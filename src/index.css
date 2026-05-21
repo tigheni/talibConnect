@@ -53,14 +53,25 @@
    box-shadow: 0 8px 16px rgba(99, 232, 126, 0.25);
 }
 
-body {
-   /* Step 2: Apply the background and make it fill the screen */
+.hero {
+   min-height: 100vh;
    background-image: url('./assets/stacked-waves-haikei.svg');
    background-size: cover;
    background-position: center;
    background-repeat: no-repeat;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   text-align: center;
+   padding: 0 1rem;
 }
 
+.hero-content {
+   position: relative;
+
+   z-index: 1;
+}
 @utility btn_hover_effects {
    @apply hover:rounded-lg hover:bg-black/5 transition-all ease-in duration-200;
 }

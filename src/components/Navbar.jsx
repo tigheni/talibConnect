@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function NavBoard() {
    return (
       <div className="fixed top-3 left-0 right-0 z-50 flex justify-center font-roboto-mono ">
-         <nav className="h-16 w-full max-w-5xl mx-4 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
+         <nav className="h-16 w-full max-w-5xl mx-5 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
             <div className="flex-shrink-0 flex   ">
                <Link to="/">
                   <img
