@@ -6,9 +6,9 @@ export default function Home() {
   };
   return (
     <div>
-      <header className="hero">
-        <div className="hero-content flex flex-col items-center justify-center gap-5">
-          <h1 className="text-2xl md:text-5xl font-bold  drop-shadow-md">
+      <header className="hero font-inter ">
+        <div className="hero-content flex flex-col items-center justify-center gap-5 mt-35">
+          <h1 className="text-2xl md:text-4xl font-bold  drop-shadow-md">
             Your ultimate hub to prepare for and master your finals
           </h1>
           <h2 className="text-lg md:text-xl italic mx-auto drop-shadow">
@@ -40,9 +40,9 @@ export default function Home() {
               <input
                 type="search"
                 name="search"
-                placeholder="Search Now"
+                placeholder="Search Your Exams Now"
                 aria-label="Search exams"
-                className="w-120 border focus:w-[50vw] transition-all  focus:border-gray-300 outline-none duration-300 ease-in-out px-9 py-2 rounded-lg"
+                className="w-75 md:w-100 border focus:w-[50vw] transition-all  focus:border-gray-300 outline-none duration-300 ease-in-out px-9 py-3 rounded-lg"
               />
               <button
                 type="submit"
@@ -52,6 +52,28 @@ export default function Home() {
               </button>
             </div>
           </form>
+          <div className="flex w-90 relative flex-wrap justify-center gap-2 mt-4">
+            {[
+              'Mathematics',
+              'Physics',
+              'Chemistry',
+              'Law',
+              'Medicine',
+              'Computer Science',
+              'Biology',
+            ].map((subject) => (
+              <button
+                key={subject}
+                className="px-4 py-1.5  rounded-lg border border-white text-white text-sm hover:bg-white hover:text-green-600 transition-colors duration-200"
+                onClick={() => {
+                  document.querySelector('input[name="search"]').value =
+                    subject;
+                }}
+              >
+                {subject}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
