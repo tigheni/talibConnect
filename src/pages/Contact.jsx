@@ -42,14 +42,17 @@ export default function Contact() {
    };
 
    return (
-      <div className="min-h-screen bg-[#0f0f0f]">
+      <div className="min-h-screen bg-[#0f0f0f] font-inter">
          <div className="max-w-2xl mx-auto px-4 py-24">
             <div className="text-center mb-12">
                <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
                   Contact Us
                </h1>
                <p className="text-gray-400">
-                  Have questions? We'll get back to you within 24 hours.
+                  Have questions? We'll get back to you soon!
+               </p>
+               <p className="text-gray-400">
+                  You can also reach us at contact@talibconnect.com
                </p>
             </div>
 
@@ -96,7 +99,7 @@ export default function Contact() {
                <button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full bg-[#63E87E] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
+                  className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
                >
                   {status === 'sending' ? 'Sending...' : 'Send Message'}
                </button>

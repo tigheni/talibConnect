@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { FaInstagram, FaFacebook, FaEnvelope } from 'react-icons/fa';
 export default function Footer() {
    return (
       <footer className="bg-[#111111] border-t border-gray-800 ">
@@ -98,25 +98,19 @@ export default function Footer() {
                         href="#"
                         className="text-gray-400 hover:text-[#63E87E] transition"
                      >
-                        📘
+                        <FaInstagram size={20} />
                      </a>
                      <a
                         href="#"
                         className="text-gray-400 hover:text-[#63E87E] transition"
                      >
-                        📷
+                        <FaFacebook size={20} />
                      </a>
                      <a
-                        href="#"
+                        href="mailto:contact@talibconnect.com"
                         className="text-gray-400 hover:text-[#63E87E] transition"
                      >
-                        🐦
-                     </a>
-                     <a
-                        href="#"
-                        className="text-gray-400 hover:text-[#63E87E] transition"
-                     >
-                        💼
+                        <FaEnvelope size={20} />
                      </a>
                   </div>
                </div>

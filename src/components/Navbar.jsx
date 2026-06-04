@@ -1,7 +1,10 @@
 import logo from '../assets/logo.svg';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function NavBoard() {
+   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
    return (
       <div className="fixed top-3 left-0 right-0 z-50 flex justify-center font-roboto-mono ">
          <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
@@ -58,8 +61,25 @@ export default function NavBoard() {
                   </div>
                </Link>
             </div>
-            <div className="ml-auto md:hidden">
-               <button className="text-2xl">☰</button>
+            <div className=" md:hidden ">
+               <button
+                  onClick={() => {
+                     setIsMenuOpen(!isMenuOpen);
+                     console.log('clicked');
+                  }}
+                  className="text-2xl font-bold focus:outline-none"
+               >
+                  {isMenuOpen ? '✕' : '☰'}
+               </button>
+               {isMenuOpen && (
+                  <div className="absolute top-16 left-0 right-0 bg-white/90 backdrop-blur-md flex flex-col p-4 gap-3 shadow-lg">
+                     <Link to="/">Home</Link>
+                     <Link to="/exams">Exams</Link>
+                     <Link to="/upload">Upload</Link>
+                     <Link to="/login">Login</Link>
+                     <Link to="/register">Register</Link>
+                  </div>
+               )}
             </div>
          </nav>
       </div>

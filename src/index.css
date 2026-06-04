@@ -73,12 +73,14 @@
    --color-light-green-300: #a9e085;
    --color-light-green-400: #8dd65c;
    --color-light-green-500: #70cc33;
+   --cp: #4fe56d;
    --color-light-green-600: #5aa329;
    --color-light-green-700: #437a1f;
    --color-light-green-800: #2d5214;
    --color-light-green-900: #16290a;
    --color-light-green-950: #101d07;
 }
+
 body {
    min-height: 100vh;
    background-image: url('./assets/axiom-pattern-1920x1080.png');
