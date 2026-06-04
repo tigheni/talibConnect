@@ -79,7 +79,7 @@ export default function Home() {
    return (
       <div className="font-inter">
          <header className="hero">
-            <div className="hero-content flex flex-col items-center justify-center gap-5 md:mt-30">
+            <div className="hero-content flex flex-col items-center justify-center gap-5 ">
                <h1 className="text-2xl md:text-4xl font-bold  drop-shadow-md">
                   Ace your exams with past papers from Algerian universities
                </h1>

@@ -5,6 +5,7 @@ export default function Register() {
       username: '',
       email: '',
       password: '',
+      confirmPassword: '',
    });
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
@@ -19,10 +20,19 @@ export default function Register() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       setError('');
+      if (formData.password !== formData.confirmPassword) {
+         setError("Passwords don't match");
+         setLoading(false);
+         return;
+      }
+      if (formData.password.length < 6) {
+         setError('Password must be at least 6 characters');
+         return;
+      }
+
       setLoading(true);
       try {
          //here add supabase auth logic to register the user
-         console.log('data up', formData);
          navigate('/dashboard');
       } catch (err) {
          setError(err.message);
@@ -31,11 +41,11 @@ export default function Register() {
       }
    };
    return (
-      <div className="h-screen flex items-center justify-center mt-10">
-         <div className="w-full md:max-w-lg  sm:max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-4 rounded-lg shadow-lg">
+      <div className="h-[95vh] flex items-center justify-center">
+         <div className="w-full md:max-w-lg  sm:max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg">
             <h1 className="text-2xl  font-bold text-center ">Register Now!</h1>
             {error && (
-               <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-3 mb-4 text-sm">
+               <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-1  m-1 text-sm">
                   {error}
                </div>
             )}
@@ -49,10 +59,11 @@ export default function Register() {
                <input
                   type="text"
                   name="username"
+                  value={formData.username}
                   placeholder="Username"
                   onChange={handleChange}
                   required
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-2"
                />
                <label
                   htmlFor="email"
@@ -63,10 +74,11 @@ export default function Register() {
                <input
                   type="email"
                   name="email"
+                  value={formData.email}
                   placeholder="Email"
                   required
                   onChange={handleChange}
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-2"
                />
                <label
                   htmlFor="password"
@@ -77,27 +89,31 @@ export default function Register() {
                <input
                   type="password"
                   name="password"
+                  value={formData.password}
                   placeholder="Password"
                   required
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4"
+                  onChange={handleChange}
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-2"
                />
                <label
-                  htmlFor="confirm-password"
+                  htmlFor="confirmPassword"
                   className="block text-gray-700 font-medium mb-2"
                >
                   Confirm Password:
                </label>
                <input
                   type="password"
-                  name="confirm-password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
                   placeholder="Confirm Password"
                   required
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4"
+                  onChange={handleChange}
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-2  "
                />
                <button
                   type="submit"
                   value="Register"
-                  className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
+                  className="w-full bg-[var(--cp)] text-black font-semibold py-3 mt-2 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
                >
                   {loading ? 'Registering...' : 'Register'}
                </button>
