@@ -1,0 +1,17 @@
+{
+   "$schema": "node_modules/wrangler/config-schema.json",
+   "name": "talibconnect-email",
+   "main": "worker/contact-email.js",
+   "compatibility_date": "2026-06-03",
+   "send_email": [
+      {
+         "name": "CONTACT_EMAIL",
+         "destination_address": "oussama.adame40@gmail.com",
+      },
+   ],
+   "vars": {
+      "TO_EMAIL": "oussama.adame40@gmail.com",
+      "CONTACT_FROM": "contact@talibconnect.com",
+      "CORS_ORIGIN": "http://localhost:5173",
+   },
+}

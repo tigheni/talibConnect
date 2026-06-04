@@ -81,7 +81,7 @@ export default function Home() {
          <header className="hero">
             <div className="hero-content flex flex-col items-center justify-center gap-5 md:mt-30">
                <h1 className="text-2xl md:text-4xl font-bold  drop-shadow-md">
-                  Your ultimate hub to prepare for and master your finals
+                  Ace your exams with past papers from Algerian universities
                </h1>
                <h2 className="text-lg md:text-xl italic mx-auto drop-shadow">
                   Every past exam, Organized in one place
@@ -151,8 +151,10 @@ export default function Home() {
          </header>
 
          <section className="max-w-6xl mx-auto px-2">
-            <h1 className="text-2xl font-bold mb-4">Recent Exams</h1>
-            <p className="text-gray-600">Latest additions from students</p>
+            <h1 className="text-2xl font-bold mb-4">Latest Exam Papers</h1>
+            <p className="text-gray-600">
+               Freshly uploaded by students like you
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4 ">
                {recentExams.slice(0, 6).map((exam) => (
                   <ExamCard key={exam.id} exam={exam} />
@@ -175,7 +177,7 @@ export default function Home() {
                Our Community By the Numbers
             </h2>
             <p className="text-gray-400">
-               Join thousands of Algerian students who already use TalibConnect
+               Join 10,000+ students already preparing smarter
             </p>
          </div>
          <section className="max-w-6xl mx-auto py-12">
@@ -194,14 +196,13 @@ export default function Home() {
             </div>
          </section>
          {/* Call to Action Section */}
-         <section className="max-w-6xl mx-auto px-4 py-">
+         <section className="max-w-6xl mx-auto px-4 pb-12">
             <div className="bg-gradient-to-r from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 md:p-12 text-center border border-gray-800">
                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Ready to Ace Your Exams?
                </h2>
                <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-                  Join thousands of Algerian students sharing and accessing past
-                  exams. It's free and takes 30 seconds.
+                  Join for free. Start browsing exams in 30 seconds.
                </p>
                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <button className="bg-[#63E87E] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#4bc864] transition-all duration-300 transform hover:scale-105">

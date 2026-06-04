@@ -1,5 +1,20 @@
 # React + Vite
 
+## Contact email setup
+
+The contact form posts to a Cloudflare Worker, and the Worker sends the message with Cloudflare Email Routing.
+
+1. Copy `.env.example` to `.env.local` and set `VITE_CONTACT_ENDPOINT` to your Worker URL.
+2. In `wrangler.jsonc`, set `CONTACT_FROM` to an address on your Email Routing domain.
+3. Set the `send_email.destination_address` and `TO_EMAIL` values to your verified destination inbox.
+4. Deploy the Worker:
+
+```sh
+npm run worker:deploy
+```
+
+5. If your frontend is deployed, update `CORS_ORIGIN` in `wrangler.jsonc` to your site URL and deploy again.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

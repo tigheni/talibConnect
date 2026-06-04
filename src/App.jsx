@@ -4,24 +4,25 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import MainLayout from './components/Mainlayout';
-import Browse from './pages/Browse';
-import About from './pages/About';
+import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
+
 import Contact from './pages/Contact';
 
 export default function App() {
    return (
       <BrowserRouter>
+         <ScrollToTop />
          <Routes>
             <Route element={<MainLayout />}>
                <Route path="/" element={<Home />} />
                <Route path="/login" element={<Login />} />
                <Route path="/register" element={<Register />} />
                <Route path="/dashboard" element={<Dashboard />} />
-               <Route path="/about" element={<About />} />
-               <Route path="/browse" element={<Browse />} />
                <Route path="/contact" element={<Contact />} />
             </Route>
          </Routes>
+         <Footer />
       </BrowserRouter>
    );
 }

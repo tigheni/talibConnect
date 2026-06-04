@@ -17,19 +17,19 @@ export default function NavBoard() {
                      Home
                   </Link>
                   <Link
-                     to="/browse"
+                     to="/upload"
                      className="text-sm font-medium sm:p-2 px-4  py-2 btn_hover_effects rounded-lg"
                   >
                      Upload
                   </Link>
                   <Link
-                     to="/about"
+                     to="/exams"
                      className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-lg"
                   >
                      Exams
                   </Link>
                   <Link
-                     to="/Contact"
+                     to="/contact"
                      className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-lg"
                   >
                      Contact

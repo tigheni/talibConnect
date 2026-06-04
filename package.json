@@ -7,13 +7,16 @@
     "dev": "vite --open",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "worker:dev": "wrangler dev --config wrangler.jsonc",
+    "worker:deploy": "wrangler deploy --config wrangler.jsonc"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-router-dom": "^7.15.1"
+    "react-router-dom": "^7.15.1",
+    "wrangler": "^4.97.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
