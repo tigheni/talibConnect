@@ -19,7 +19,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Home
                 </Link>
@@ -27,7 +29,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/exams"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Exams
                 </Link>
@@ -35,7 +39,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/upload"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Upload
                 </Link>
@@ -43,7 +49,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   About
                 </Link>
@@ -57,7 +65,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Contact Us
                 </Link>
@@ -65,7 +75,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/faq"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   FAQ
                 </Link>
@@ -73,7 +85,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Privacy Policy
                 </Link>
@@ -81,7 +95,9 @@ export default function Footer() {
               <li>
                 <Link
                   to="/terms"
-                  className="text-gray-400 text-sm hover:text-[#63E87E] transition"
+                  className="text-gray-400 text-sm hover:text-[#
+5ae4a8
+] transition"
                 >
                   Terms of Use
                 </Link>
@@ -94,19 +110,25 @@ export default function Footer() {
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#63E87E] transition"
+                className="text-gray-400 hover:text-[#
+5ae4a8
+] transition"
               >
                 <FaInstagram size={20} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#63E87E] transition"
+                className="text-gray-400 hover:text-[#
+5ae4a8
+] transition"
               >
                 <FaFacebook size={20} />
               </a>
               <a
                 href="mailto:contact@talibconnect.com"
-                className="text-gray-400 hover:text-[#63E87E] transition"
+                className="text-gray-400 hover:text-[#
+5ae4a8
+] transition"
               >
                 <FaEnvelope size={20} />
               </a>

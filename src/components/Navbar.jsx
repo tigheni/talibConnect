@@ -49,7 +49,7 @@ export default function NavBoard() {
 
           <Link
             to="/register"
-            className="cursor-pointer sm:p-2 bg-[#4FE56D] shadow-[0px_4px_32px_0_rgba(99,232,126,.40)] px-6 py-3 rounded-xl border-[1px] border-[#63E87E] text-[#0f0f0f] font-medium group"
+            className="cursor-pointer sm:p-2 bg-[var(--cp)] shadow-[0px_4px_32px_0_rgba(99,232,126,.40)] px-6 py-3 rounded-xl border-[1px] border-[#5ae4a8] text-[#0f0f0f] font-medium group"
           >
             <div className="relative overflow-hidden">
               <p className="group-hover:-translate-y-10 duration-[1.2s] ease-[cubic-bezier(0.19,1,0.22,1)]">

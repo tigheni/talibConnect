@@ -9,7 +9,7 @@ export default function ExamCard({ exam }) {
         <span className="text-gray-500 text-sm">
           {exam.year} • {exam.downloads} downloads
         </span>
-        <button className="text-[#63E87E] text-sm group">
+        <button className="text-[var(--cp)] text-sm group">
           Open{" "}
           <span className="inline-block transition-transform duration-300 group-hover:rotate-90">
             ↓

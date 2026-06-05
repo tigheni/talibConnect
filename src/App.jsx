@@ -11,8 +11,9 @@ const Upload = lazy(() => import("./pages/UploadPage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
-
+import { supabase } from "./lib/supabase";
 export default function App() {
+  console.log("Supabase connected:", supabase);
   return (
     <BrowserRouter>
       <ScrollToTop />
