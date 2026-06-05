@@ -31,7 +31,7 @@ export default function ForgotPassword() {
         "If an account exists with this email, you will receive a password reset link.",
       );
       setEmail(""); // Clear email field
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

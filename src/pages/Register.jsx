@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import img from "../assets/7618724.jpg";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,15 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -76,14 +85,18 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen  w-full flex items-center justify-center">
-      <div className=" w-full md:max-w-lg sm:max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg px-8">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
+      style={!isMobile ? { backgroundImage: `url('${img}')` } : {}}
+    >
+      {/* Made the card smaller - same as Login component */}
+      <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-8 mb-6" />
+          <img src={logo} alt="Logo" className="h-7 mb-4" />
         </Link>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-xl p-2 mb-4 text-sm text-center w-full">
+          <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
             {error}
           </div>
         )}
@@ -91,7 +104,7 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="w-full">
           <label
             htmlFor="username"
-            className="block mb-2 font-medium text-gray-700"
+            className="block mb-1 font-medium text-gray-700 text-sm"
           >
             Username:
           </label>
@@ -102,17 +115,17 @@ export default function Register() {
             value={formData.username}
             placeholder="Username"
             onChange={(e) => handleChange(e)}
-            className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-sm mt-1 ${fieldErrors.username ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.username ? "visible" : "invisible"}`}
           >
             {fieldErrors.username || "placeholder"}
           </div>
 
           <label
             htmlFor="email"
-            className="block text-gray-700 font-medium mb-2 mt-2"
+            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
           >
             Email:
           </label>
@@ -123,17 +136,17 @@ export default function Register() {
             value={formData.email}
             placeholder="Email"
             onChange={(e) => handleChange(e)}
-            className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-sm mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
           >
             {fieldErrors.email || "placeholder"}
           </div>
 
           <label
             htmlFor="password"
-            className="block text-gray-700 font-medium mb-2 mt-2"
+            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
           >
             Password:
           </label>
@@ -145,17 +158,17 @@ export default function Register() {
             placeholder="Password"
             required
             onChange={(e) => handleChange(e)}
-            className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-sm mt-1 ${fieldErrors.password ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.password ? "visible" : "invisible"}`}
           >
             {fieldErrors.password || "placeholder"}
           </div>
 
           <label
             htmlFor="confirmPassword"
-            className="block text-gray-700 font-medium mb-2 mt-2"
+            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
           >
             Confirm Password:
           </label>
@@ -167,10 +180,10 @@ export default function Register() {
             placeholder="Confirm Password"
             required
             onChange={(e) => handleChange(e)}
-            className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-sm mt-1 ${fieldErrors.confirmPassword ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.confirmPassword ? "visible" : "invisible"}`}
           >
             {fieldErrors.confirmPassword || "placeholder"}
           </div>
@@ -178,18 +191,18 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[var(--cp)] text-black font-semibold py-3 mt-4 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
+            className="w-full bg-[#5ae4a8] text-black font-semibold py-2.5 mt-4 rounded-lg hover:bg-[#4bcc94]/90 transition-all duration-300 disabled:opacity-50 text-sm"
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
         <div className="mt-4 text-center">
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-[var(--cp)] hover:text-[#3aa855] hover:underline transition-colors"
+              className="text-[#5ae4a8] hover:text-[#3aa855] hover:underline transition-colors"
             >
               Login here
             </Link>
