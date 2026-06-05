@@ -7,6 +7,8 @@ import MainLayout from "./components/Mainlayout";
 import ScrollToTop from "./components/ScrollToTop";
 import Contact from "./pages/Contact";
 import AuthLayout from "./components/AuthLayout";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgetPassword";
 export default function App() {
   return (
     <BrowserRouter>
@@ -20,6 +22,8 @@ export default function App() {
         <Route elemet={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

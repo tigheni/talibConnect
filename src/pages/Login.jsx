@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import loginIllustration from "../assets/login_weas1.svg";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -54,7 +55,9 @@ export default function Login() {
     try {
       //here add supabase auth logic to login the user
       console.log("Login data:", formData);
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,8 +66,15 @@ export default function Login() {
   };
 
   return (
-    <div className="h-[95vh] flex items-center justify-center">
-      <div className="w-full max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg px-8">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="hidden md:block md:w-1/2">
+        <img
+          src={loginIllustration}
+          alt="Login Illustration"
+          className="h-[70vh] md:max-w-lg sm:max-w-md object-contain"
+        />
+      </div>
+      <div className="w-full md:max-w-lg sm:max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg px-8">
         <Link to="/">
           <img src={logo} alt="Logo" className="h-8 mb-6" />
         </Link>
@@ -89,7 +99,7 @@ export default function Login() {
             value={formData.email}
             placeholder="Email"
             required
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -111,7 +121,7 @@ export default function Login() {
             value={formData.password}
             placeholder="Password"
             required
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -119,7 +129,14 @@ export default function Login() {
           >
             {fieldErrors.password || "placeholder"}
           </div>
-
+          <div className="text-right ">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-[var(--cp)] hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <button
             type="submit"
             disabled={loading}
@@ -132,7 +149,10 @@ export default function Login() {
         <div className="mt-4 text-center">
           <p className="text-gray-600">
             Already have an account?{" "}
-            <Link to="/register" className="text-[var(--cp)] hover:underline">
+            <Link
+              to="/register"
+              className="text-[var(--cp)] hover:text-[#3aa855] hover:underline transition-colors"
+            >
               Register
             </Link>
           </p>

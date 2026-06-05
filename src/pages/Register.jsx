@@ -76,8 +76,8 @@ export default function Register() {
   };
 
   return (
-    <div className="h-[95vh] flex items-center justify-center">
-      <div className="w-full max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg px-8">
+    <div className="min-h-screen  w-full flex items-center justify-center">
+      <div className=" w-full md:max-w-lg sm:max-w-md flex justify-center font-inter flex-col items-center border border-gray-300 bg-white py-6 rounded-lg shadow-lg px-8">
         <Link to="/">
           <img src={logo} alt="Logo" className="h-8 mb-6" />
         </Link>
@@ -101,7 +101,7 @@ export default function Register() {
             id="username"
             value={formData.username}
             placeholder="Username"
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -122,7 +122,7 @@ export default function Register() {
             id="email"
             value={formData.email}
             placeholder="Email"
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -144,7 +144,7 @@ export default function Register() {
             value={formData.password}
             placeholder="Password"
             required
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -166,7 +166,7 @@ export default function Register() {
             value={formData.confirmPassword}
             placeholder="Confirm Password"
             required
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
           <div
@@ -187,7 +187,10 @@ export default function Register() {
         <div className="mt-4 text-center">
           <p className="text-gray-600">
             Already have an account?{" "}
-            <Link to="/login" className="text-[var(--cp)] hover:underline">
+            <Link
+              to="/login"
+              className="text-[var(--cp)] hover:text-[#3aa855] hover:underline transition-colors"
+            >
               Login here
             </Link>
           </p>
