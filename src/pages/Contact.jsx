@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { TbSend } from 'react-icons/tb';
+import { BiMessageSquare } from 'react-icons/bi';
+import contactIll from '../assets/undraw_email_b5yu1111.svg';
 
 export default function Contact() {
    const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT;
@@ -43,11 +46,16 @@ export default function Contact() {
    };
 
    return (
-      <div className="min-h-screen flex items-center justify-center ">
-         <div className="w-full max-w-lg bg-white py-4 px-8 rounded-lg shadow-lg border border-gray-300">
-            <h1 className="text-2xl font-bold text-center mb-4">Contact Us</h1>
+      <div className="min-h-screen flex flex-col-reverse items-center justify-center gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:gap-12 lg:px-8">
+         <div className="w-full max-w-lg bg-white px-5 py-6 rounded-lg shadow-lg border border-gray-300 sm:px-8">
+            <div className="flex gap-2 justify-center items-center">
+               <BiMessageSquare className="text-3xl text-[var(--cp)] sm:text-4xl" />
+               <h1 className="text-xl font-bold text-center sm:text-2xl">
+                  Send us a Message
+               </h1>
+            </div>
 
-            <p className="text-gray-600 text-center text-sm mb-4">
+            <p className="text-gray-600 text-center text-sm mt-3 mb-4">
                Have questions? We'll get back to you soon!
             </p>
 
@@ -89,7 +97,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Your Message"
                   required
-                  rows={8}
+                  rows={6}
                   className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4 resize-none"
                ></textarea>
 
@@ -98,10 +106,17 @@ export default function Contact() {
                   disabled={status === 'sending'}
                   className="w-full bg-[var(--cp)] text-black font-semibold py-2 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
                >
+                  <TbSend className="inline-block mr-2 text-lg" />
                   {status === 'sending' ? 'Sending...' : 'Send Message'}
-                  部队
                </button>
             </form>
+         </div>
+         <div className="w-full max-w-xs sm:max-w-sm lg:max-w-md">
+            <img
+               src={contactIll}
+               alt="contact illustration"
+               className="w-full h-auto max-h-72 object-contain sm:max-h-96 lg:max-h-[500px]"
+            />
          </div>
       </div>
    );
