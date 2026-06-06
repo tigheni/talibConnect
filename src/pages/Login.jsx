@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
+import { supabase } from "../lib/supabase";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -60,12 +61,14 @@ export default function Login() {
     }
 
     setLoading(true);
+
     try {
-      //here add supabase auth logic to login the user
-      console.log("Login data:", formData);
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (error) throw error;
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {

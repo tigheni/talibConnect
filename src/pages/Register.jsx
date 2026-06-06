@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
+import { supabase } from "../lib/supabase";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -74,9 +75,23 @@ export default function Register() {
 
     setLoading(true);
     try {
-      //here add supabase auth logic to register the user
-      console.log("Register data:", formData);
-      navigate("/dashboard");
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            username: formData.username,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      if (data.session) {
+        navigate("/dashboard");
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
