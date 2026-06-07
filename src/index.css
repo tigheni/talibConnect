@@ -87,3 +87,10 @@ body {
   background-image: url("./assets/axiom-pattern-1920x1080.png");
   color: black;
 }
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+section {
+  scroll-snap-align: start;
+}

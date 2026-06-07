@@ -11,6 +11,7 @@ const Upload = lazy(() => import("./pages/UploadPage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
+const ExamPage = lazy(() => import("./pages/ExamPage"));
 import { supabase } from "./lib/supabase";
 export default function App() {
   console.log("Supabase connected:", supabase);
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/exams" element={<ExamPage />} />
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />

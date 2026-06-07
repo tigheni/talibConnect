@@ -152,7 +152,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-2">
         <h1 className="text-2xl font-bold mb-4">Latest Exam Papers</h1>
         <p className="text-gray-600">Freshly uploaded by students like you</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4  ">
           {recentExams.slice(0, 6).map((exam) => (
             <ExamCard key={exam.id} exam={exam} />
           ))}
@@ -177,7 +177,7 @@ export default function Home() {
           Join 10,000+ students already preparing smarter
         </p>
       </div>
-      <section className="max-w-6xl mx-auto py-12">
+      <section className="max-w-6xl mx-auto py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((stat) => (
             <div
@@ -192,7 +192,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      {/* Call to Action Section */}
+
       <section className="max-w-6xl mx-auto px-4 pb-12">
         <div className="bg-gradient-to-r from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 md:p-12 text-center border border-gray-800">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
