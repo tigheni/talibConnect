@@ -1,10 +1,11 @@
 import { useState } from "react";
 import ExamCard from "../components/ExamCard";
+
 export default function ExamPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode, setViewMode] = useState("list");
 
   const universities = ["USTHB", "University of Algiers", "ESI"];
 
@@ -82,44 +83,48 @@ export default function ExamPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-6 py-20 ">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section - NOT STICKY */}
+      <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
         <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
           All Exams
         </h1>
-        <p className="text-xl text-gray-500 max-w-2xl">
+        <p className="text-xl text-gray-600 max-w-2xl">
           Browse thousands of past exams shared by students across Algeria
         </p>
       </div>
 
-      <div className="sticky top-20 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-10">
-        <div className="max-w-7xl mx-auto px-2 py-2">
-          <div className="relative max-w-2xl mx-auto mb-2">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search exams by title, subject, or keyword..."
-              className="w-full pl-12 pr-4 py-4 border-0 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
-            />
+      {/* Search Bar - NOT STICKY */}
+      <div className="max-w-7xl mx-auto px-6 pb-8">
+        <div className="relative max-w-2xl mx-auto">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg
+              className="h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
           </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search exams by title, subject, or keyword..."
+            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
+          />
+        </div>
+      </div>
 
-          {/* Filters Row */}
+      {/* Filters Row - STICKY */}
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap justify-between items-center gap-4">
             <div className="flex gap-3">
               <select
@@ -149,8 +154,6 @@ export default function ExamPage() {
                 ))}
               </select>
             </div>
-
-            {/* View Toggle */}
             <div className="flex gap-2 bg-gray-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
@@ -191,14 +194,15 @@ export default function ExamPage() {
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-gray-500">
+          <div className="mt-3 text-sm text-gray-500">
             Found {filteredExams.length} exam
             {filteredExams.length !== 1 ? "s" : ""}
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      {/* Results Section - NOT STICKY */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {filteredExams.length > 0 ? (
           <div
             className={
@@ -207,31 +211,14 @@ export default function ExamPage() {
                 : "space-y-4"
             }
           >
-            {filteredExams.map((exam, index) =>
-              viewMode === "grid" ? (
-                <ExamCard key={exam.id} exam={exam} index={index} />
-              ) : (
-                // List Card
-                <div className="p-4 flex items-center justify-between flex-wrap gap-4 hover:bg-gray-50 transition-colors rounded-xl">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {exam.title}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {exam.university} • {exam.subject} • {exam.year}
-                    </p>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                      <span>📄 {exam.fileType}</span>
-                      <span>⬇️ {exam.downloads}</span>
-                      <span>👤 {exam.uploader}</span>
-                    </div>
-                  </div>
-                  <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
-                    Download
-                  </button>
-                </div>
-              ),
-            )}
+            {filteredExams.map((exam, index) => (
+              <ExamCard
+                key={exam.id}
+                exam={exam}
+                viewMode={viewMode}
+                index={index}
+              />
+            ))}
           </div>
         ) : (
           <div className="text-center py-20">

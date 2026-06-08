@@ -6,7 +6,7 @@ export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="sticky top-3 left-0 right-0 z-50 flex justify-center font-roboto-mono ">
+    <div className="sticky top-0 p-3 left-0 right-0 z-50 flex justify-center  shadow-sm font-roboto-mono bg-gradient-to-br from-gray-50 to-white">
       <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
         <Link to="/">
           <img src={logo} className="h-4  md:h-8 w-auto" alt="logo" />
