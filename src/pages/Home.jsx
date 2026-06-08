@@ -5,6 +5,7 @@ export default function Home() {
     const query = e.target.search.value;
     console.log("Search query:", query);
   };
+  const viewMode = "grid";
   const recentExams = [
     {
       id: 1,
@@ -13,6 +14,8 @@ export default function Home() {
       university: "USTHB",
       year: 2024,
       downloads: 245,
+      uploader: "Ahmed K.",
+      fileType: "PDF",
     },
     {
       id: 2,
@@ -21,6 +24,8 @@ export default function Home() {
       university: "University of Algiers",
       year: 2024,
       downloads: 189,
+      uploader: "Sarah M.",
+      fileType: "PDF",
     },
     {
       id: 3,
@@ -29,6 +34,8 @@ export default function Home() {
       university: "ESI",
       year: 2023,
       downloads: 432,
+      uploader: "Karim B.",
+      fileType: "DOCX",
     },
     {
       id: 4,
@@ -37,6 +44,8 @@ export default function Home() {
       university: "USTHB",
       year: 2024,
       downloads: 167,
+      uploader: "Lydia R.",
+      fileType: "PDF",
     },
     {
       id: 5,
@@ -45,6 +54,8 @@ export default function Home() {
       university: "University of Algiers",
       year: 2024,
       downloads: 98,
+      uploader: "Oussama A.",
+      fileType: "PDF",
     },
     {
       id: 6,
@@ -53,22 +64,8 @@ export default function Home() {
       university: "University of Algiers",
       year: 2024,
       downloads: 312,
-    },
-    {
-      id: 7,
-      title: "Economics Final",
-      subject: "Economics",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 156,
-    },
-    {
-      id: 8,
-      title: "Philosophy Exam",
-      subject: "Philosophy",
-      university: "USTHB",
-      year: 2023,
-      downloads: 89,
+      uploader: "Meriem T.",
+      fileType: "PDF",
     },
   ];
   const stats = [
@@ -152,12 +149,13 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-2">
         <h1 className="text-2xl font-bold mb-4">Latest Exam Papers</h1>
         <p className="text-gray-600">Freshly uploaded by students like you</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4  ">
-          {recentExams.slice(0, 6).map((exam) => (
-            <ExamCard key={exam.id} exam={exam} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          {recentExams.map((exams) => (
+            <ExamCard key={exams.id} exam={exams} />
           ))}
         </div>
       </section>
+
       <div className="max-w-6xl mx-auto my-8 py-8">
         <div className="flex justify-center gap-1">
           {[...Array(20)].map((_, i) => (

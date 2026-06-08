@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { FaDownload } from "react-icons/fa6";
-
+import ExamCard from "../components/ExamCard";
 export default function ExamPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
-  const [viewMode, setViewMode] = useState("grid"); // grid or list
+  const [viewMode, setViewMode] = useState("grid");
 
   const universities = ["USTHB", "University of Algiers", "ESI"];
 
@@ -84,8 +83,6 @@ export default function ExamPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Hero Section */}
-
       <div className="max-w-7xl mx-auto px-6 py-20 ">
         <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
           All Exams
@@ -95,11 +92,9 @@ export default function ExamPage() {
         </p>
       </div>
 
-      {/* Search & Filters Section */}
-      <div className="sticky top-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto mb-6">
+      <div className="sticky top-20 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-10">
+        <div className="max-w-7xl mx-auto px-2 py-2">
+          <div className="relative max-w-2xl mx-auto mb-2">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <svg
                 className="h-5 w-5 text-gray-400"
@@ -196,16 +191,14 @@ export default function ExamPage() {
             </div>
           </div>
 
-          {/* Results Count */}
-          <div className="mt-6 text-sm text-gray-500">
+          <div className="mt-4 text-sm text-gray-500">
             Found {filteredExams.length} exam
             {filteredExams.length !== 1 ? "s" : ""}
           </div>
         </div>
       </div>
 
-      {/* Results Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-6">
         {filteredExams.length > 0 ? (
           <div
             className={
@@ -214,94 +207,31 @@ export default function ExamPage() {
                 : "space-y-4"
             }
           >
-            {filteredExams.map((exam, index) => (
-              <div
-                key={exam.id}
-                className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fadeIn"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                {viewMode === "grid" ? (
-                  // Grid Card
-                  <div className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="px-3 py-1 bg-[#4FE56D]/10 text-[#4FE56D] text-xs font-semibold rounded-full">
-                        {exam.fileType}
-                      </div>
-                      <button className="text-gray-400 hover:text-red-500 transition-colors">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#4FE56D] transition-colors">
+            {filteredExams.map((exam, index) =>
+              viewMode === "grid" ? (
+                <ExamCard key={exam.id} exam={exam} index={index} />
+              ) : (
+                // List Card
+                <div className="p-4 flex items-center justify-between flex-wrap gap-4 hover:bg-gray-50 transition-colors rounded-xl">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-semibold text-gray-900">
                       {exam.title}
                     </h3>
-
-                    <div className="space-y-2 mb-4">
-                      <p className="text-sm text-gray-600">
-                        {exam.university} • {exam.subject}
-                      </p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <span>📅 {exam.year}</span>
-                        <span>•</span>
-                        <span>⬇️ {exam.downloads} downloads</span>
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        👤 {exam.uploader}
-                      </p>
+                    <p className="text-sm text-gray-500">
+                      {exam.university} • {exam.subject} • {exam.year}
+                    </p>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                      <span>📄 {exam.fileType}</span>
+                      <span>⬇️ {exam.downloads}</span>
+                      <span>👤 {exam.uploader}</span>
                     </div>
-
-                    <button className="w-full mt-4 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium flex items-center justify-center gap-2 group/btn">
-                      Download Exam
-                      <svg
-                        className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
                   </div>
-                ) : (
-                  // List Card
-                  <div className="p-4 flex items-center justify-between flex-wrap gap-4 hover:bg-gray-50 transition-colors rounded-xl">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {exam.title}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {exam.university} • {exam.subject} • {exam.year}
-                      </p>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                        <span>📄 {exam.fileType}</span>
-                        <span>⬇️ {exam.downloads}</span>
-                        <span>👤 {exam.uploader}</span>
-                      </div>
-                    </div>
-                    <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
-                      Download
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
+                  <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
+                    Download
+                  </button>
+                </div>
+              ),
+            )}
           </div>
         ) : (
           <div className="text-center py-20">
@@ -325,23 +255,6 @@ export default function ExamPage() {
           </div>
         )}
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out forwards;
-          opacity: 0;
-        }
-      `}</style>
     </div>
   );
 }
