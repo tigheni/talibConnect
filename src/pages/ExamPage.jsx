@@ -1,90 +1,64 @@
-import { useState } from "react";
 import ExamCard from "../components/ExamCard";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function ExamPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
   const [viewMode, setViewMode] = useState("list");
+  const [exams, setExams] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const universities = ["USTHB", "University of Algiers", "ESI"];
+  const fetchExams = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("exams")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  const exams = [
-    {
-      id: 1,
-      title: "Physics Final 2024",
-      subject: "Physics",
-      university: "USTHB",
-      year: 2024,
-      downloads: 245,
-      uploader: "Ahmed K.",
-      fileType: "PDF",
-    },
-    {
-      id: 2,
-      title: "Mathematics Midterm",
-      subject: "Math",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 189,
-      uploader: "Sarah M.",
-      fileType: "PDF",
-    },
-    {
-      id: 3,
-      title: "Computer Science Exam",
-      subject: "CS",
-      university: "ESI",
-      year: 2023,
-      downloads: 432,
-      uploader: "Karim B.",
-      fileType: "DOCX",
-    },
-    {
-      id: 4,
-      title: "Chemistry Final",
-      subject: "Chemistry",
-      university: "USTHB",
-      year: 2024,
-      downloads: 167,
-      uploader: "Lydia R.",
-      fileType: "PDF",
-    },
-    {
-      id: 5,
-      title: "Biology Exam",
-      subject: "Biology",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 98,
-      uploader: "Oussama A.",
-      fileType: "PDF",
-    },
-    {
-      id: 6,
-      title: "Law Exam 2024",
-      subject: "Law",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 312,
-      uploader: "Meriem T.",
-      fileType: "PDF",
-    },
+    if (error) {
+      console.error("Error fetching exams:", error);
+    } else {
+      setExams(data || []);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    fetchExams();
+  }, []);
+
+  const universities = [
+    ...new Set(exams.map((exam) => exam.university).filter(Boolean)),
   ];
 
   const filteredExams = exams.filter((exam) => {
-    const matchSearch = exam.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+    const matchSearch =
+      (exam.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (exam.subject || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (exam.university || "").toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchSubject = !subjectFilter || exam.subject === subjectFilter;
     const matchUniversity =
       !universityFilter || exam.university === universityFilter;
+
     return matchSearch && matchSubject && matchUniversity;
   });
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading exams...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section - NOT STICKY */}
+      {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
         <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
           All Exams
@@ -94,7 +68,7 @@ export default function ExamPage() {
         </p>
       </div>
 
-      {/* Search Bar - NOT STICKY */}
+      {/* Search Bar */}
       <div className="max-w-7xl mx-auto px-6 pb-8">
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -116,13 +90,13 @@ export default function ExamPage() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search exams by title, subject, or keyword..."
+            placeholder="Search exams by title, subject, or university..."
             className="w-full pl-12 pr-4 py-4 border-0 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
           />
         </div>
       </div>
 
-      {/* Filters Row - STICKY */}
+      {/* Filters */}
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap justify-between items-center gap-4">
@@ -154,6 +128,7 @@ export default function ExamPage() {
                 ))}
               </select>
             </div>
+
             <div className="flex gap-2 bg-gray-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
@@ -173,6 +148,7 @@ export default function ExamPage() {
                   />
                 </svg>
               </button>
+
               <button
                 onClick={() => setViewMode("list")}
                 className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white shadow-sm text-[#4FE56D]" : "text-gray-500"}`}
@@ -201,7 +177,7 @@ export default function ExamPage() {
         </div>
       </div>
 
-      {/* Results Section - NOT STICKY */}
+      {/* Results */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {filteredExams.length > 0 ? (
           <div

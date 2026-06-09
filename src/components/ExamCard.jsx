@@ -1,3 +1,5 @@
+import { FaDownload, FaRegUser } from "react-icons/fa";
+
 export default function ExamCard({ exam, index, viewMode }) {
   if (viewMode === "grid") {
     return (
@@ -15,19 +17,26 @@ export default function ExamCard({ exam, index, viewMode }) {
           <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#4FE56D] transition-colors">
             {exam.title}
           </h3>
-          <div className="space-y-1 mb-4">
+          <div className="space-y-1 mb-4 w-full">
             <p className="text-sm text-gray-600">
               {exam.university} • {exam.subject}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>📅 {exam.year}</span>
               <span>•</span>
-              <span>⬇️ {exam.downloads} downloads</span>
+              <span className="inline-flex items-center gap-1">
+                <FaDownload /> {exam.downloads} downloads
+              </span>
             </div>
-            <p className="text-xs text-gray-400">👤 {exam.uploader}</p>
+            <p className="inline-flex items-center gap-1 text-gray-500">
+              <FaRegUser /> {exam.uploader}
+            </p>
           </div>
           <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium">
             Download Exam
+          </button>
+          <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium">
+            Open PDF
           </button>
         </div>
       </div>
@@ -48,14 +57,21 @@ export default function ExamCard({ exam, index, viewMode }) {
           <p className="text-sm text-gray-500">
             {exam.university} • {exam.subject} • {exam.year}
           </p>
-          <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
             <span>📄 {exam.fileType}</span>
-            <span>⬇️ {exam.downloads}</span>
-            <span>👤 {exam.uploader}</span>
+            <span className="inline-flex items-center gap-1">
+              <FaDownload /> {exam.downloads} downloads
+            </span>
+            <p className="inline-flex items-center gap-1 text-gray-500">
+              <FaRegUser /> {exam.uploader}
+            </p>
           </div>
         </div>
         <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
           Download
+        </button>
+        <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
+          Open PDF
         </button>
       </div>
     </div>
