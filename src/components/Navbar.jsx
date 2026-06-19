@@ -1,12 +1,16 @@
 import logo from "../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const location = useLocation();
+  const isHome = location.pathname === "/exams";
+  console.log(isHome);
   return (
-    <div className="sticky top-0 p-3 left-0 right-0 z-50 flex justify-center  shadow-sm font-roboto-mono bg-gradient-to-br from-gray-50 to-white">
+    <div
+      className={`sticky top-0 p-3 left-0 right-0 z-50 flex justify-center  font-roboto-mono ${isHome ? "bg-gradient-to-br from-gray-50 to-white shadow-sm" : ""} `}
+    >
       <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
         <Link to="/">
           <img src={logo} className="h-4  md:h-8 w-auto" alt="logo" />

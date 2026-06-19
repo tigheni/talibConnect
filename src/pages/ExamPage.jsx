@@ -2,11 +2,14 @@ import ExamCard from "../components/ExamCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
+import Pagination from "../components/Pagination";
+
 export default function ExamPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
   const [viewMode, setViewMode] = useState("list");
+
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +50,13 @@ export default function ExamPage() {
 
     return matchSearch && matchSubject && matchUniversity;
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const examsPerPage = 9;
+  const totalPages = Math.ceil(filteredExams.length / examsPerPage);
+  const startIndex = (currentPage - 1) * examsPerPage;
+  const endIndex = startIndex + examsPerPage;
+  const currentExams = filteredExams.slice(startIndex, endIndex);
 
   if (loading) {
     return (
@@ -177,7 +187,6 @@ export default function ExamPage() {
         </div>
       </div>
 
-      {/* Results */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {filteredExams.length > 0 ? (
           <div
@@ -187,7 +196,7 @@ export default function ExamPage() {
                 : "space-y-4"
             }
           >
-            {filteredExams.map((exam, index) => (
+            {currentExams.map((exam, index) => (
               <ExamCard
                 key={exam.id}
                 exam={exam}
@@ -217,6 +226,11 @@ export default function ExamPage() {
             </button>
           </div>
         )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

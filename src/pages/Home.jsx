@@ -88,22 +88,22 @@ export default function Home() {
             className="w-full flex justify-center"
             onSubmit={handleSearch}
           >
-            <div class="relative">
+            <div className="relative">
               <svg
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <circle cx="11" cy="11" r="7" stroke-width="2" />
+                <circle cx="11" cy="11" r="7" strokeWidth="2" />
                 <line
                   x1="16.5"
                   y1="16.5"
                   x2="22"
                   y2="22"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
               </svg>
               <input
@@ -145,13 +145,37 @@ export default function Home() {
           </div>
         </div>
       </header>
-
+      <section>
+        <div className="text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-3">
+            Our Community By the Numbers
+          </h2>
+          <p className="text-gray-400">
+            Join 10,000+ students already preparing smarter
+          </p>
+        </div>
+        <section className="max-w-6xl mx-auto py-12 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            {stats.map((stat) => (
+              <div
+                key={stat.id}
+                className="bg-[#1a1a1a] rounded-xl p-4 border border-gray-800 "
+              >
+                <h3 className="text-3xl md:text-4xl font-bold text-[#63E87E] mb-2">
+                  {stat.number}
+                </h3>
+                <p className="text-gray-400">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </section>
       <section className="max-w-6xl mx-auto px-2">
         <h1 className="text-2xl font-bold mb-4">Latest Exam Papers</h1>
         <p className="text-gray-600">Freshly uploaded by students like you</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {recentExams.map((exams) => (
-            <ExamCard key={exams.id} exam={exams} />
+            <ExamCard key={exams.id} exam={exams} viewMode={"grid"} />
           ))}
         </div>
       </section>
@@ -167,29 +191,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-black mb-3">
-          Our Community By the Numbers
-        </h2>
-        <p className="text-gray-400">
-          Join 10,000+ students already preparing smarter
-        </p>
-      </div>
-      <section className="max-w-6xl mx-auto py-12 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          {stats.map((stat) => (
-            <div
-              key={stat.id}
-              className="bg-[#1a1a1a] rounded-xl p-4 border border-gray-800 "
-            >
-              <h3 className="text-3xl md:text-4xl font-bold text-[#63E87E] mb-2">
-                {stat.number}
-              </h3>
-              <p className="text-gray-400">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section className="max-w-6xl mx-auto px-4 pb-12">
         <div className="bg-gradient-to-r from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 md:p-12 text-center border border-gray-800">

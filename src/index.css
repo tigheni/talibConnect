@@ -92,5 +92,5 @@ html {
   scroll-snap-type: y proximity;
 }
 section {
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
