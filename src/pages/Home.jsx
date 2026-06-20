@@ -1,73 +1,36 @@
 import ExamCard from "../components/ExamCard";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+
 export default function Home() {
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.search.value;
-    console.log("Search query:", query);
   };
+
   const viewMode = "grid";
-  const recentExams = [
-    {
-      id: 1,
-      title: "Physics Final 2024",
-      subject: "Physics",
-      university: "USTHB",
-      year: 2024,
-      downloads: 245,
-      uploader: "Ahmed K.",
-      fileType: "PDF",
-    },
-    {
-      id: 2,
-      title: "Mathematics Midterm",
-      subject: "Math",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 189,
-      uploader: "Sarah M.",
-      fileType: "PDF",
-    },
-    {
-      id: 3,
-      title: "Computer Science Exam",
-      subject: "CS",
-      university: "ESI",
-      year: 2023,
-      downloads: 432,
-      uploader: "Karim B.",
-      fileType: "DOCX",
-    },
-    {
-      id: 4,
-      title: "Chemistry Final",
-      subject: "Chemistry",
-      university: "USTHB",
-      year: 2024,
-      downloads: 167,
-      uploader: "Lydia R.",
-      fileType: "PDF",
-    },
-    {
-      id: 5,
-      title: "Biology Exam",
-      subject: "Biology",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 98,
-      uploader: "Oussama A.",
-      fileType: "PDF",
-    },
-    {
-      id: 6,
-      title: "Law Exam 2024",
-      subject: "Law",
-      university: "University of Algiers",
-      year: 2024,
-      downloads: 312,
-      uploader: "Meriem T.",
-      fileType: "PDF",
-    },
-  ];
+
+  const [recentExams, setRecentExams] = useState([]);
+  const fetchExams = async () => {
+    const { data, error } = await supabase
+      .from("exams")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(6);
+
+    if (error) {
+      console.error("Error fetching exams:", error);
+    } else {
+      setRecentExams(data || []);
+    }
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    fetchExams();
+  }, []);
+
   const stats = [
     { id: 1, number: "1,000+", label: "Exams Available" },
     { id: 2, number: "50+", label: "Universities" },
@@ -202,10 +165,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-[#63E87E] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#4bc864] transition-all duration-300 transform hover:scale-105">
-              Register Now
+              <Link to="/register">Register Now</Link>
             </button>
             <button className="border border-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-all duration-300">
-              Browse Exams
+              <Link to="/exams">Browse Exams</Link>
             </button>
           </div>
         </div>

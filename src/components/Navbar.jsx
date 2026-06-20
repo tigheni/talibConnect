@@ -6,7 +6,7 @@ export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/exams";
-  console.log(isHome);
+
   return (
     <div
       className={`sticky top-0 p-3 left-0 right-0 z-50 flex justify-center  font-roboto-mono ${isHome ? "bg-gradient-to-br from-gray-50 to-white shadow-sm" : ""} `}

@@ -68,7 +68,6 @@ export default function ExamPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
         <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
           All Exams
@@ -77,8 +76,6 @@ export default function ExamPage() {
           Browse thousands of past exams shared by students across Algeria
         </p>
       </div>
-
-      {/* Search Bar */}
       <div className="max-w-7xl mx-auto px-6 pb-8">
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -106,7 +103,6 @@ export default function ExamPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap justify-between items-center gap-4">
