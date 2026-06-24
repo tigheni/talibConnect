@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { FaDownload, FaRegUser } from "react-icons/fa";
 
 export default function ExamCard({ exam, index, viewMode }) {
+  const navigate = useNavigate();
   if (viewMode === "grid") {
     return (
       <div
@@ -35,7 +37,10 @@ export default function ExamCard({ exam, index, viewMode }) {
           <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium">
             Download Exam
           </button>
-          <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium">
+          <button
+            onClick={() => navigate(`/exam/${exam.id}`)}
+            className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium"
+          >
             Open PDF
           </button>
         </div>
@@ -70,7 +75,11 @@ export default function ExamCard({ exam, index, viewMode }) {
         <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
           Download
         </button>
-        <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
+
+        <button
+          onClick={() => navigate(`/exam/${exam.id}`)}
+          className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
+        >
           Open PDF
         </button>
       </div>

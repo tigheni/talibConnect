@@ -46,9 +46,9 @@ export default function NavBoard() {
         <div className=" hidden  md:flex items-center gap-5 ">
           <Link
             to="/login"
-            className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-lg border border-gray-300 transition-all duration-300"
+            className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-lg border border-gray-400 transition-all duration-200"
           >
-            <span className="relative z-10">Login</span>
+            <span className="relative z-10 ">Login</span>
           </Link>
 
           <Link

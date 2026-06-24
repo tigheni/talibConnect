@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 
 export default function ForgotPassword() {
-  // State for email input
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -14,7 +13,6 @@ export default function ForgotPassword() {
     setError("");
     setMessage("");
 
-    // Validate email is not empty
     if (!email) {
       setError("Email is required");
       return;
@@ -26,11 +24,10 @@ export default function ForgotPassword() {
       // TODO: Add Supabase later
       console.log("Reset requested for:", email);
 
-      // Show success message (same whether email exists or not)
       setMessage(
         "If an account exists with this email, you will receive a password reset link.",
       );
-      setEmail(""); // Clear email field
+      setEmail("");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -65,7 +62,6 @@ export default function ForgotPassword() {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* EMAIL FIELD - THIS WAS MISSING */}
           <label
             htmlFor="email"
             className="block text-gray-700 font-medium mb-2"

@@ -74,7 +74,7 @@ export default function Home() {
                 name="search"
                 placeholder="Search Your Exams Now"
                 aria-label="Search exams"
-                className="w-75 placeholder-[#575757] md:w-100 border focus:w-[90vw] focus:md:w-[50vw] transition-all  focus:border-gray-300 outline-none duration-300 ease-in-out px-9 py-3 rounded-lg"
+                className="w-75 placeholder-[#575757] md:w-100 border focus:w-[90vw] focus:md:w-[50vw] transition-all  focus:border-gray-500 outline-none duration-300 ease-in-out px-9 py-3 rounded-lg"
               />
               <button
                 type="submit"
@@ -96,7 +96,7 @@ export default function Home() {
             ].map((subject) => (
               <button
                 key={subject}
-                className="px-4 py-1.5  rounded-lg border border-gray-300 bg-gray-100 text-black text-sm  hover:text-green-600 transition-colors duration-200"
+                className="px-4 py-1.5  rounded-lg border border-gray-300 bg-gray-200 text-black text-sm  hover:text-green-600 transition-colors duration-200"
                 onClick={() => {
                   document.querySelector('input[name="search"]').value =
                     subject;
@@ -113,7 +113,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-black mb-3">
             Our Community By the Numbers
           </h2>
-          <p className="text-gray-400">
+          <p className="text-gray-600">
             Join 10,000+ students already preparing smarter
           </p>
         </div>

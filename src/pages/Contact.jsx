@@ -78,7 +78,7 @@ export default function Contact() {
             onChange={handleChange}
             placeholder="Your Name"
             required
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-3"
+            className="w-full bg-gray-200 border border-gray-500 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-3"
           />
 
           <input
@@ -88,7 +88,7 @@ export default function Contact() {
             onChange={handleChange}
             placeholder="Your Email"
             required
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-3"
+            className="w-full bg-gray-100 border border-gray-500 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-3"
           />
 
           <textarea
@@ -98,7 +98,7 @@ export default function Contact() {
             placeholder="Your Message"
             required
             rows={6}
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4 resize-none"
+            className="w-full bg-gray-100 border border-gray-500 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4 resize-none"
           ></textarea>
 
           <button

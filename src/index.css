@@ -16,7 +16,7 @@
 }
 
 .btn_hover_effects:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.154);
   box-shadow: 0 4px 6px rgb(243, 244, 246);
 }
 
@@ -84,8 +84,10 @@
 
 body {
   min-height: 100vh;
-  background-image: url("./assets/axiom-pattern-1920x1080.png");
-  color: black;
+  /*   background-image: url("./assets/axiom-pattern-1920x1080.png"); */
+  background-color: #e3e3e3;
+  background-image: url("https://www.transparenttextures.com/patterns/axiom-pattern.png");
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 html {
   scroll-behavior: smooth;
@@ -93,4 +95,7 @@ html {
 }
 section {
   scroll-snap-align: center;
+}
+button:hover {
+  cursor: pointer;
 }

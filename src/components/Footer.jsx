@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebook, FaEnvelope } from "react-icons/fa";
 export default function Footer() {
