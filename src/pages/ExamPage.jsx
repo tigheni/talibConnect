@@ -98,7 +98,7 @@ export default function ExamPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search exams by title, subject, or university..."
-            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
+            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-300/75 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
           />
         </div>
       </div>

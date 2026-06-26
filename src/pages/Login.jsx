@@ -68,7 +68,7 @@ export default function Login() {
         password: formData.password,
       });
       if (error) throw error;
-      navigate("/dashboard");
+      navigate("/exams");
     } catch (err) {
       setError(err.message);
     } finally {

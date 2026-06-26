@@ -77,7 +77,7 @@ export default function ExamCard({ exam, index, viewMode }) {
         </button>
 
         <button
-          onClick={() => navigate(`/exam/${exam.id}`)}
+          onClick={() => navigate(`/exam/${exam.id}`, { state: { exam } })}
           className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
         >
           Open PDF

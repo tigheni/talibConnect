@@ -1,11 +1,28 @@
 import logo from "../assets/logo.svg";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/exams";
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    };
+    getUser();
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null);
+      },
+    );
+
+    return () => listener?.subscription.unsubscribe();
+  }, []);
 
   return (
     <div
@@ -43,27 +60,52 @@ export default function NavBoard() {
             </Link>
           </div>
         </div>
-        <div className=" hidden  md:flex items-center gap-5 ">
-          <Link
-            to="/login"
-            className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-lg border border-gray-400 transition-all duration-200"
-          >
-            <span className="relative z-10 ">Login</span>
-          </Link>
+        <div className="flex items-center gap-4">
+          {user ? (
+            <>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#4FE56D] flex items-center justify-center text-black font-bold text-sm">
+                  {user.email.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm text-gray-700 hidden md:block">
+                  {user.user_metadata.username}
+                </span>
+              </div>
 
-          <Link
-            to="/register"
-            className="cursor-pointer sm:p-2 bg-[var(--cp)] shadow-[0px_4px_32px_0_rgba(99,232,126,.40)] px-6 py-3 rounded-xl border-[1px] border-[#5ae4a8] text-[#0f0f0f] font-medium group"
-          >
-            <div className="relative overflow-hidden">
-              <p className="group-hover:-translate-y-10 duration-[1.2s] ease-[cubic-bezier(0.19,1,0.22,1)]">
-                Register
-              </p>
-              <p className="absolute top-7 left-0 group-hover:top-0 duration-[1.2s] ease-[cubic-bezier(0.19,1,0.22,1)]">
-                Register
-              </p>
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  setUser(null);
+                }}
+                className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-2 rounded-lg border-none  transition-all duration-200 hover:scale-110"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <div className=" hidden  md:flex items-center gap-5 ">
+              <Link
+                to="/login"
+                className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-lg border border-gray-400 transition-all duration-200"
+              >
+                <span className="relative z-10 ">Login</span>
+              </Link>
+
+              <Link
+                to="/register"
+                className="cursor-pointer sm:p-2 bg-[var(--cp)] shadow-[0px_4px_32px_0_rgba(99,232,126,.40)] px-6 py-3 rounded-xl border-[1px] border-[#5ae4a8] text-[#0f0f0f] font-medium group"
+              >
+                <div className="relative overflow-hidden">
+                  <p className="group-hover:-translate-y-10 duration-[1.2s] ease-[cubic-bezier(0.19,1,0.22,1)]">
+                    Register
+                  </p>
+                  <p className="absolute top-7 left-0 group-hover:top-0 duration-[1.2s] ease-[cubic-bezier(0.19,1,0.22,1)]">
+                    Register
+                  </p>
+                </div>
+              </Link>
             </div>
-          </Link>
+          )}
         </div>
         <div className=" md:hidden ">
           <button
