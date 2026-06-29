@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
+import useMobile from "../hooks/useMobile";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -15,15 +16,8 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMobile();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -79,7 +73,9 @@ export default function Login() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
-      style={!isMobile ? { backgroundImage: `url('${img}')` } : {}}
+      style={
+        !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
+      }
     >
       {/* Made the card smaller: reduced padding, max-width, and rounded corners */}
       <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">

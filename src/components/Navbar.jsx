@@ -1,14 +1,15 @@
 import logo from "../assets/logo.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import useMobile from "../hooks/useMobile";
 
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/exams";
   const [user, setUser] = useState(null);
-
+  const isMobile = useMobile();
   useEffect(() => {
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
@@ -61,14 +62,14 @@ export default function NavBoard() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          {user ? (
+          {user && !isMobile ? (
             <>
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-[#4FE56D] flex items-center justify-center text-black font-bold text-sm">
-                  {user.email.charAt(0).toUpperCase()}
+                  {user.email?.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm text-gray-700 hidden md:block">
-                  {user.user_metadata.username}
+                  {user.user_metadata?.username}
                 </span>
               </div>
 
@@ -122,8 +123,40 @@ export default function NavBoard() {
               <Link to="/">Home</Link>
               <Link to="/exams">Exams</Link>
               <Link to="/upload">Upload</Link>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+
+              {user ? (
+                <>
+                  <div className="flex gap-2 py-2">
+                    <div className="w-8 h-8 rounded-full bg-[#4FE56D] flex items-center justify-center text-black font-bold text-sm">
+                      {user.email?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <span className="text-sm text-gray-700">
+                      {user.user_metadata?.username ||
+                        user.email?.split("@")[0] ||
+                        "User"}
+                    </span>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      setUser(null);
+                      setIsMenuOpen(false);
+                    }}
+                    className="text-red-500 text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    Login
+                  </Link>
+                  <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </div>

@@ -34,7 +34,6 @@ export default function Register() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear field error when user starts typing
     if (fieldErrors[e.target.name]) {
       setFieldErrors({ ...fieldErrors, [e.target.name]: "" });
     }
@@ -102,7 +101,9 @@ export default function Register() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
-      style={!isMobile ? { backgroundImage: `url('${img}')` } : {}}
+      style={
+        !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
+      }
     >
       {/* Made the card smaller - same as Login component */}
       <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
