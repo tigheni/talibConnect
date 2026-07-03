@@ -64,7 +64,7 @@ export default function ExamViewer() {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <iframe
             src={exam.file_url}
-            className="w-full h-[80vh]"
+            className="w-full h-[100vh]"
             title={exam.title}
           />
         </div>

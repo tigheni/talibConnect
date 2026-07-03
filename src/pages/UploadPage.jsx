@@ -107,6 +107,7 @@ export default function UploadPage() {
         file_url: publicUrl,
         file_type: "PDF",
         downloads: 0,
+        uploader_name: user.user_metadata?.username || "unknown",
         uploader_id: uploaderId,
       });
 

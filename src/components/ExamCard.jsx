@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { FaDownload, FaRegUser } from "react-icons/fa";
-
+import { supabase } from "../lib/supabase";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
+
   if (viewMode === "grid") {
     return (
       <div
@@ -31,11 +32,14 @@ export default function ExamCard({ exam, index, viewMode }) {
               </span>
             </div>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <FaRegUser /> {exam.uploader}
+              <FaRegUser /> {exam.uploader_name}
             </p>
           </div>
+
           <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#4FE56D] hover:text-black transition-all duration-300 font-medium">
-            Download Exam
+            <a href={`${exam.file_url}?download=${exam.title}`} download>
+              Download
+            </a>
           </button>
           <button
             onClick={() => navigate(`/exam/${exam.id}`)}
@@ -68,13 +72,18 @@ export default function ExamCard({ exam, index, viewMode }) {
               <FaDownload /> {exam.downloads} downloads
             </span>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <FaRegUser /> {exam.uploader}
+              <FaRegUser /> {exam.uploader_name}
             </p>
           </div>
         </div>
-        <button className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap">
+
+        <a
+          href={`${exam.file_url}?download=${exam.title}`}
+          download
+          className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
+        >
           Download
-        </button>
+        </a>
 
         <button
           onClick={() => navigate(`/exam/${exam.id}`, { state: { exam } })}
