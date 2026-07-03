@@ -1,42 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import usePasswordValidation from "../hooks/PasswordValidation";
+import { supabase } from "../lib/supabase";
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const {
+    password,
+    confirmPassword,
+    setPassword,
+    setConfirmPassword,
+    errors: passwordErrors,
+    validatePasswords,
+    clearErrors,
+  } = usePasswordValidation();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-  const validatePasswords = () => {
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return false;
-    }
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("code");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return false;
-    }
+    if (!code) return;
 
-    setError("");
-    return true;
-  };
+    const exchangeCode = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+      if (error) {
+        setError(
+          "Invalid or expired reset link. Please request a new password reset link.",
+        );
+      }
+    };
+
+    exchangeCode();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
     setMessage("");
-    if (!token) {
-      setError(
-        "Invalid or missing reset token. Please request a new password reset link.",
-      );
-      return;
-    }
 
     if (!validatePasswords()) {
       return;
@@ -45,14 +50,25 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      console.log("Resetting password for token:", token);
-      console.log("New password:", password);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setError(
+          "Invalid or expired reset link. Please request a new password reset link.",
+        );
+        return;
+      }
+
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) throw error;
 
       setMessage("Password reset successfully! Redirecting to login...");
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -97,11 +113,19 @@ export default function ResetPassword() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              clearErrors();
+            }}
             placeholder="Enter new password"
             required
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-4"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
+          <div
+            className={`text-red-500 text-xs mt-1 mb-4 ${passwordErrors.password ? "visible" : "invisible"}`}
+          >
+            {passwordErrors.password || "placeholder"}
+          </div>
 
           <label
             htmlFor="confirmPassword"
@@ -113,11 +137,19 @@ export default function ResetPassword() {
             type="password"
             id="confirmPassword"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              clearErrors();
+            }}
             placeholder="Confirm new password"
             required
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)] mb-6"
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[var(--cp)]"
           />
+          <div
+            className={`text-red-500 text-xs mt-1 mb-6 ${passwordErrors.confirmPassword ? "visible" : "invisible"}`}
+          >
+            {passwordErrors.confirmPassword || "placeholder"}
+          </div>
 
           <button
             type="submit"

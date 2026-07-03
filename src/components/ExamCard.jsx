@@ -13,7 +13,7 @@ export default function ExamCard({ exam, index, viewMode }) {
         <div className="p-5">
           <div className="mb-3">
             <span className="inline-block px-3 py-1 bg-[#4FE56D]/10 text-[#4FE56D] text-xs font-semibold rounded-full">
-              {exam.fileType}
+              {exam.file_type}
             </span>
           </div>
           <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#4FE56D] transition-colors">

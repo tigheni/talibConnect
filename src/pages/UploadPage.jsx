@@ -22,11 +22,13 @@ export default function UploadPage() {
   useEffect(() => {
     const fetchSubjects = async () => {
       const { data } = await supabase.from("exams").select("subject");
+      // TODO:do  error checking
       const uniqueSubjects = [...new Set(data.map((item) => item.subject))];
       setSubjects(uniqueSubjects);
     };
     fetchSubjects();
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -75,6 +77,16 @@ export default function UploadPage() {
     const filePath = `${Date.now()}_${cleanFileName}`;
 
     try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const uploaderId = user?.id;
+      if (!uploaderId) {
+        setError("You must be logged in to upload");
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.storage
         .from("exams")
         .upload(filePath, file, { upsert: true });
@@ -86,15 +98,7 @@ export default function UploadPage() {
         .getPublicUrl(filePath);
 
       const publicUrl = urlData.publicUrl;
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const uploaderId = user?.id;
-      if (!uploaderId) {
-        setError("You must be logged in to upload");
-        setLoading(false);
-        return;
-      }
+
       const { error: dbError } = await supabase.from("exams").insert({
         title: ExamData.title,
         year: parseInt(ExamData.year),

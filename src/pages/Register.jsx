@@ -1,41 +1,52 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
+import usePasswordValidation from "../hooks/PasswordValidation";
+import useMobile from "../hooks/useMobile";
 
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: "",
-    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
     username: "",
     email: "",
-    password: "",
-    confirmPassword: "",
   });
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMobile();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const {
+    password,
+    confirmPassword,
+    setPassword,
+    setConfirmPassword,
+    errors: passwordErrors,
+    validatePasswords,
+    clearErrors,
+  } = usePasswordValidation();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    if (fieldErrors[e.target.name]) {
-      setFieldErrors({ ...fieldErrors, [e.target.name]: "" });
+    const { name, value } = e.target;
+
+    if (name === "username" || name === "email") {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+      if (fieldErrors[name]) {
+        setFieldErrors({ ...fieldErrors, [name]: "" });
+      }
+    } else if (name === "password") {
+      setPassword(value);
+      clearErrors("password");
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+      clearErrors("confirmPassword");
     }
   };
 
@@ -45,30 +56,18 @@ export default function Register() {
     setFieldErrors({
       username: "",
       email: "",
-      password: "",
-      confirmPassword: "",
     });
 
     if (!formData.username) {
-      setFieldErrors({ ...fieldErrors, username: "Username is required" });
+      setFieldErrors((prev) => ({ ...prev, username: "Username is required" }));
       return;
     }
     if (!formData.email) {
-      setFieldErrors({ ...fieldErrors, email: "Email is required" });
+      setFieldErrors((prev) => ({ ...prev, email: "Email is required" }));
       return;
     }
-    if (formData.password.length < 6) {
-      setFieldErrors({
-        ...fieldErrors,
-        password: "Password must be at least 6 characters",
-      });
-      return;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      setFieldErrors({
-        ...fieldErrors,
-        confirmPassword: "Passwords don't match",
-      });
+
+    if (!validatePasswords()) {
       return;
     }
 
@@ -76,7 +75,7 @@ export default function Register() {
     try {
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
-        password: formData.password,
+        password: password,
         options: {
           data: {
             username: formData.username,
@@ -105,7 +104,6 @@ export default function Register() {
         !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
       }
     >
-      {/* Made the card smaller - same as Login component */}
       <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
         <Link to="/">
           <img src={logo} alt="Logo" className="h-7 mb-4" />
@@ -130,7 +128,7 @@ export default function Register() {
             id="username"
             value={formData.username}
             placeholder="Username"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
@@ -151,7 +149,7 @@ export default function Register() {
             id="email"
             value={formData.email}
             placeholder="Email"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
@@ -170,16 +168,16 @@ export default function Register() {
             type="password"
             name="password"
             id="password"
-            value={formData.password}
+            value={password} // Use password from hook
             placeholder="Password"
             required
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.password ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${passwordErrors.password ? "visible" : "invisible"}`}
           >
-            {fieldErrors.password || "placeholder"}
+            {passwordErrors.password || "placeholder"}
           </div>
 
           <label
@@ -192,16 +190,16 @@ export default function Register() {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
-            value={formData.confirmPassword}
+            value={confirmPassword} // Use confirmPassword from hook
             placeholder="Confirm Password"
             required
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.confirmPassword ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${passwordErrors.confirmPassword ? "visible" : "invisible"}`}
           >
-            {fieldErrors.confirmPassword || "placeholder"}
+            {passwordErrors.confirmPassword || "placeholder"}
           </div>
 
           <button
