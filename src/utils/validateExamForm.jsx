@@ -1,0 +1,57 @@
+export const validateExamForm = (examData, file) => {
+  const errors = {
+    title: "",
+    subject: "",
+    year: "",
+    university: "",
+    file: "",
+  };
+  let isValid = true;
+
+  if (!examData.title?.trim()) {
+    errors.title = "Title is required";
+    isValid = false;
+  } else if (examData.title.trim().length < 3) {
+    errors.title = "Title must be at least 3 characters";
+    isValid = false;
+  }
+
+  // Subject validation
+  if (!examData.subject?.trim()) {
+    errors.subject = "Subject is required";
+    isValid = false;
+  }
+
+  if (!examData.university?.trim()) {
+    errors.university = "University is required";
+    isValid = false;
+  }
+
+  const currentYear = new Date().getFullYear();
+  if (!examData.year) {
+    errors.year = "Year is required";
+    isValid = false;
+  } else if (isNaN(examData.year)) {
+    errors.year = "Year must be a number";
+    isValid = false;
+  } else if (examData.year < 2000) {
+    errors.year = "Year must be 2000 or later";
+    isValid = false;
+  } else if (examData.year > currentYear + 1) {
+    errors.year = `Year cannot be later than ${currentYear + 1}`;
+    isValid = false;
+  }
+
+  if (!file) {
+    errors.file = "Please select a PDF file";
+    isValid = false;
+  } else if (file.type !== "application/pdf") {
+    errors.file = "Please select a PDF file (PDF format required)";
+    isValid = false;
+  } else if (file.size > 10 * 1024 * 1024) {
+    errors.file = "File size must be less than 10MB";
+    isValid = false;
+  }
+
+  return { isValid, errors };
+};

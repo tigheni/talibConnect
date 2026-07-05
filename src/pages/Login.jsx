@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
@@ -19,12 +19,15 @@ export default function Login() {
   const isMobile = useMobile();
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/exams";
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear field error when user starts typing
+
     if (fieldErrors[e.target.name]) {
       setFieldErrors({ ...fieldErrors, [e.target.name]: "" });
     }
@@ -62,7 +65,7 @@ export default function Login() {
         password: formData.password,
       });
       if (error) throw error;
-      navigate("/exams");
+      navigate(redirectTo);
     } catch (err) {
       setError(err.message);
     } finally {

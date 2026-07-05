@@ -4,6 +4,7 @@ import MainLayout from "./components/Mainlayout";
 import ScrollToTop from "./components/ScrollToTop";
 import AuthLayout from "./components/AuthLayout";
 import ExamViewer from "./pages/ExamViewer";
+import ProtectedRoute from "./components/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -21,7 +22,14 @@ export default function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/upload" element={<Upload />} />
+            <Route
+              path="/upload"
+              element={
+                <ProtectedRoute>
+                  <Upload />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/contact" element={<Contact />} />
             <Route path="/exams" element={<ExamPage />} />
           </Route>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import { validateExamForm } from "../utils/validateExamForm"; // Import from utils
+
 export default function UploadPage() {
   const [subjects, setSubjects] = useState([]);
   const [file, setFile] = useState(null);
@@ -11,6 +13,7 @@ export default function UploadPage() {
     subject: "",
     year: "",
     university: "",
+    file: "",
   });
   const [ExamData, setExamData] = useState({
     title: "",
@@ -22,7 +25,6 @@ export default function UploadPage() {
   useEffect(() => {
     const fetchSubjects = async () => {
       const { data } = await supabase.from("exams").select("subject");
-      // TODO:do  error checking
       const uniqueSubjects = [...new Set(data.map((item) => item.subject))];
       setSubjects(uniqueSubjects);
     };
@@ -32,43 +34,15 @@ export default function UploadPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setFieldErrors({
-      title: "",
-      subject: "",
-      year: "",
-      university: "",
-      file: null,
-    });
-    if (!ExamData.title) {
-      setFieldErrors({ ...fieldErrors, title: " Exam should have a Title" });
-      return;
-    }
-    if (!ExamData.subject) {
-      setFieldErrors({
-        ...fieldErrors,
-        subject: " Exam should have a Subject",
-      });
-      return;
-    }
-    if (!ExamData.university) {
-      setFieldErrors({
-        ...fieldErrors,
-        university: " Exam should have a university",
-      });
-      return;
-    }
-    if (!ExamData.year) {
-      setFieldErrors({
-        ...fieldErrors,
-        year: " Exam should have a year",
-      });
+
+    // Validate the form
+    const { isValid, errors } = validateExamForm(ExamData, file);
+    setFieldErrors(errors);
+
+    if (!isValid) {
       return;
     }
 
-    if (!file) {
-      setFieldErrors({ ...fieldErrors, file: "Please select a PDF file" });
-      return;
-    }
     setLoading(true);
     const cleanFileName = file.name
       .normalize("NFD")
@@ -114,23 +88,32 @@ export default function UploadPage() {
       if (dbError) throw dbError;
 
       alert("Exam uploaded successfully!");
+
+      // Reset form
+      setExamData({ title: "", university: "", year: "", subject: "" });
+      setFile(null);
+      // Reset file input
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) fileInput.value = "";
+      setFieldErrors({
+        title: "",
+        subject: "",
+        year: "",
+        university: "",
+        file: "",
+      });
     } catch (err) {
       setError(err.message);
     } finally {
-      setExamData({ title: "", university: "", year: "", subject: "" });
-      setFile(null);
       setLoading(false);
-      const { data } = await supabase.storage.from("exams").list();
-
-      console.log("Files in bucket:", data);
     }
   };
 
   return (
-    <div className=" max-w-2xl mx-auto px-4 py-12">
+    <div className="max-w-2xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-center mb-6">Upload Exam</h1>
       <form
-        className="bg-white rounded-xl p-6 shadow-lg border"
+        className="bg-white rounded-xl p-6 shadow-lg "
         onSubmit={handleSubmit}
       >
         {error && (
@@ -149,14 +132,13 @@ export default function UploadPage() {
             onChange={(e) =>
               setExamData({ ...ExamData, title: e.target.value })
             }
-            required
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
+              fieldErrors.title ? "border-red-500" : "border-gray-400"
+            }`}
           />
-        </div>
-        <div
-          className={`text-red-500 text-xs mt-1 ${fieldErrors.title ? "visible" : "invisible"}`}
-        >
-          {fieldErrors.title || "placeholder"}
+          {fieldErrors.title && (
+            <div className="text-red-500 text-xs mt-1">{fieldErrors.title}</div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -171,19 +153,22 @@ export default function UploadPage() {
               setExamData({ ...ExamData, subject: e.target.value })
             }
             list="subjectSuggestions"
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
+              fieldErrors.subject ? "border-red-500" : "border-gray-400"
+            }`}
           />
           <datalist id="subjectSuggestions">
             {subjects.map((s) => (
-              <option key={s} className="" value={s} />
+              <option key={s} value={s} />
             ))}
           </datalist>
+          {fieldErrors.subject && (
+            <div className="text-red-500 text-xs mt-1">
+              {fieldErrors.subject}
+            </div>
+          )}
         </div>
-        <div
-          className={`text-red-500 text-xs mt-1 ${fieldErrors.subject ? "visible" : "invisible"}`}
-        >
-          {fieldErrors.subject || "placeholder"}
-        </div>
+
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             University:
@@ -195,14 +180,17 @@ export default function UploadPage() {
             onChange={(e) =>
               setExamData({ ...ExamData, university: e.target.value })
             }
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
+              fieldErrors.university ? "border-red-500" : "border-gray-400"
+            }`}
           />
+          {fieldErrors.university && (
+            <div className="text-red-500 text-xs mt-1">
+              {fieldErrors.university}
+            </div>
+          )}
         </div>
-        <div
-          className={`text-red-500 text-xs mt-1 ${fieldErrors.university ? "visible" : "invisible"}`}
-        >
-          {fieldErrors.university || "placeholder"}
-        </div>
+
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Year:
@@ -213,9 +201,15 @@ export default function UploadPage() {
             value={ExamData.year}
             min={2000}
             onChange={(e) => setExamData({ ...ExamData, year: e.target.value })}
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
+              fieldErrors.year ? "border-red-500" : "border-gray-400"
+            }`}
           />
+          {fieldErrors.year && (
+            <div className="text-red-500 text-xs mt-1">{fieldErrors.year}</div>
+          )}
         </div>
+
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Exam File (PDF):
@@ -224,20 +218,21 @@ export default function UploadPage() {
             type="file"
             accept=".pdf"
             onChange={(e) => setFile(e.target.files[0])}
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94]"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94] ${
+              fieldErrors.file ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {fieldErrors.file && (
+            <div className="text-red-500 text-xs mt-1">{fieldErrors.file}</div>
+          )}
         </div>
-        <div
-          className={`text-red-500 text-xs mt-1 ${fieldErrors.file ? "visible" : "invisible"}`}
-        >
-          {fieldErrors.file || "placeholder"}
-        </div>
+
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#5ae4a8] text-black font-semibold py-3 rounded-lg hover:bg-[#4bcc94] transition-all duration-300"
+          className="w-full bg-[#5ae4a8] text-black font-semibold py-3 rounded-lg hover:bg-[#4bcc94] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Uploading The Exam" : "Upload Exam"}
+          {loading ? "Uploading The Exam..." : "Upload Exam"}
         </button>
       </form>
     </div>

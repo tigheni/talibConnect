@@ -106,7 +106,7 @@ export default function ExamPage() {
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap justify-between items-center gap-4">
-            <div className="flex gap-3">
+            <div className=" flex flex-col gap-5 md:flex">
               <select
                 value={subjectFilter}
                 onChange={(e) => setSubjectFilter(e.target.value)}

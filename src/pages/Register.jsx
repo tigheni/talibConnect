@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
-import usePasswordValidation from "../hooks/PasswordValidation";
+import usePasswordValidation from "../utils/PasswordValidation";
 import useMobile from "../hooks/useMobile";
 
 export default function Register() {
