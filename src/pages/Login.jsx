@@ -60,12 +60,16 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
       if (error) throw error;
-      navigate(redirectTo);
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate("/exams");
+      }
     } catch (err) {
       setError(err.message);
     } finally {

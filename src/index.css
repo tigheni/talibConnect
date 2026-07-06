@@ -62,7 +62,7 @@
 }
 
 @utility btn_hover_effects {
-  @apply hover:rounded-lg hover:bg-black/5 transition-all ease-in duration-200;
+  @apply hover:rounded-xl hover:bg-black/5 transition-all ease-in duration-200;
 }
 
 :root {

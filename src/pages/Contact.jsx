@@ -46,8 +46,8 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col-reverse items-center justify-center gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:gap-12 lg:px-8">
-      <div className="w-full max-w-lg bg-white px-5 py-6 rounded-lg shadow-lg border border-gray-300 sm:px-8">
+    <div className="min-h-screen flex flex-col-reverse items-center justify-center gap-8 px-4 sm:px-6 lg:flex-row lg:gap-12 lg:px-6">
+      <div className="w-full max-w-lg bg-white px-5 py-6 rounded-xl shadow-lg border border-gray-300 sm:px-8">
         <div className="flex gap-2 justify-center items-center">
           <BiMessageSquare className="text-3xl text-[var(--cp)] sm:text-4xl" />
           <h1 className="text-xl font-bold text-center sm:text-2xl">

@@ -1,5 +1,5 @@
 import logo from "../assets/logo.svg";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
@@ -29,7 +29,7 @@ export default function NavBoard() {
     <div
       className={`sticky top-0 p-3 left-0 right-0 z-50 flex justify-center  font-roboto-mono ${isHome ? "bg-gradient-to-br from-gray-50 to-white shadow-sm" : ""} `}
     >
-      <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
+      <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
         <Link to="/">
           <img src={logo} className="h-4  md:h-8 w-auto" alt="logo" />
         </Link>
@@ -37,25 +37,25 @@ export default function NavBoard() {
           <div className="flex gap-5">
             <Link
               to="/"
-              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-lg"
+              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
             >
               Home
             </Link>
             <Link
               to="/upload"
-              className="text-sm font-medium sm:p-2 px-4  py-2 btn_hover_effects rounded-lg"
+              className="text-sm font-medium sm:p-2 px-4  py-2 btn_hover_effects rounded-xl"
             >
               Upload
             </Link>
             <Link
               to="/exams"
-              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-lg"
+              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
             >
               Exams
             </Link>
             <Link
               to="/contact"
-              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-lg"
+              className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
             >
               Contact
             </Link>
@@ -78,7 +78,7 @@ export default function NavBoard() {
                   await supabase.auth.signOut();
                   setUser(null);
                 }}
-                className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-2 rounded-lg border-none  transition-all duration-200 hover:scale-110"
+                className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-2 rounded-xl border-none  transition-all duration-200 hover:scale-110"
               >
                 Logout
               </button>
@@ -87,7 +87,7 @@ export default function NavBoard() {
             <div className=" hidden  md:flex items-center gap-5 ">
               <Link
                 to="/login"
-                className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-lg border border-gray-400 transition-all duration-200"
+                className="login-btn text-sm font-medium sm:p-2  px-4 py-2 rounded-xl border border-gray-400 transition-all duration-200"
               >
                 <span className="relative z-10 ">Login</span>
               </Link>

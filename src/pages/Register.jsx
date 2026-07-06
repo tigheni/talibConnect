@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
-import usePasswordValidation from "../utils/PasswordValidation";
+import usePasswordValidation from "../hooks/PasswordValidation";
 import useMobile from "../hooks/useMobile";
 
 export default function Register() {
@@ -19,6 +19,8 @@ export default function Register() {
   });
   const isMobile = useMobile();
   const navigate = useNavigate();
+
+  const [message, setMessage] = useState("");
 
   const {
     password,
@@ -86,9 +88,9 @@ export default function Register() {
       if (error) throw error;
 
       if (data.session) {
-        navigate("/dashboard");
+        navigate("/exams");
       } else {
-        navigate("/login");
+        setMessage("Check your email to confirm your account.");
       }
     } catch (err) {
       setError(err.message);
@@ -112,6 +114,11 @@ export default function Register() {
         {error && (
           <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
             {error}
+          </div>
+        )}
+        {message && (
+          <div className="bg-gray-500/10 border border-black-500 text-black-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
+            {message}
           </div>
         )}
 

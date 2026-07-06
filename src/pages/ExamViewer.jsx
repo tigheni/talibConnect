@@ -7,22 +7,20 @@ export default function ExamViewer() {
   const [exam, setExam] = useState(null);
   const { id } = useParams();
 
-  const fetchExamById = async () => {
-    const { data, error } = await supabase
-      .from("exams")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      console.error("Error:", error);
-    } else {
-      setExam(data);
-    }
-  };
-
   useEffect(() => {
-    // eslint-disable-next-line
+    const fetchExamById = async () => {
+      const { data, error } = await supabase
+        .from("exams")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error:", error);
+      } else {
+        setExam(data);
+      }
+    };
     fetchExamById();
   }, [id]);
   if (!exam) {

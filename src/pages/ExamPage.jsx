@@ -1,11 +1,10 @@
 import ExamCard from "../components/ExamCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-
+import { useSearchParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
 
 export default function ExamPage() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
   const [viewMode, setViewMode] = useState("list");
@@ -13,24 +12,29 @@ export default function ExamPage() {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchExams = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("exams")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error fetching exams:", error);
-    } else {
-      setExams(data || []);
-    }
-
-    setLoading(false);
-  };
+  const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(
+    () => searchParams.get("search") || "",
+  );
 
   useEffect(() => {
-    // eslint-disable-next-line
+    const fetchExams = async () => {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("exams")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching exams:", error);
+      } else {
+        setExams(data || []);
+      }
+
+      setLoading(false);
+    };
+
     fetchExams();
   }, []);
 
@@ -60,15 +64,19 @@ export default function ExamPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading exams...</div>
+      <div className="min-h-screen flex items-center justify-center ">
+        <div className="flex gap-2">
+          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
+    <div className="min-h-screen ">
+      <div className=" mx-auto px-6 pt-12 pb-6 bg-gray-200">
         <h1 className="text-5xl md:text-5xl font-bold mb-4 tracking-tight">
           All Exams
         </h1>
@@ -76,7 +84,7 @@ export default function ExamPage() {
           Browse thousands of past exams shared by students across Algeria
         </p>
       </div>
-      <div className="max-w-7xl mx-auto px-6 pb-8">
+      <div className=" w-full mx-auto px-6 pb-8 bg-gray-200">
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg
@@ -103,14 +111,14 @@ export default function ExamPage() {
         </div>
       </div>
 
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+      <div className="sticky top-0 z-50 bg-white backdrop-blur-lg border-b border-gray-200 shadow-md ">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap justify-between items-center gap-4">
-            <div className=" flex flex-col gap-5 md:flex">
+            <div className=" flex flex-col gap-5 md:flex-row">
               <select
                 value={subjectFilter}
                 onChange={(e) => setSubjectFilter(e.target.value)}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer hover:bg-gray-200 transition-all"
+                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer  transition-all"
               >
                 <option value="">📚 All Subjects</option>
                 <option value="Physics">⚡ Physics</option>
@@ -124,21 +132,21 @@ export default function ExamPage() {
               <select
                 value={universityFilter}
                 onChange={(e) => setUniversityFilter(e.target.value)}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer hover:bg-gray-200 transition-all"
+                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer transition-all"
               >
                 <option value="">🎓 All Universities</option>
                 {universities.map((uni) => (
                   <option key={uni} value={uni}>
-                    {uni}
+                    {`🎓${uni}`}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="flex gap-2 bg-gray-100 rounded-xl p-1">
+            <div className="flex gap-2 bg-gray-300 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white shadow-sm text-[#4FE56D]" : "text-gray-500"}`}
+                className={`p-2 rounded-xl transition-all ${viewMode === "grid" ? "bg-white shadow-sm text-[#4FE56D]" : "text-gray-500"}`}
               >
                 <svg
                   className="w-5 h-5"

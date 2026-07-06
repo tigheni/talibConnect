@@ -1,16 +1,17 @@
 import ExamCard from "../components/ExamCard";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
 export default function Home() {
+  const navigate = useNavigate();
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.search.value;
+    if (query.trim()) {
+      navigate(`/exams?search=${query}`);
+    }
   };
-
-  const viewMode = "grid";
-
   const [recentExams, setRecentExams] = useState([]);
   const fetchExams = async () => {
     const { data, error } = await supabase
@@ -36,6 +37,7 @@ export default function Home() {
     { id: 2, number: "50+", label: "Universities" },
     { id: 3, number: "10,000+", label: "Active Students" },
   ];
+
   return (
     <div className="font-inter">
       <header className="hero">
@@ -69,6 +71,7 @@ export default function Home() {
                   strokeLinecap="round"
                 />
               </svg>
+
               <input
                 type="search"
                 name="search"

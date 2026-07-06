@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { validateExamForm } from "../utils/validateExamForm"; // Import from utils
+import { validateExamForm } from "../validators/validateExamForm";
 
 export default function UploadPage() {
   const [subjects, setSubjects] = useState([]);
@@ -35,7 +35,6 @@ export default function UploadPage() {
     e.preventDefault();
     setError("");
 
-    // Validate the form
     const { isValid, errors } = validateExamForm(ExamData, file);
     setFieldErrors(errors);
 
@@ -61,7 +60,7 @@ export default function UploadPage() {
         return;
       }
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("exams")
         .upload(filePath, file, { upsert: true });
 
@@ -87,12 +86,8 @@ export default function UploadPage() {
 
       if (dbError) throw dbError;
 
-      alert("Exam uploaded successfully!");
-
-      // Reset form
       setExamData({ title: "", university: "", year: "", subject: "" });
       setFile(null);
-      // Reset file input
       const fileInput = document.querySelector('input[type="file"]');
       if (fileInput) fileInput.value = "";
       setFieldErrors({
@@ -102,6 +97,7 @@ export default function UploadPage() {
         university: "",
         file: "",
       });
+      alert("Exam uploaded successfully!");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -230,7 +226,7 @@ export default function UploadPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#5ae4a8] text-black font-semibold py-3 rounded-lg hover:bg-[#4bcc94] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-[#5ae4a8] text-black font-semibold py-3 rounded-xl hover:bg-[#4bcc94] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Uploading The Exam..." : "Upload Exam"}
         </button>

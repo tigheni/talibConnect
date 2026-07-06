@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { FaDownload, FaRegUser } from "react-icons/fa";
-import { supabase } from "../lib/supabase";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
 
@@ -8,12 +7,12 @@ export default function ExamCard({ exam, index, viewMode }) {
     return (
       <div
         key={exam.id}
-        className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all  duration-300 hover:-translate-y-1"
         style={{ animationDelay: `${index * 50}ms` }}
       >
         <div className="p-5">
           <div className="mb-3">
-            <span className="inline-block px-3 py-1 bg-[#4FE56D]/10 text-[#4FE56D] text-xs font-semibold rounded-full">
+            <span className="inline-block px-3 border py-1 bg-[#4FE56D]/10 text-[#4FE56D] text-xs font-semibold rounded-full">
               {exam.file_type}
             </span>
           </div>
@@ -67,7 +66,6 @@ export default function ExamCard({ exam, index, viewMode }) {
             {exam.university} • {exam.subject} • {exam.year}
           </p>
           <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
-            <span>📄 {exam.fileType}</span>
             <span className="inline-flex items-center gap-1">
               <FaDownload /> {exam.downloads} downloads
             </span>
@@ -80,14 +78,14 @@ export default function ExamCard({ exam, index, viewMode }) {
         <a
           href={`${exam.file_url}?download=${exam.title}`}
           download
-          className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
+          className="px-6 py-2 bg-[#4FE56D] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
         >
           Download
         </a>
 
         <button
           onClick={() => navigate(`/exam/${exam.id}`, { state: { exam } })}
-          className="px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
+          className="px-6 py-2 bg-[#4FE56D] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
         >
           Open PDF
         </button>
