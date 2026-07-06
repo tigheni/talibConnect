@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/Mainlayout";
 import ScrollToTop from "./components/ScrollToTop";
-import AuthLayout from "./components/AuthLayout";
+import AuthLayout from "./layout/AuthLayout";
 import ExamViewer from "./pages/ExamViewer";
 import ProtectedRoute from "./components/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home"));

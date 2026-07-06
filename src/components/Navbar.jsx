@@ -1,5 +1,5 @@
 import logo from "../assets/logo.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
@@ -7,6 +7,7 @@ import useMobile from "../hooks/useMobile";
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/exams";
   const [user, setUser] = useState(null);
   const isMobile = useMobile();
@@ -77,6 +78,7 @@ export default function NavBoard() {
                 onClick={async () => {
                   await supabase.auth.signOut();
                   setUser(null);
+                  navigate("/");
                 }}
                 className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-2 rounded-xl border-none  transition-all duration-200 hover:scale-110"
               >

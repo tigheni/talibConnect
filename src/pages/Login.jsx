@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,20 @@ export default function Login() {
 
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/exams";
+
+  useEffect(() => {
+    const redirectAuthenticatedUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        navigate(redirectTo, { replace: true });
+      }
+    };
+
+    redirectAuthenticatedUser();
+  }, [navigate, redirectTo]);
 
   const handleChange = (e) => {
     setFormData({
@@ -71,11 +86,16 @@ export default function Login() {
         navigate("/exams");
       }
     } catch (err) {
-      setError(err.message);
+      setError(
+        err.message || "Could not log in. Please check your email and password.",
+      );
     } finally {
       setLoading(false);
     }
   };
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div

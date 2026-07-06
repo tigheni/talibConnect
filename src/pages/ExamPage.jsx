@@ -2,6 +2,7 @@ import ExamCard from "../components/ExamCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useSearchParams } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
 
 export default function ExamPage() {
@@ -63,15 +64,7 @@ export default function ExamPage() {
   const currentExams = filteredExams.slice(startIndex, endIndex);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center ">
-        <div className="flex gap-2">
-          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-          <div className="w-4 h-4 bg-[#4FE56D] rounded-full animate-bounce"></div>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -104,7 +97,10 @@ export default function ExamPage() {
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
             placeholder="Search exams by title, subject, or university..."
             className="w-full pl-12 pr-4 py-4 border-0 bg-gray-300/75 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
           />
@@ -117,7 +113,10 @@ export default function ExamPage() {
             <div className=" flex flex-col gap-5 md:flex-row">
               <select
                 value={subjectFilter}
-                onChange={(e) => setSubjectFilter(e.target.value)}
+                onChange={(e) => {
+                  setSubjectFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
                 className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer  transition-all"
               >
                 <option value="">📚 All Subjects</option>
@@ -131,7 +130,10 @@ export default function ExamPage() {
 
               <select
                 value={universityFilter}
-                onChange={(e) => setUniversityFilter(e.target.value)}
+                onChange={(e) => {
+                  setUniversityFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
                 className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer transition-all"
               >
                 <option value="">🎓 All Universities</option>
@@ -223,6 +225,7 @@ export default function ExamPage() {
                 setSearchTerm("");
                 setSubjectFilter("");
                 setUniversityFilter("");
+                setCurrentPage(1);
               }}
               className="mt-6 px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all"
             >

@@ -8,6 +8,7 @@ export default function UploadPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
     title: "",
     subject: "",
@@ -24,8 +25,16 @@ export default function UploadPage() {
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      const { data } = await supabase.from("exams").select("subject");
-      const uniqueSubjects = [...new Set(data.map((item) => item.subject))];
+      const { data, error } = await supabase.from("exams").select("subject");
+
+      if (error) {
+        console.error("Error fetching subjects:", error);
+        return;
+      }
+
+      const uniqueSubjects = [
+        ...new Set((data || []).map((item) => item.subject).filter(Boolean)),
+      ];
       setSubjects(uniqueSubjects);
     };
     fetchSubjects();
@@ -34,6 +43,7 @@ export default function UploadPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     const { isValid, errors } = validateExamForm(ExamData, file);
     setFieldErrors(errors);
@@ -85,6 +95,7 @@ export default function UploadPage() {
       });
 
       if (dbError) throw dbError;
+      setSuccess("Your exam has been successfully uploaded.");
 
       setExamData({ title: "", university: "", year: "", subject: "" });
       setFile(null);
@@ -97,7 +108,6 @@ export default function UploadPage() {
         university: "",
         file: "",
       });
-      alert("Exam uploaded successfully!");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -117,6 +127,11 @@ export default function UploadPage() {
             {error}
           </div>
         )}
+        {success && (
+          <div className="bg-emerald-500/10 border border-emerald-500 text-emerald-500 rounded-lg p-3 mb-4 text-sm text-center">
+            {success}
+          </div>
+        )}
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Title:
@@ -125,9 +140,9 @@ export default function UploadPage() {
             type="text"
             placeholder="EX: Waves and vibrations"
             value={ExamData.title}
-            onChange={(e) =>
-              setExamData({ ...ExamData, title: e.target.value })
-            }
+            onChange={(e) => {
+              setExamData({ ...ExamData, title: e.target.value });
+            }}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.title ? "border-red-500" : "border-gray-400"
             }`}
@@ -145,9 +160,9 @@ export default function UploadPage() {
             type="text"
             placeholder="e.g., Computer Science, Law, Biochemistry..."
             value={ExamData.subject}
-            onChange={(e) =>
-              setExamData({ ...ExamData, subject: e.target.value })
-            }
+            onChange={(e) => {
+              setExamData({ ...ExamData, subject: e.target.value });
+            }}
             list="subjectSuggestions"
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.subject ? "border-red-500" : "border-gray-400"
@@ -173,9 +188,9 @@ export default function UploadPage() {
             type="text"
             placeholder="e.g., USTHB, University of Algiers..."
             value={ExamData.university}
-            onChange={(e) =>
-              setExamData({ ...ExamData, university: e.target.value })
-            }
+            onChange={(e) => {
+              setExamData({ ...ExamData, university: e.target.value });
+            }}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.university ? "border-red-500" : "border-gray-400"
             }`}
@@ -196,7 +211,9 @@ export default function UploadPage() {
             placeholder="e.g., 2024"
             value={ExamData.year}
             min={2000}
-            onChange={(e) => setExamData({ ...ExamData, year: e.target.value })}
+            onChange={(e) => {
+              setExamData({ ...ExamData, year: e.target.value });
+            }}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.year ? "border-red-500" : "border-gray-400"
             }`}
@@ -213,7 +230,9 @@ export default function UploadPage() {
           <input
             type="file"
             accept=".pdf"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+            }}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94] ${
               fieldErrors.file ? "border-red-500" : "border-gray-300"
             }`}

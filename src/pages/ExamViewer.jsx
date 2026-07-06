@@ -1,28 +1,51 @@
 import { IoIosArrowBack } from "react-icons/io";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ExamViewer() {
   const [exam, setExam] = useState(null);
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExamById = async () => {
-      const { data, error } = await supabase
-        .from("exams")
-        .select("*")
-        .eq("id", id)
-        .single();
+      try {
+        setLoading(true);
+        setError("");
+        setExam(null);
 
-      if (error) {
-        console.error("Error:", error);
-      } else {
+        const { data, error } = await supabase
+          .from("exams")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) throw error;
+
         setExam(data);
+      } catch (err) {
+        setError(err.message || "An unexpected error occurred. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchExamById();
   }, [id]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500 text-xl">{error}</p>
+      </div>
+    );
+  }
   if (!exam) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -30,11 +53,12 @@ export default function ExamViewer() {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-6">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => navigate(-1)}
           className="flex items-center gap-2 px-4 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition mb-4"
         >
           <IoIosArrowBack className="text-xl" />

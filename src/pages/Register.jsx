@@ -34,6 +34,8 @@ export default function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
+    setMessage("");
 
     if (name === "username" || name === "email") {
       setFormData({
@@ -55,6 +57,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setMessage("");
     setFieldErrors({
       username: "",
       email: "",
@@ -93,7 +96,7 @@ export default function Register() {
         setMessage("Check your email to confirm your account.");
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Could not create your account. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -117,7 +120,7 @@ export default function Register() {
           </div>
         )}
         {message && (
-          <div className="bg-gray-500/10 border border-black-500 text-black-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
+          <div className="bg-emerald-500/10 border border-emerald-500 text-emerald-600 rounded-lg p-2 mb-3 text-sm text-center w-full">
             {message}
           </div>
         )}
