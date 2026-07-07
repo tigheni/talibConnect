@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
-import { validateExamForm } from "../validators/validateExamForm";
+import { useState } from "react";
+import { useUploadExam } from "../hooks/useUploadExam";
+import { useSubjects } from "../hooks/useSubjects";
 
 export default function UploadPage() {
-  const [subjects, setSubjects] = useState([]);
-  const [file, setFile] = useState(null);
+  const subjects = useSubjects();
+  const { uploadExam, loading, error, success } = useUploadExam();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [examData, setExamData] = useState({
+    title: "",
+    university: "",
+    year: "",
+    subject: "",
+  });
+  const [file, setFile] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({
     title: "",
     subject: "",
@@ -16,91 +20,38 @@ export default function UploadPage() {
     university: "",
     file: "",
   });
-  const [ExamData, setExamData] = useState({
-    title: "",
-    university: "",
-    year: "",
-    subject: "",
-  });
 
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      const { data, error } = await supabase.from("exams").select("subject");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setExamData({ ...examData, [name]: value });
+    if (fieldErrors[name]) {
+      setFieldErrors({ ...fieldErrors, [name]: "" });
+    }
+  };
 
-      if (error) {
-        console.error("Error fetching subjects:", error);
-        return;
-      }
-
-      const uniqueSubjects = [
-        ...new Set((data || []).map((item) => item.subject).filter(Boolean)),
-      ];
-      setSubjects(uniqueSubjects);
-    };
-    fetchSubjects();
-  }, []);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    if (fieldErrors.file) {
+      setFieldErrors({ ...fieldErrors, file: "" });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setFieldErrors({
+      title: "",
+      subject: "",
+      year: "",
+      university: "",
+      file: "",
+    });
 
-    const { isValid, errors } = validateExamForm(ExamData, file);
-    setFieldErrors(errors);
+    const result = await uploadExam(examData, file);
 
-    if (!isValid) {
-      return;
-    }
-
-    setLoading(true);
-    const cleanFileName = file.name
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filePath = `${Date.now()}_${cleanFileName}`;
-
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const uploaderId = user?.id;
-      if (!uploaderId) {
-        setError("You must be logged in to upload");
-        setLoading(false);
-        return;
-      }
-
-      const { error } = await supabase.storage
-        .from("exams")
-        .upload(filePath, file, { upsert: true });
-
-      if (error) throw error;
-
-      const { data: urlData } = supabase.storage
-        .from("exams")
-        .getPublicUrl(filePath);
-
-      const publicUrl = urlData.publicUrl;
-
-      const { error: dbError } = await supabase.from("exams").insert({
-        title: ExamData.title,
-        year: parseInt(ExamData.year),
-        university: ExamData.university,
-        subject: ExamData.subject,
-        file_url: publicUrl,
-        file_type: "PDF",
-        downloads: 0,
-        uploader_name: user.user_metadata?.username || "unknown",
-        uploader_id: uploaderId,
-      });
-
-      if (dbError) throw dbError;
-      setSuccess("Your exam has been successfully uploaded.");
-
+    if (result.success) {
       setExamData({ title: "", university: "", year: "", subject: "" });
       setFile(null);
-      const fileInput = document.querySelector('input[type="file"]');
-      if (fileInput) fileInput.value = "";
+      document.querySelector('input[type="file"]').value = "";
       setFieldErrors({
         title: "",
         subject: "",
@@ -108,10 +59,10 @@ export default function UploadPage() {
         university: "",
         file: "",
       });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    }
+
+    if (result.errors) {
+      setFieldErrors(result.errors);
     }
   };
 
@@ -119,8 +70,8 @@ export default function UploadPage() {
     <div className="max-w-2xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-center mb-6">Upload Exam</h1>
       <form
-        className="bg-white rounded-xl p-6 shadow-lg "
         onSubmit={handleSubmit}
+        className="bg-white rounded-xl p-6 shadow-lg"
       >
         {error && (
           <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-3 mb-4 text-sm text-center">
@@ -132,17 +83,17 @@ export default function UploadPage() {
             {success}
           </div>
         )}
+
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Title:
           </label>
           <input
             type="text"
+            name="title"
             placeholder="EX: Waves and vibrations"
-            value={ExamData.title}
-            onChange={(e) => {
-              setExamData({ ...ExamData, title: e.target.value });
-            }}
+            value={examData.title}
+            onChange={handleChange}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.title ? "border-red-500" : "border-gray-400"
             }`}
@@ -158,11 +109,10 @@ export default function UploadPage() {
           </label>
           <input
             type="text"
+            name="subject"
             placeholder="e.g., Computer Science, Law, Biochemistry..."
-            value={ExamData.subject}
-            onChange={(e) => {
-              setExamData({ ...ExamData, subject: e.target.value });
-            }}
+            value={examData.subject}
+            onChange={handleChange}
             list="subjectSuggestions"
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.subject ? "border-red-500" : "border-gray-400"
@@ -186,11 +136,10 @@ export default function UploadPage() {
           </label>
           <input
             type="text"
+            name="university"
             placeholder="e.g., USTHB, University of Algiers..."
-            value={ExamData.university}
-            onChange={(e) => {
-              setExamData({ ...ExamData, university: e.target.value });
-            }}
+            value={examData.university}
+            onChange={handleChange}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.university ? "border-red-500" : "border-gray-400"
             }`}
@@ -208,12 +157,11 @@ export default function UploadPage() {
           </label>
           <input
             type="number"
+            name="year"
             placeholder="e.g., 2024"
-            value={ExamData.year}
+            value={examData.year}
+            onChange={handleChange}
             min={2000}
-            onChange={(e) => {
-              setExamData({ ...ExamData, year: e.target.value });
-            }}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
               fieldErrors.year ? "border-red-500" : "border-gray-400"
             }`}
@@ -230,9 +178,7 @@ export default function UploadPage() {
           <input
             type="file"
             accept=".pdf"
-            onChange={(e) => {
-              setFile(e.target.files[0]);
-            }}
+            onChange={handleFileChange}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94] ${
               fieldErrors.file ? "border-red-500" : "border-gray-300"
             }`}

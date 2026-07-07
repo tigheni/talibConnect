@@ -10,6 +10,7 @@ export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
+    role: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +38,7 @@ export default function Register() {
     setError("");
     setMessage("");
 
-    if (name === "username" || name === "email") {
+    if (name === "username" || name === "email" || name === "role") {
       setFormData({
         ...formData,
         [name]: value,
@@ -84,6 +85,7 @@ export default function Register() {
         options: {
           data: {
             username: formData.username,
+            role: formData.role,
           },
         },
       });
@@ -96,7 +98,9 @@ export default function Register() {
         setMessage("Check your email to confirm your account.");
       }
     } catch (err) {
-      setError(err.message || "Could not create your account. Please try again.");
+      setError(
+        err.message || "Could not create your account. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -167,6 +171,22 @@ export default function Register() {
             className={`text-red-500 text-xs mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
           >
             {fieldErrors.email || "placeholder"}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Are you a student or teacher?
+            </label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3"
+              required
+            >
+              <option value="">Select your role</option>
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+            </select>
           </div>
 
           <label

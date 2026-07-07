@@ -5,6 +5,9 @@ import { supabase } from "../lib/supabase";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState([]);
+  const [userCount, setUserCount] = useState(0);
+  const [universityCount, setUniversityCount] = useState(0);
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.search.value;
@@ -13,31 +16,54 @@ export default function Home() {
     }
   };
   const [recentExams, setRecentExams] = useState([]);
-  const fetchExams = async () => {
-    const { data, error } = await supabase
-      .from("exams")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(6);
-
-    if (error) {
-      console.error("Error fetching exams:", error);
-    } else {
-      setRecentExams(data || []);
-    }
-  };
 
   useEffect(() => {
-    // eslint-disable-next-line
-    fetchExams();
+    const fetchAllData = async () => {
+      const { data: examsData, error: examsError } = await supabase
+        .from("exams")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .eq("status", "approved")
+        .limit(6);
+
+      if (examsError) {
+        console.error("Error fetching exams:", examsError);
+        return;
+      }
+
+      const { data: userData, error: userError } =
+        await supabase.rpc("get_user_count");
+      const userCount = userError ? 0 : userData || 0;
+
+      const { data: uniData, error: uniError } = await supabase
+        .from("exams")
+        .select("university")
+        .eq("status", "approved");
+
+      let universityCount = 0;
+      if (!uniError && uniData) {
+        const uniqueUniversities = [
+          ...new Set(uniData.map((item) => item.university)),
+        ];
+        universityCount = uniqueUniversities.length;
+      }
+      setRecentExams(examsData || []);
+      setUserCount(userCount);
+      setUniversityCount(universityCount);
+
+      setStats([
+        {
+          id: 1,
+          number: `${examsData?.length || 0}+`,
+          label: "Exams Available",
+        },
+        { id: 2, number: `${universityCount}+`, label: "Universities" },
+        { id: 3, number: `${userCount}+`, label: "Active Students" },
+      ]);
+    };
+
+    fetchAllData();
   }, []);
-
-  const stats = [
-    { id: 1, number: "1,000+", label: "Exams Available" },
-    { id: 2, number: "50+", label: "Universities" },
-    { id: 3, number: "10,000+", label: "Active Students" },
-  ];
-
   return (
     <div className="font-inter">
       <header className="hero">

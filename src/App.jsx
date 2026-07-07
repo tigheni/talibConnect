@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/Mainlayout";
 import ScrollToTop from "./components/ScrollToTop";
-import AuthLayout from "./layout/AuthLayout";
+import AuthLayout from "./layouts/AuthLayout";
 import ExamViewer from "./pages/ExamViewer";
 import ProtectedRoute from "./components/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home"));
@@ -13,7 +13,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
 const ExamPage = lazy(() => import("./pages/ExamPage"));
-
+const Admin = lazy(() => import("./pages/Admin"));
 export default function App() {
   return (
     <BrowserRouter>
@@ -32,6 +32,7 @@ export default function App() {
             />
             <Route path="/contact" element={<Contact />} />
             <Route path="/exams" element={<ExamPage />} />
+            <Route path="/admin" element={<Admin />} />
           </Route>
           <Route path="/exam/:id" element={<ExamViewer />} />
           <Route element={<AuthLayout />}>

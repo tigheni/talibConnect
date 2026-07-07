@@ -9,13 +9,19 @@ export default function NavBoard() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/exams";
-  const [user, setUser] = useState(null);
   const isMobile = useMobile();
+
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
       setUser(data.user);
+      const userEmail = data.user?.email;
+      setIsAdmin(userEmail === "oussama.adame12@gmail.com");
     };
+
     getUser();
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
@@ -60,6 +66,11 @@ export default function NavBoard() {
             >
               Contact
             </Link>
+            {isAdmin && (
+              <Link to="/admin" className="text-sm font-medium px-4 py-2">
+                Admin
+              </Link>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-4">

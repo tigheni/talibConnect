@@ -25,7 +25,8 @@ export default function ExamPage() {
       const { data, error } = await supabase
         .from("exams")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .eq("status", "approved");
 
       if (error) {
         console.error("Error fetching exams:", error);
