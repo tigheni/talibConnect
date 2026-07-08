@@ -12,6 +12,6 @@
   "vars": {
     "TO_EMAIL": "oussama.adame40@gmail.com",
     "CONTACT_FROM": "contact@talibconnect.com",
-    "CORS_ORIGIN": "http://localhost:5173",
+    "CORS_ORIGIN": "https://talibconnect.com",
   },
 }
