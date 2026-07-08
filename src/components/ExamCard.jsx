@@ -21,7 +21,7 @@ export default function ExamCard({ exam, index, viewMode }) {
           </h3>
           <div className="space-y-1 mb-4 w-full">
             <p className="text-sm text-gray-600">
-              {exam.university} • {exam.subject}
+              {exam.institution} • {exam.subject}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>📅 {exam.year}</span>
@@ -63,7 +63,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             {exam.title}
           </h3>
           <p className="text-sm text-gray-500">
-            {exam.university} • {exam.subject} • {exam.year}
+            {exam.institution} • {exam.subject} • {exam.year}
           </p>
           <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
             <span className="inline-flex items-center gap-1">

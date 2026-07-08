@@ -46,19 +46,25 @@ export function useUploadExam() {
       const { error: dbError } = await supabase.from("exams").insert({
         title: examData.title,
         year: parseInt(examData.year),
-        university: examData.university,
+        wilaya: examData.wilaya,
+        institution: examData.institution,
+        faculty: examData.faculty,
+        department: examData.department,
         subject: examData.subject,
+
         file_url: urlData.publicUrl,
         file_type: "PDF",
+
         downloads: 0,
         uploader_name: isAdmin
           ? "Admin"
           : user.user_metadata?.username || "unknown",
         uploader_id: uploaderId,
-        status: "pending",
         uploader_role: isAdmin
           ? "admin"
           : user.user_metadata?.role || "student",
+
+        status: "pending",
       });
 
       if (dbError) throw dbError;

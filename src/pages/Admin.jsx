@@ -43,7 +43,6 @@ export default function Admin() {
       .from("exams")
       .update({ status: "approved" })
       .eq("id", id);
-    console.log(error);
 
     if (error) {
       setMessage(error.message);

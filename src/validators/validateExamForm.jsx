@@ -3,7 +3,10 @@ export const validateExamForm = (examData, file) => {
     title: "",
     subject: "",
     year: "",
-    university: "",
+    wilaya: "",
+    institution: "",
+    faculty: "",
+    department: "",
     file: "",
   };
   let isValid = true;
@@ -22,8 +25,23 @@ export const validateExamForm = (examData, file) => {
     isValid = false;
   }
 
-  if (!examData.university?.trim()) {
-    errors.university = "University is required";
+  if (!examData.wilaya) {
+    errors.wilaya = "Wilaya is required";
+    isValid = false;
+  }
+
+  if (!examData.institution) {
+    errors.institution = "Institution is required";
+    isValid = false;
+  }
+
+  if (!examData.faculty) {
+    errors.faculty = "Faculty is required";
+    isValid = false;
+  }
+
+  if (!examData.department) {
+    errors.department = "Department is required";
     isValid = false;
   }
 

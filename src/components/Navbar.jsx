@@ -125,7 +125,6 @@ export default function NavBoard() {
           <button
             onClick={() => {
               setIsMenuOpen(!isMenuOpen);
-              console.log("clicked");
             }}
             className="text-2xl font-bold focus:outline-none"
           >

@@ -57,7 +57,7 @@ export default function Home() {
           number: `${examsData?.length || 0}+`,
           label: "Exams Available",
         },
-        { id: 2, number: `${universityCount}+`, label: "Universities" },
+        { id: 2, number: `${universityCount}+`, label: "institutions" },
         { id: 3, number: `${userCount}+`, label: "Active Students" },
       ]);
     };
@@ -69,7 +69,7 @@ export default function Home() {
       <header className="hero">
         <div className="hero-content flex flex-col items-center justify-center gap-5 ">
           <h1 className="text-2xl md:text-4xl font-bold  drop-shadow-md">
-            Ace your exams with past papers from Algerian universities
+            Ace your exams with past papers from Algerian institutions
           </h1>
           <h2 className="text-lg md:text-xl italic mx-auto drop-shadow">
             Every past exam, Organized in one place

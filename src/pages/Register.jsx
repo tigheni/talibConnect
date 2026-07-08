@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/7618724.jpg";
 import { supabase } from "../lib/supabase";
 import usePasswordValidation from "../hooks/PasswordValidation";
 import useMobile from "../hooks/useMobile";
+import { useLocations } from "../hooks/useLocations";
 
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     role: "",
+    wilaya_id: "",
+    university_id: "",
+    faculty_id: "",
+    department_id: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -22,6 +27,18 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
+  const {
+    wilayas,
+    institutions,
+    faculties,
+    departments,
+    selectedWilaya,
+    selectedInstitution,
+    selectedFaculty,
+    setSelectedWilaya,
+    setSelectedInstitution,
+    setSelectedFaculty,
+  } = useLocations();
 
   const {
     password,
@@ -78,6 +95,7 @@ export default function Register() {
     }
 
     setLoading(true);
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
@@ -86,6 +104,16 @@ export default function Register() {
           data: {
             username: formData.username,
             role: formData.role,
+            wilaya_id: formData.wilaya_id ? Number(formData.wilaya_id) : null,
+            university_id: formData.university_id
+              ? Number(formData.university_id)
+              : null,
+            faculty_id: formData.faculty_id
+              ? Number(formData.faculty_id)
+              : null,
+            department_id: formData.department_id
+              ? Number(formData.department_id)
+              : null,
           },
         },
       });
@@ -189,6 +217,108 @@ export default function Register() {
             </select>
           </div>
 
+          <div className="mb-3">
+            <label className="block text-gray-700 font-medium mb-1 text-sm">
+              State (Wilaya):
+            </label>
+            <select
+              name="wilaya_id"
+              value={selectedWilaya}
+              onChange={(e) => {
+                setSelectedWilaya(e.target.value);
+                setFormData({ ...formData, wilaya_id: e.target.value });
+              }}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+              required
+            >
+              <option value="">Select your state</option>
+              {wilayas.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.name_en}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label className="block text-gray-700 font-medium mb-1 text-sm">
+              University:
+            </label>
+            <select
+              name="university_id"
+              value={selectedInstitution}
+              onChange={(e) => {
+                setSelectedInstitution(e.target.value);
+                setFormData({ ...formData, university_id: e.target.value });
+              }}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+              required
+              disabled={!selectedWilaya}
+            >
+              <option value="">Select your university</option>
+              {institutions.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name_en}
+                </option>
+              ))}
+            </select>
+            {selectedWilaya && institutions.length === 0 && (
+              <p className="text-xs text-gray-500 mt-1">
+                No institutions found for this state
+              </p>
+            )}
+          </div>
+
+          <div className="mb-3">
+            <label className="block text-gray-700 font-medium mb-1 text-sm">
+              Faculty:
+            </label>
+            <select
+              name="faculty_id"
+              value={selectedFaculty}
+              onChange={(e) => {
+                setSelectedFaculty(e.target.value);
+                setFormData({
+                  ...formData,
+                  faculty_id: e.target.value,
+                });
+              }}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+              required
+              disabled={!selectedInstitution}
+            >
+              <option value="">Select your faculty</option>
+              {faculties.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.name_en}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label className="block text-gray-700 font-medium mb-1 text-sm">
+              Department:
+            </label>
+            <select
+              name="department_id"
+              value={formData.department_id}
+              onChange={(e) => {
+                setFormData({ ...formData, department_id: e.target.value });
+              }}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+              required
+              disabled={!selectedFaculty}
+            >
+              <option value="">Select your department</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name_en}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <label
             htmlFor="password"
             className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
@@ -199,7 +329,7 @@ export default function Register() {
             type="password"
             name="password"
             id="password"
-            value={password} // Use password from hook
+            value={password}
             placeholder="Password"
             required
             onChange={handleChange}
@@ -221,7 +351,7 @@ export default function Register() {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
-            value={confirmPassword} // Use confirmPassword from hook
+            value={confirmPassword}
             placeholder="Confirm Password"
             required
             onChange={handleChange}

@@ -1,23 +1,43 @@
 import { useState } from "react";
 import { useUploadExam } from "../hooks/useUploadExam";
 import { useSubjects } from "../hooks/useSubjects";
-
+import { useLocations } from "../hooks/useLocations";
 export default function UploadPage() {
   const subjects = useSubjects();
   const { uploadExam, loading, error, success } = useUploadExam();
+  const {
+    wilayas,
+    institutions,
+    faculties,
+    departments,
+
+    selectedWilaya,
+    selectedInstitution,
+    selectedFaculty,
+
+    setSelectedWilaya,
+    setSelectedInstitution,
+    setSelectedFaculty,
+  } = useLocations();
 
   const [examData, setExamData] = useState({
     title: "",
-    university: "",
     year: "",
     subject: "",
+    wilaya: "",
+    institution: "",
+    faculty: "",
+    department: "",
   });
   const [file, setFile] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({
     title: "",
-    subject: "",
     year: "",
-    university: "",
+    subject: "",
+    wilaya: "",
+    institution: "",
+    faculty: "",
+    department: "",
     file: "",
   });
 
@@ -38,25 +58,41 @@ export default function UploadPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setFieldErrors({
       title: "",
-      subject: "",
       year: "",
-      university: "",
+      subject: "",
+      wilaya: "",
+      institution: "",
+      faculty: "",
+      department: "",
       file: "",
     });
-
+    console.log(examData);
     const result = await uploadExam(examData, file);
+    console.log(result);
 
     if (result.success) {
-      setExamData({ title: "", university: "", year: "", subject: "" });
+      setExamData({
+        title: "",
+        year: "",
+        subject: "",
+        wilaya: "",
+        institution: "",
+        faculty: "",
+        department: "",
+      });
       setFile(null);
       document.querySelector('input[type="file"]').value = "";
       setFieldErrors({
         title: "",
         subject: "",
         year: "",
-        university: "",
+        wilaya: "",
+        institution: "",
+        faculty: "",
+        department: "",
         file: "",
       });
     }
@@ -129,28 +165,125 @@ export default function UploadPage() {
             </div>
           )}
         </div>
-
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
-            University:
+            Wilaya
           </label>
-          <input
-            type="text"
-            name="university"
-            placeholder="e.g., USTHB, University of Algiers..."
-            value={examData.university}
-            onChange={handleChange}
-            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
-              fieldErrors.university ? "border-red-500" : "border-gray-400"
-            }`}
-          />
-          {fieldErrors.university && (
-            <div className="text-red-500 text-xs mt-1">
-              {fieldErrors.university}
-            </div>
-          )}
-        </div>
 
+          <select
+            value={selectedWilaya}
+            onChange={(e) => {
+              const selected = wilayas.find(
+                (w) => w.id === Number(e.target.value),
+              );
+
+              setSelectedWilaya(e.target.value);
+              setExamData((prev) => ({
+                ...prev,
+                wilaya: selected?.name_en || "",
+                institution: "",
+                faculty: "",
+                department: "",
+              }));
+            }}
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="">Select Wilaya</option>
+
+            {wilayas.map((w) => (
+              <option key={w.id} value={w.id}>
+                {w.name_en}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label>Institution</label>
+
+          <select
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            value={selectedInstitution}
+            disabled={!selectedWilaya}
+            onChange={(e) => {
+              const selected = institutions.find(
+                (i) => i.id === Number(e.target.value),
+              );
+
+              setSelectedInstitution(e.target.value);
+
+              setExamData({
+                ...examData,
+                institution: selected?.name_en || "",
+                faculty: "",
+                department: "",
+              });
+            }}
+          >
+            <option value="">Select Institution</option>
+
+            {institutions.map((i) => (
+              <option key={i.id} value={i.id}>
+                {i.name_en}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label>Faculty</label>
+
+          <select
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            value={selectedFaculty}
+            disabled={!selectedInstitution}
+            onChange={(e) => {
+              const selected = faculties.find(
+                (f) => f.id === Number(e.target.value),
+              );
+
+              setSelectedFaculty(e.target.value);
+
+              setExamData({
+                ...examData,
+                faculty: selected?.name_en || "",
+                department: "",
+              });
+            }}
+          >
+            <option value="">Select Faculty</option>
+
+            {faculties.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.name_en}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label>Department</label>
+
+          <select
+            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            disabled={!selectedFaculty}
+            onChange={(e) => {
+              const selected = departments.find(
+                (d) => d.id === Number(e.target.value),
+              );
+
+              setExamData({
+                ...examData,
+                department: selected?.name_en || "",
+              });
+            }}
+          >
+            <option value="">Select Department</option>
+
+            {departments.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name_en}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Year:

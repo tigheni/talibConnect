@@ -40,21 +40,24 @@ export default function ExamPage() {
     fetchExams();
   }, []);
 
-  const universities = [
-    ...new Set(exams.map((exam) => exam.university).filter(Boolean)),
+  const institutions = [
+    ...new Set(exams.map((exam) => exam.institution).filter(Boolean)),
+  ];
+  const subjects = [
+    ...new Set(exams.map((exam) => exam.subject).filter(Boolean)),
   ];
 
   const filteredExams = exams.filter((exam) => {
     const matchSearch =
       (exam.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (exam.subject || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (exam.university || "").toLowerCase().includes(searchTerm.toLowerCase());
+      (exam.institution || "").toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchSubject = !subjectFilter || exam.subject === subjectFilter;
-    const matchUniversity =
-      !universityFilter || exam.university === universityFilter;
+    const matchInstitution =
+      !universityFilter || exam.institution === universityFilter;
 
-    return matchSearch && matchSubject && matchUniversity;
+    return matchSearch && matchSubject && matchInstitution;
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -120,13 +123,11 @@ export default function ExamPage() {
                 }}
                 className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer  transition-all"
               >
-                <option value="">📚 All Subjects</option>
-                <option value="Physics">⚡ Physics</option>
-                <option value="Math">📐 Mathematics</option>
-                <option value="Chemistry">🧪 Chemistry</option>
-                <option value="CS">💻 Computer Science</option>
-                <option value="Biology">🧬 Biology</option>
-                <option value="Law">⚖️ Law</option>
+                {subjects.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {`📚${subject}`}
+                  </option>
+                ))}
               </select>
 
               <select
@@ -137,8 +138,8 @@ export default function ExamPage() {
                 }}
                 className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer transition-all"
               >
-                <option value="">🎓 All Universities</option>
-                {universities.map((uni) => (
+                <option value="">🎓 All institutions</option>
+                {institutions.map((uni) => (
                   <option key={uni} value={uni}>
                     {`🎓${uni}`}
                   </option>
