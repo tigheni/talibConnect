@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "talibconnect-email",
+  "name": "talibconnect",
   "main": "worker/contact-email.js",
   "compatibility_date": "2026-06-03",
   "send_email": [
