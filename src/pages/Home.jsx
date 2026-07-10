@@ -23,8 +23,7 @@ export default function Home() {
         .from("exams")
         .select("*")
         .order("created_at", { ascending: false })
-        .eq("status", "approved")
-        .limit(6);
+        .eq("status", "approved");
 
       if (examsError) {
         console.error("Error fetching exams:", examsError);
@@ -37,17 +36,19 @@ export default function Home() {
 
       const { data: uniData, error: uniError } = await supabase
         .from("exams")
-        .select("university")
+        .select("institution")
         .eq("status", "approved");
-
       let universityCount = 0;
       if (!uniError && uniData) {
         const uniqueUniversities = [
-          ...new Set(uniData.map((item) => item.university)),
+          ...new Set(uniData.map((item) => item.institution)),
         ];
-        universityCount = uniqueUniversities.length;
+
+        uniqueUniversities[0]
+          ? (universityCount = uniqueUniversities.length)
+          : (universityCount = 0);
       }
-      setRecentExams(examsData || []);
+      setRecentExams(examsData.slice(0, 6) || []);
       setUserCount(userCount);
       setUniversityCount(universityCount);
 

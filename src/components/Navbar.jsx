@@ -38,7 +38,12 @@ export default function NavBoard() {
     >
       <nav className="h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-xl bg-white/90 backdrop-blur-md border border-black/15 shadow-lg px-6">
         <Link to="/">
-          <img src={logo} className="h-4  md:h-8 w-auto" alt="logo" />
+          <img
+            src={logo}
+            srcSet={`${logo} 2x`}
+            className="h-4  md:h-8 w-auto"
+            alt="logo"
+          />
         </Link>
         <div className="hidden sm:p-3  md:flex flex-1 text-black justify-center px-20 ">
           <div className="flex gap-5">
