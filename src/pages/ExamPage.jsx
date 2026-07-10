@@ -73,7 +73,7 @@ export default function ExamPage() {
 
   return (
     <div className="min-h-screen ">
-      <div className=" mx-auto px-6 pt-12 pb-6 bg-gray-200">
+      <div className=" mx-auto px-6 pt-12 pb-6 bg-white">
         <h1 className="text-5xl md:text-5xl font-bold mb-4 tracking-tight">
           All Exams
         </h1>
