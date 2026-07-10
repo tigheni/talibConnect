@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import img from "../assets/7618724.jpg";
+import img from "../assets/LoginBg.jpg";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
 import LoadingSpinner from "../components/LoadingSpinner";
