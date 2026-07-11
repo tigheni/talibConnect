@@ -1,8 +1,8 @@
-import { IoIosArrowBack } from "react-icons/io";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ReturnBackButton from "../hooks/ReturnBackButton";
 
 export default function ExamViewer() {
   const [exam, setExam] = useState(null);
@@ -28,7 +28,9 @@ export default function ExamViewer() {
 
         setExam(data);
       } catch (err) {
-        setError(err.message || "An unexpected error occurred. Please try again.");
+        setError(
+          err.message || "An unexpected error occurred. Please try again.",
+        );
       } finally {
         setLoading(false);
       }
@@ -57,13 +59,7 @@ export default function ExamViewer() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition mb-4"
-        >
-          <IoIosArrowBack className="text-xl" />
-          Back to Exams
-        </button>
+        <ReturnBackButton />
 
         <div className="flex justify-between  align-center ">
           <div>
@@ -76,7 +72,7 @@ export default function ExamViewer() {
             <a
               href={exam.file_url}
               download
-              className="mt-4 inline-block bg-[#4FE56D] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
+              className="mt-4 inline-block bg-[#5ae4a8] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
             >
               Download PDF
             </a>

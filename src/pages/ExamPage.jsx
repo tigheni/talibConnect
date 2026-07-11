@@ -81,7 +81,7 @@ export default function ExamPage() {
           Browse thousands of past exams shared by students across Algeria
         </p>
       </div>
-      <div className=" w-full mx-auto px-6 pb-8 bg-gray-200">
+      <div className=" w-full mx-auto px-6 pb-8 bg-white">
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg
@@ -106,7 +106,7 @@ export default function ExamPage() {
               setCurrentPage(1);
             }}
             placeholder="Search exams by title, subject, or university..."
-            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-300/75 rounded-2xl focus:ring-2 focus:ring-[#4FE56D] focus:outline-none transition-all text-lg"
+            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-300/75 rounded-2xl focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none transition-all text-lg"
           />
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function ExamPage() {
                   setSubjectFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer  transition-all"
+                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
               >
                 {subjects.map((subject) => (
                   <option key={subject} value={subject}>
@@ -136,7 +136,7 @@ export default function ExamPage() {
                   setUniversityFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#4FE56D] focus:outline-none cursor-pointer transition-all"
+                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
               >
                 <option value="">🎓 All institutions</option>
                 {institutions.map((uni) => (
@@ -150,7 +150,7 @@ export default function ExamPage() {
             <div className="flex gap-2 bg-gray-300 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-xl transition-all ${viewMode === "grid" ? "bg-white shadow-sm text-[#4FE56D]" : "text-gray-500"}`}
+                className={`p-2 rounded-xl transition-all ${viewMode === "grid" ? "bg-white shadow-sm text-[#5ae4a8]" : "text-gray-500"}`}
               >
                 <svg
                   className="w-5 h-5"
@@ -169,7 +169,7 @@ export default function ExamPage() {
 
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white shadow-sm text-[#4FE56D]" : "text-gray-500"}`}
+                className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white shadow-sm text-[#5ae4a8]" : "text-gray-500"}`}
               >
                 <svg
                   className="w-5 h-5"
@@ -229,7 +229,7 @@ export default function ExamPage() {
                 setUniversityFilter("");
                 setCurrentPage(1);
               }}
-              className="mt-6 px-6 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a] transition-all"
+              className="mt-6 px-6 py-2 bg-[#5ae4a8] text-black rounded-lg hover:bg-[#3bc85a] transition-all"
             >
               Clear all filters
             </button>

@@ -18,7 +18,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
             onClick={() => onPageChange(page)}
             className={`w-10 h-10 rounded-xl transition ${
               currentPage === page
-                ? "bg-[#4FE56D] text-black font-bold"
+                ? "bg-[#5ae4a8] text-black font-bold"
                 : "bg-gray-200 hover:bg-gray-300"
             }`}
           >

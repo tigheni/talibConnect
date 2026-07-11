@@ -108,7 +108,7 @@ export default function Home() {
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#4FE56D] text-black text-sm px-3 py-1 rounded-md hover:bg-[#52c76a]"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#5ae4a8] text-black text-sm px-3 py-1 rounded-md hover:bg-[#52c76a]"
               >
                 GO!
               </button>
@@ -154,7 +154,7 @@ export default function Home() {
                 key={stat.id}
                 className="bg-[#1a1a1a] rounded-xl p-4 border border-gray-800 "
               >
-                <h3 className="text-3xl md:text-4xl font-bold text-[#63E87E] mb-2">
+                <h3 className="text-3xl md:text-4xl font-bold text-[#5ae4a8] mb-2">
                   {stat.number}
                 </h3>
                 <p className="text-gray-400">{stat.label}</p>
@@ -194,7 +194,7 @@ export default function Home() {
             Join for free. Start browsing exams in 30 seconds.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-[#63E87E] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#4bc864] transition-all duration-300 transform hover:scale-105">
+            <button className="bg-[#5ae4a8] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#4bc864] transition-all duration-300 transform hover:scale-105">
               <Link to="/register">Register Now</Link>
             </button>
             <button className="border border-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-all duration-300">

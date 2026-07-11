@@ -22,6 +22,7 @@ export default function Register() {
   const [fieldErrors, setFieldErrors] = useState({
     username: "",
     email: "",
+    agreement: "",
   });
   const isMobile = useMobile();
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function Register() {
       clearErrors("confirmPassword");
     }
   };
-
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -79,6 +80,7 @@ export default function Register() {
     setFieldErrors({
       username: "",
       email: "",
+      agreement: "",
     });
 
     if (!formData.username) {
@@ -117,7 +119,13 @@ export default function Register() {
           },
         },
       });
-
+      if (!agreedToTerms) {
+        setFieldErrors({
+          ...fieldErrors,
+          agreement: "You must agree to the Terms and Privacy Policy",
+        });
+        return;
+      }
       if (error) throw error;
 
       if (data.session) {
@@ -362,7 +370,42 @@ export default function Register() {
           >
             {passwordErrors.confirmPassword || "placeholder"}
           </div>
-
+          {/* Terms and Privacy Checkbox */}
+          <div className="mb-4">
+            <label className="flex items-start gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                name="agreedToTerms"
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                required
+                className="mt-1"
+              />
+              <span>
+                I agree to the{" "}
+                <Link
+                  to="/terms"
+                  target="_blank"
+                  className="text-[#52c76a] hover:underline"
+                >
+                  Terms and Conditions
+                </Link>{" "}
+                and{" "}
+                <Link
+                  to="/privacy"
+                  target="_blank"
+                  className="text-[#52c76a] hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+              </span>
+            </label>
+            {fieldErrors.agreement && (
+              <div className="text-red-500 text-xs mt-1">
+                {fieldErrors.agreement}
+              </div>
+            )}
+          </div>
           <button
             type="submit"
             disabled={loading}
@@ -377,7 +420,7 @@ export default function Register() {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-[#5ae4a8] hover:text-[#3aa855] hover:underline transition-colors"
+              className="text-[#52c76a] hover:text-[#3aa855] hover:underline transition-colors"
             >
               Login here
             </Link>

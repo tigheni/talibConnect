@@ -102,7 +102,7 @@ export default function Admin() {
                     href={exam.file_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#4FE56D] text-sm hover:underline"
+                    className="text-[#5ae4a8] text-sm hover:underline"
                   >
                     View PDF
                   </a>
@@ -110,7 +110,7 @@ export default function Admin() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleApprove(exam.id)}
-                    className="px-4 py-2 bg-[#4FE56D] text-black rounded-lg hover:bg-[#3bc85a]"
+                    className="px-4 py-2 bg-[#5ae4a8] text-black rounded-lg hover:bg-[#3bc85a]"
                   >
                     Approve
                   </button>

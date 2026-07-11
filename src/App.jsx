@@ -14,6 +14,10 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
 const ExamPage = lazy(() => import("./pages/ExamPage"));
 const Admin = lazy(() => import("./pages/Admin"));
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+
+// Inside your routes:
 export default function App() {
   return (
     <BrowserRouter>
@@ -41,6 +45,8 @@ export default function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

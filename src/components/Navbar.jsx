@@ -82,7 +82,7 @@ export default function NavBoard() {
           {user && !isMobile ? (
             <>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#4FE56D] flex items-center justify-center text-black font-bold text-sm">
+                <div className="w-8 h-8 rounded-full bg-[#5ae4a8] flex items-center justify-center text-black font-bold text-sm">
                   {user.email?.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm text-gray-700 hidden md:block">
@@ -144,7 +144,7 @@ export default function NavBoard() {
               {user ? (
                 <>
                   <div className="flex gap-2 py-2">
-                    <div className="w-8 h-8 rounded-full bg-[#4FE56D] flex items-center justify-center text-black font-bold text-sm">
+                    <div className="w-8 h-8 rounded-full bg-[#5ae4a8] flex items-center justify-center text-black font-bold text-sm">
                       {user.email?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <span className="text-sm text-gray-700">
