@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { FaInstagram, FaFacebookF, FaEnvelope, FaGithub } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -22,39 +21,7 @@ export default function Footer() {
               The platform helping Algerian university students discover, share
               and access previous exams in one place.
             </p>
-
-            <div className="mt-7 flex gap-3">
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-400 transition hover:border-[#5AE4A8] hover:bg-[#5AE4A8] hover:text-black"
-              >
-                <FaInstagram />
-              </a>
-
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-400 transition hover:border-[#5AE4A8] hover:bg-[#5AE4A8] hover:text-black"
-              >
-                <FaFacebookF />
-              </a>
-
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-400 transition hover:border-[#5AE4A8] hover:bg-[#5AE4A8] hover:text-black"
-              >
-                <FaGithub />
-              </a>
-
-              <a
-                href="mailto:contact@talibconnect.com"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-400 transition hover:border-[#5AE4A8] hover:bg-[#5AE4A8] hover:text-black"
-              >
-                <FaEnvelope />
-              </a>
-            </div>
           </div>
-
-          {/* Explore */}
           <div>
             <h3 className="text-white font-semibold">Explore</h3>
 
@@ -97,7 +64,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
             <h3 className="text-white font-semibold">Resources</h3>
 
@@ -139,8 +105,6 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* Community */}
           <div>
             <h3 className="text-white font-semibold">Community</h3>
 
@@ -157,8 +121,6 @@ export default function Footer() {
             </Link>
           </div>
         </div>
-
-        {/* Bottom */}
 
         <div className="mt-16 flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-8 text-sm text-gray-500 md:flex-row">
           <p>© {new Date().getFullYear()} TalibConnect. All rights reserved.</p>

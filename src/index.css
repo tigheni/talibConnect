@@ -90,10 +90,6 @@ body {
 }
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-}
-section {
-  scroll-snap-align: center;
 }
 button:hover {
   cursor: pointer;
