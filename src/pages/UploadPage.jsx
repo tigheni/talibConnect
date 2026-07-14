@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useUploadExam } from "../hooks/useUploadExam";
 import { useSubjects } from "../hooks/useSubjects";
 import { useLocations } from "../hooks/useLocations";
+import toast from "react-hot-toast";
+
 export default function UploadPage() {
   const subjects = useSubjects();
   const { uploadExam, loading, error, success } = useUploadExam();
@@ -69,11 +71,11 @@ export default function UploadPage() {
       department: "",
       file: "",
     });
-    console.log(examData);
+
     const result = await uploadExam(examData, file);
-    console.log(result);
 
     if (result.success) {
+      toast.success("Exam uploaded successfully!");
       setExamData({
         title: "",
         year: "",
@@ -98,6 +100,7 @@ export default function UploadPage() {
     }
 
     if (result.errors) {
+      toast.error("Something went wrong");
       setFieldErrors(result.errors);
     }
   };

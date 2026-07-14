@@ -16,11 +16,13 @@ const ExamPage = lazy(() => import("./pages/ExamPage"));
 const Admin = lazy(() => import("./pages/Admin"));
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import { Toaster } from "react-hot-toast";
 
 // Inside your routes:
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <ScrollToTop />
       <Suspense fallback={null}>
         <Routes>

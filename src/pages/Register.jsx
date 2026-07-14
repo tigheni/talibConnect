@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/LoginBg.jpg";
@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import usePasswordValidation from "../hooks/PasswordValidation";
 import useMobile from "../hooks/useMobile";
 import { useLocations } from "../hooks/useLocations";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -131,11 +132,11 @@ export default function Register() {
       if (data.session) {
         navigate("/exams");
       } else {
-        setMessage("Check your email to confirm your account.");
+        toast.success("Check your email to confirm");
       }
     } catch (err) {
-      setError(
-        err.message || "Could not create your account. Please try again.",
+      toast.error(
+        `${err.message || "An unexpected error occurred. Please try again."}`,
       );
     } finally {
       setLoading(false);
