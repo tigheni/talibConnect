@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/LoginBg.jpg";
@@ -7,7 +7,8 @@ import usePasswordValidation from "../hooks/PasswordValidation";
 import useMobile from "../hooks/useMobile";
 import { useLocations } from "../hooks/useLocations";
 import toast from "react-hot-toast";
-
+import { validateForm } from "../validators/validateRegesterForm";
+import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
@@ -23,12 +24,17 @@ export default function Register() {
   const [fieldErrors, setFieldErrors] = useState({
     username: "",
     email: "",
+    role: "",
+    wilaya_id: "",
+    university_id: "",
+    faculty_id: "",
+    department_id: "",
     agreement: "",
   });
   const isMobile = useMobile();
   const navigate = useNavigate();
+  const formTopRef = useRef(null);
 
-  const [message, setMessage] = useState("");
   const {
     wilayas,
     institutions,
@@ -40,6 +46,7 @@ export default function Register() {
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
+    error: locationsError, // assumes useLocations can surface a load error; safe if undefined
   } = useLocations();
 
   const {
@@ -55,15 +62,11 @@ export default function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setError("");
-    setMessage("");
 
     if (name === "username" || name === "email" || name === "role") {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData((prev) => ({ ...prev, [name]: value }));
       if (fieldErrors[name]) {
-        setFieldErrors({ ...fieldErrors, [name]: "" });
+        setFieldErrors((prev) => ({ ...prev, [name]: "" }));
       }
     } else if (name === "password") {
       setPassword(value);
@@ -73,39 +76,56 @@ export default function Register() {
       clearErrors("confirmPassword");
     }
   };
+
+  // Single handler for the cascading location selects — replaces the
+  // duplicated handleChange + setSelected... + setFormData calls
+  const handleLocationChange = (field, setter) => (e) => {
+    const { value } = e.target;
+    setError("");
+    setter(value);
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
     setError("");
-    setMessage("");
-    setFieldErrors({
-      username: "",
-      email: "",
-      agreement: "",
-    });
 
-    if (!formData.username) {
-      setFieldErrors((prev) => ({ ...prev, username: "Username is required" }));
-      return;
-    }
-    if (!formData.email) {
-      setFieldErrors((prev) => ({ ...prev, email: "Email is required" }));
+    const { errors } = validateForm(formData, agreedToTerms);
+    const passwordsOk = validatePasswords();
+
+    if (Object.keys(errors).length > 0 || !passwordsOk) {
+      setFieldErrors((prev) => ({ ...prev, ...errors }));
+      // Scroll user to the top so they see the summary/first error
+      formTopRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
       return;
     }
 
-    if (!validatePasswords()) {
+    if (!wilayas?.length) {
+      setError(
+        "Location data hasn't finished loading. Please wait a moment and try again.",
+      );
       return;
     }
 
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: password,
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email.trim(),
+        password,
         options: {
           data: {
-            username: formData.username,
+            username: formData.username.trim(),
             role: formData.role,
             wilaya_id: formData.wilaya_id ? Number(formData.wilaya_id) : null,
             university_id: formData.university_id
@@ -120,24 +140,28 @@ export default function Register() {
           },
         },
       });
-      if (!agreedToTerms) {
-        setFieldErrors({
-          ...fieldErrors,
-          agreement: "You must agree to the Terms and Privacy Policy",
-        });
-        return;
+
+      if (signUpError) throw signUpError;
+
+      if (!data?.user) {
+        throw new Error(
+          "Registration didn't complete as expected. Please try again.",
+        );
       }
-      if (error) throw error;
 
       if (data.session) {
         navigate("/exams");
       } else {
-        toast.success("Check your email to confirm");
+        toast.success("Check your email to confirm your account.");
       }
     } catch (err) {
-      toast.error(
-        `${err.message || "An unexpected error occurred. Please try again."}`,
-      );
+      const friendlyMessage = getAuthErrorMessage(err);
+      setError(friendlyMessage);
+      toast.error(friendlyMessage);
+      formTopRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     } finally {
       setLoading(false);
     }
@@ -150,23 +174,25 @@ export default function Register() {
         !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
       }
     >
-      <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
+      <div
+        ref={formTopRef}
+        className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6"
+      >
         <Link to="/">
           <img src={logo} alt="Logo" className="h-7 mb-4" />
         </Link>
 
-        {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="bg-emerald-500/10 border border-emerald-500 text-emerald-600 rounded-lg p-2 mb-3 text-sm text-center w-full">
-            {message}
+        {locationsError && (
+          <div
+            role="alert"
+            className="bg-amber-500/10 border border-amber-500 text-amber-600 rounded-lg p-2 mb-3 text-sm text-center w-full"
+          >
+            Couldn't load location data. Some fields may not work — try
+            refreshing the page.
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="w-full">
+        <form onSubmit={handleSubmit} className="w-full" noValidate>
           <label
             htmlFor="username"
             className="block mb-1 font-medium text-gray-700 text-sm"
@@ -180,10 +206,14 @@ export default function Register() {
             value={formData.username}
             placeholder="Username"
             onChange={handleChange}
-            required
+            maxLength={20}
+            autoComplete="username"
+            aria-invalid={!!fieldErrors.username}
+            aria-describedby="username-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
+            id="username-error"
             className={`text-red-500 text-xs mt-1 ${fieldErrors.username ? "visible" : "invisible"}`}
           >
             {fieldErrors.username || "placeholder"}
@@ -202,13 +232,18 @@ export default function Register() {
             value={formData.email}
             placeholder="Email"
             onChange={handleChange}
+            autoComplete="email"
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby="email-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
+            id="email-error"
             className={`text-red-500 text-xs mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
           >
             {fieldErrors.email || "placeholder"}
           </div>
+
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Are you a student or teacher?
@@ -217,13 +252,18 @@ export default function Register() {
               name="role"
               value={formData.role}
               onChange={handleChange}
+              aria-invalid={!!fieldErrors.role}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3"
-              required
             >
               <option value="">Select your role</option>
               <option value="student">Student</option>
               <option value="teacher">Teacher</option>
             </select>
+          </div>
+          <div
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.role ? "visible" : "invisible"}`}
+          >
+            {fieldErrors.role || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -233,20 +273,25 @@ export default function Register() {
             <select
               name="wilaya_id"
               value={selectedWilaya}
-              onChange={(e) => {
-                setSelectedWilaya(e.target.value);
-                setFormData({ ...formData, wilaya_id: e.target.value });
-              }}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
-              required
+              onChange={handleLocationChange("wilaya_id", setSelectedWilaya)}
+              aria-invalid={!!fieldErrors.wilaya_id}
+              disabled={!wilayas?.length}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
             >
-              <option value="">Select your state</option>
-              {wilayas.map((w) => (
+              <option value="">
+                {wilayas?.length ? "Select your state" : "Loading states..."}
+              </option>
+              {wilayas?.map((w) => (
                 <option key={w.id} value={w.id}>
                   {w.name_en}
                 </option>
               ))}
             </select>
+          </div>
+          <div
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.wilaya_id ? "visible" : "invisible"}`}
+          >
+            {fieldErrors.wilaya_id || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -256,26 +301,31 @@ export default function Register() {
             <select
               name="university_id"
               value={selectedInstitution}
-              onChange={(e) => {
-                setSelectedInstitution(e.target.value);
-                setFormData({ ...formData, university_id: e.target.value });
-              }}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
-              required
+              onChange={handleLocationChange(
+                "university_id",
+                setSelectedInstitution,
+              )}
+              aria-invalid={!!fieldErrors.university_id}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedWilaya}
             >
               <option value="">Select your university</option>
-              {institutions.map((u) => (
+              {institutions?.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.name_en}
                 </option>
               ))}
             </select>
-            {selectedWilaya && institutions.length === 0 && (
+            {selectedWilaya && institutions?.length === 0 && (
               <p className="text-xs text-gray-500 mt-1">
                 No institutions found for this state
               </p>
             )}
+          </div>
+          <div
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.university_id ? "visible" : "invisible"}`}
+          >
+            {fieldErrors.university_id || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -285,24 +335,23 @@ export default function Register() {
             <select
               name="faculty_id"
               value={selectedFaculty}
-              onChange={(e) => {
-                setSelectedFaculty(e.target.value);
-                setFormData({
-                  ...formData,
-                  faculty_id: e.target.value,
-                });
-              }}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
-              required
+              onChange={handleLocationChange("faculty_id", setSelectedFaculty)}
+              aria-invalid={!!fieldErrors.faculty_id}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedInstitution}
             >
               <option value="">Select your faculty</option>
-              {faculties.map((f) => (
+              {faculties?.map((f) => (
                 <option key={f.id} value={f.id}>
                   {f.name_en}
                 </option>
               ))}
             </select>
+          </div>
+          <div
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.faculty_id ? "visible" : "invisible"}`}
+          >
+            {fieldErrors.faculty_id || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -312,20 +361,23 @@ export default function Register() {
             <select
               name="department_id"
               value={formData.department_id}
-              onChange={(e) => {
-                setFormData({ ...formData, department_id: e.target.value });
-              }}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
-              required
+              onChange={handleLocationChange("department_id", () => {})}
+              aria-invalid={!!fieldErrors.department_id}
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedFaculty}
             >
               <option value="">Select your department</option>
-              {departments.map((d) => (
+              {departments?.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.name_en}
                 </option>
               ))}
             </select>
+          </div>
+          <div
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.department_id ? "visible" : "invisible"}`}
+          >
+            {fieldErrors.department_id || "placeholder"}
           </div>
 
           <label
@@ -340,8 +392,9 @@ export default function Register() {
             id="password"
             value={password}
             placeholder="Password"
-            required
             onChange={handleChange}
+            autoComplete="new-password"
+            aria-invalid={!!passwordErrors.password}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
@@ -362,8 +415,9 @@ export default function Register() {
             id="confirmPassword"
             value={confirmPassword}
             placeholder="Confirm Password"
-            required
             onChange={handleChange}
+            autoComplete="new-password"
+            aria-invalid={!!passwordErrors.confirmPassword}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
@@ -371,15 +425,19 @@ export default function Register() {
           >
             {passwordErrors.confirmPassword || "placeholder"}
           </div>
-          {/* Terms and Privacy Checkbox */}
+
           <div className="mb-4">
             <label className="flex items-start gap-2 text-sm text-gray-700">
               <input
                 type="checkbox"
                 name="agreedToTerms"
                 checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                required
+                onChange={(e) => {
+                  setAgreedToTerms(e.target.checked);
+                  if (fieldErrors.agreement) {
+                    setFieldErrors((prev) => ({ ...prev, agreement: "" }));
+                  }
+                }}
                 className="mt-1"
               />
               <span>
@@ -407,6 +465,7 @@ export default function Register() {
               </div>
             )}
           </div>
+
           <button
             type="submit"
             disabled={loading}

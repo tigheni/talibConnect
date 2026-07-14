@@ -75,7 +75,7 @@ export default function UploadPage() {
     const result = await uploadExam(examData, file);
 
     if (result.success) {
-      toast.success("Exam uploaded successfully!");
+      toast.success(success || "Exam uploaded successfully!");
       setExamData({
         title: "",
         year: "",
@@ -100,7 +100,9 @@ export default function UploadPage() {
     }
 
     if (result.errors) {
-      toast.error("Something went wrong");
+      toast.error(
+        error || "Failed to upload exam. Please check the form for errors.",
+      );
       setFieldErrors(result.errors);
     }
   };
@@ -112,17 +114,6 @@ export default function UploadPage() {
         onSubmit={handleSubmit}
         className="bg-white rounded-xl p-6 shadow-lg"
       >
-        {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-3 mb-4 text-sm text-center">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="bg-emerald-500/10 border border-emerald-500 text-emerald-500 rounded-lg p-3 mb-4 text-sm text-center">
-            {success}
-          </div>
-        )}
-
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Title:
