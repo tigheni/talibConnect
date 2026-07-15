@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaDownload, FaRegUser } from "react-icons/fa";
+import { Download, User } from "lucide-react";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
 
@@ -27,11 +27,12 @@ export default function ExamCard({ exam, index, viewMode }) {
               <span>📅 {exam.year}</span>
               <span>•</span>
               <span className="inline-flex items-center gap-1">
-                <FaDownload /> {exam.downloads} downloads
+                <Download size={16} />
+                {exam.downloads} downloads
               </span>
             </div>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <FaRegUser /> {exam.uploader_name}
+              <User size={16} /> {exam.uploader_name}
             </p>
           </div>
 
@@ -67,10 +68,12 @@ export default function ExamCard({ exam, index, viewMode }) {
           </p>
           <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
             <span className="inline-flex items-center gap-1">
-              <FaDownload /> {exam.downloads} downloads
+              <Download size={16} />
+              {exam.downloads} downloads
             </span>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <FaRegUser /> {exam.uploader_name}
+              <User size={16} />
+              {exam.uploader_name}
             </p>
           </div>
         </div>
