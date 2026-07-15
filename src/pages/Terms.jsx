@@ -1,9 +1,8 @@
-import Footer from "../components/Footer";
-import ReturnBackButton from "../hooks/ReturnBackButton";
+import ReturnBackButton from "../components/ReturnBackButton";
 
 export default function Terms() {
   return (
-    <div className="m-5">
+    <main className="m-5">
       <ReturnBackButton />
       <div className="max-w-4xl mx-auto px-4 py-10">
         <h1 className="text-3xl font-bold mb-6">Terms and Conditions</h1>
@@ -64,6 +63,6 @@ export default function Terms() {
           </section>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

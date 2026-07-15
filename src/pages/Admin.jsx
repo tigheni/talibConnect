@@ -68,7 +68,7 @@ export default function Admin() {
     return <LoadingSpinner />;
   }
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
+    <main className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-2">Admin Panel</h1>
       <p className="text-gray-600 mb-6">
         Pending exams ({pendingExams.length})
@@ -126,6 +126,6 @@ export default function Admin() {
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 }

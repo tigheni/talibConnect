@@ -1,9 +1,8 @@
-import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
-import ReturnBackButton from "../hooks/ReturnBackButton";
+import ReturnBackButton from "../components/ReturnBackButton";
 export default function Privacy() {
   return (
-    <div className="m-5">
+    <main className="m-5">
       <ReturnBackButton />
       <div className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
@@ -66,6 +65,6 @@ export default function Privacy() {
           </section>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -108,7 +108,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
+    <main className="max-w-2xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-center mb-6">Upload Exam</h1>
       <form
         onSubmit={handleSubmit}
@@ -323,6 +323,6 @@ export default function UploadPage() {
           {loading ? "Uploading The Exam..." : "Upload Exam"}
         </button>
       </form>
-    </div>
+    </main>
   );
 }

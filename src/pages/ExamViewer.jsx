@@ -1,15 +1,14 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
-import ReturnBackButton from "../hooks/ReturnBackButton";
+import ReturnBackButton from "../components/ReturnBackButton";
 
 export default function ExamViewer() {
   const [exam, setExam] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExamById = async () => {
@@ -43,21 +42,21 @@ export default function ExamViewer() {
   }
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <p className="text-red-500 text-xl">{error}</p>
-      </div>
+      </main>
     );
   }
   if (!exam) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <p className="text-red-500 text-xl">Exam not found</p>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-6">
         <ReturnBackButton />
 
@@ -87,6 +86,6 @@ export default function ExamViewer() {
           />
         </div>
       </div>
-    </div>
+    </main>
   );
 }

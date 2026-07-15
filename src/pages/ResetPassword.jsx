@@ -77,10 +77,10 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="h-[95vh] flex items-center justify-center">
+    <main className="h-[95vh] flex items-center justify-center">
       <div className="w-full max-w-md bg-white py-8 px-8 rounded-3xl shadow-lg border border-gray-300">
         <Link to="/" className="flex justify-center mb-6">
-          <img src={logo} alt="Logo" className="h-8" />
+          <img src={logo} alt="Logo" className="h-8" width={250} height={100} />
         </Link>
 
         <h1 className="text-2xl font-bold text-center mb-2">
@@ -169,6 +169,6 @@ export default function ResetPassword() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

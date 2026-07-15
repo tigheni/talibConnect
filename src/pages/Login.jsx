@@ -87,7 +87,8 @@ export default function Login() {
       }
     } catch (err) {
       setError(
-        err.message || "Could not log in. Please check your email and password.",
+        err.message ||
+          "Could not log in. Please check your email and password.",
       );
     } finally {
       setLoading(false);
@@ -98,7 +99,7 @@ export default function Login() {
   }
 
   return (
-    <div
+    <main
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
       style={
         !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
@@ -107,7 +108,13 @@ export default function Login() {
       {/* Made the card smaller: reduced padding, max-width, and rounded corners */}
       <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-7 mb-4" />
+          <img
+            src={logo}
+            alt="Logo"
+            className="h-7 mb-4"
+            width={220}
+            height={110}
+          />
         </Link>
 
         {error && (
@@ -191,6 +198,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

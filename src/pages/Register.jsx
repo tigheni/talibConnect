@@ -20,7 +20,7 @@ export default function Register() {
     department_id: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
   const [fieldErrors, setFieldErrors] = useState({
     username: "",
     email: "",
@@ -61,7 +61,6 @@ export default function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setError("");
 
     if (name === "username" || name === "email" || name === "role") {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -81,7 +80,7 @@ export default function Register() {
   // duplicated handleChange + setSelected... + setFormData calls
   const handleLocationChange = (field, setter) => (e) => {
     const { value } = e.target;
-    setError("");
+
     setter(value);
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (fieldErrors[field]) {
@@ -94,9 +93,6 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-
-    setError("");
-
     const { errors } = validateForm(formData, agreedToTerms);
     const passwordsOk = validatePasswords();
 
@@ -111,7 +107,7 @@ export default function Register() {
     }
 
     if (!wilayas?.length) {
-      setError(
+      toast.error(
         "Location data hasn't finished loading. Please wait a moment and try again.",
       );
       return;
@@ -156,7 +152,6 @@ export default function Register() {
       }
     } catch (err) {
       const friendlyMessage = getAuthErrorMessage(err);
-      setError(friendlyMessage);
       toast.error(friendlyMessage);
       formTopRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -168,7 +163,7 @@ export default function Register() {
   };
 
   return (
-    <div
+    <main
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
       style={
         !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
@@ -179,7 +174,13 @@ export default function Register() {
         className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6"
       >
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-7 mb-4" />
+          <img
+            src={logo}
+            alt="Logo"
+            className="h-7 mb-4"
+            width={220}
+            height={110}
+          />
         </Link>
 
         {locationsError && (
@@ -487,6 +488,6 @@ export default function Register() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

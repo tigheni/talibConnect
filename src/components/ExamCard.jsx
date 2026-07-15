@@ -12,13 +12,13 @@ export default function ExamCard({ exam, index, viewMode }) {
       >
         <div className="p-5">
           <div className="mb-3">
-            <span className="inline-block px-3 border py-1 bg-[#5ae4a8]/10 text-[#5ae4a8] text-xs font-semibold rounded-full">
+            <span className="inline-block px-3 border py-1 bg-[#5ae4a8] text-white text-xs rounded-xl font-medium">
               {exam.file_type}
             </span>
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#5ae4a8] transition-colors">
+          <h1 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#5ae4a8] transition-colors">
             {exam.title}
-          </h3>
+          </h1>
           <div className="space-y-1 mb-4 w-full">
             <p className="text-sm text-gray-600">
               {exam.institution} • {exam.subject}
@@ -35,14 +35,14 @@ export default function ExamCard({ exam, index, viewMode }) {
             </p>
           </div>
 
-          <button className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium">
+          <button className="w-full mt-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium">
             <a href={`${exam.file_url}?download=${exam.title}`} download>
               Download
             </a>
           </button>
           <button
             onClick={() => navigate(`/exam/${exam.id}`)}
-            className="w-full mt-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium"
+            className="w-full mt-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium"
           >
             Open PDF
           </button>
@@ -59,9 +59,9 @@ export default function ExamCard({ exam, index, viewMode }) {
     >
       <div className="p-4 flex items-center justify-between flex-wrap gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#5ae4a8] transition-colors">
+          <h1 className="text-lg font-semibold text-gray-900 group-hover:text-[#5ae4a8] transition-colors">
             {exam.title}
-          </h3>
+          </h1>
           <p className="text-sm text-gray-500">
             {exam.institution} • {exam.subject} • {exam.year}
           </p>
@@ -78,14 +78,14 @@ export default function ExamCard({ exam, index, viewMode }) {
         <a
           href={`${exam.file_url}?download=${exam.title}`}
           download
-          className="px-6 py-2 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
+          className="px-6 py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
         >
           Download
         </a>
 
         <button
           onClick={() => navigate(`/exam/${exam.id}`, { state: { exam } })}
-          className="px-6 py-2 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
+          className="px-6 py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
         >
           Open PDF
         </button>

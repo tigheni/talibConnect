@@ -43,6 +43,8 @@ export default function NavBoard() {
             srcSet={`${logo} 2x`}
             className="h-4  md:h-8 w-auto"
             alt="logo"
+            width={250}
+            height={100}
           />
         </Link>
         <div className="hidden sm:p-3  md:flex flex-1 text-black justify-center px-20 ">
@@ -50,24 +52,28 @@ export default function NavBoard() {
             <Link
               to="/"
               className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
+              aria-label="Go to Homepage"
             >
               Home
             </Link>
             <Link
               to="/upload"
               className="text-sm font-medium sm:p-2 px-4  py-2 btn_hover_effects rounded-xl"
+              aria-label="Upload a new exam"
             >
               Upload
             </Link>
             <Link
               to="/exams"
               className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
+              aria-label="Browse all exams"
             >
               Exams
             </Link>
             <Link
               to="/contact"
               className="text-sm font-medium sm:p-2 px-4 py-2 btn_hover_effects rounded-xl"
+              aria-label="contact us here"
             >
               Contact
             </Link>
@@ -96,7 +102,7 @@ export default function NavBoard() {
                   setUser(null);
                   navigate("/");
                 }}
-                className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-2 rounded-xl border-none  transition-all duration-200 hover:scale-110"
+                className=" text-[#f35f62] bg-[#3b1c1d] text-sm font-medium sm:p-2   px-4 py-3 rounded-xl border-none  transition-all duration-200 hover:scale-110"
               >
                 Logout
               </button>
@@ -131,15 +137,29 @@ export default function NavBoard() {
             onClick={() => {
               setIsMenuOpen(!isMenuOpen);
             }}
-            className="text-2xl font-bold focus:outline-none"
+            className="text-2xl p-4 font-bold focus:outline-none"
           >
             {isMenuOpen ? "✕" : "☰"}
           </button>
           {isMenuOpen && (
-            <div className="absolute top-16 left-0 right-0 bg-white/90 backdrop-blur-md flex flex-col p-4 gap-3 shadow-lg">
-              <Link to="/">Home</Link>
-              <Link to="/exams">Exams</Link>
-              <Link to="/upload">Upload</Link>
+            <div className="absolute top-16 left-0 right-0 bg-white/90 rounded-xl backdrop-blur-md flex flex-col p-4 gap-3 shadow-lg">
+              <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                Home
+              </Link>
+              <Link
+                to="/exams"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Browse all exams"
+              >
+                Exams
+              </Link>
+              <Link
+                to="/upload"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Upload a new exam"
+              >
+                Upload
+              </Link>
 
               {user ? (
                 <>

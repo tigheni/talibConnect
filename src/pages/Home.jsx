@@ -6,8 +6,6 @@ import { supabase } from "../lib/supabase";
 export default function Home() {
   const navigate = useNavigate();
   const [stats, setStats] = useState([]);
-  const [userCount, setUserCount] = useState(0);
-  const [universityCount, setUniversityCount] = useState(0);
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.search.value;
@@ -49,8 +47,6 @@ export default function Home() {
           : (universityCount = 0);
       }
       setRecentExams(examsData.slice(0, 6) || []);
-      setUserCount(userCount);
-      setUniversityCount(universityCount);
 
       setStats([
         {
@@ -66,7 +62,7 @@ export default function Home() {
     fetchAllData();
   }, []);
   return (
-    <div className="font-inter">
+    <main className="font-inter">
       <header className="hero">
         <div className="hero-content flex flex-col items-center justify-center gap-5 ">
           <h1 className="text-2xl md:text-4xl font-bold  drop-shadow-md">
@@ -203,6 +199,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

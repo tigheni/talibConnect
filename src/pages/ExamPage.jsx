@@ -8,13 +8,8 @@ import useMobile from "../hooks/useMobile";
 export default function ExamPage() {
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
-  const [viewMode, setViewMode] = useState("list");
   const isMobile = useMobile();
-  useEffect(() => {
-    if (isMobile) {
-      setViewMode("grid");
-    }
-  }, [isMobile]);
+  const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
 
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +73,7 @@ export default function ExamPage() {
   }
 
   return (
-    <div className="min-h-screen ">
+    <main className="min-h-screen ">
       <div className=" mx-auto px-6 pt-12 pb-6 bg-white">
         <h1 className="text-5xl md:text-5xl font-bold mb-4 tracking-tight">
           All Exams
@@ -249,6 +244,6 @@ export default function ExamPage() {
           onPageChange={(page) => setCurrentPage(page)}
         />
       </div>
-    </div>
+    </main>
   );
 }
