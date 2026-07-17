@@ -98,7 +98,6 @@ export default function Register() {
 
     if (Object.keys(errors).length > 0 || !passwordsOk) {
       setFieldErrors((prev) => ({ ...prev, ...errors }));
-      // Scroll user to the top so they see the summary/first error
       formTopRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",

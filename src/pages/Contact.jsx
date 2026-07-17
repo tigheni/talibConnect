@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Send, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import contactIll from "../assets/undraw_email_b5yu1111.svg";
+import toast from "react-hot-toast";
 
 const REASONS = [
   { label: "Bug report", prefix: "I found a bug: " },
@@ -35,13 +36,16 @@ export default function Contact() {
       });
 
       if (res.ok) {
+        toast.success("Message sent — we'll get back to you soon.");
         setStatus("success");
         setFormData({ name: "", email: "", message: "" });
         setTimeout(() => setStatus(""), 3000);
       } else {
-        setStatus("error");
+        toast.error(" Failed to send. Please try again.");
       }
     } catch (err) {
+      toast.error(" Failed to send. Please try again.");
+
       setStatus("error");
       console.error("Error submitting contact form:", err);
     }
@@ -84,8 +88,8 @@ export default function Contact() {
         </div>
 
         <div className="bg-white px-6 py-10 sm:px-10 sm:py-12">
-          {status === "success" && (
-            <div className="flex items-center gap-2 bg-[#5ae4a8]/10 border border-[#5ae4a8]/40 text-[#2f9e6d] rounded-xl px-4 py-3 mb-6 text-sm">
+          {/*  {status === "success" && (
+            <div className="flex items-center gap-2 bg-[#5ae4a8]/10 border border-[#5ae4a8]/50 text-[#2f9e6d] rounded-xl px-4 py-3 mb-6 text-sm">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               Message sent — we'll get back to you soon.
             </div>
@@ -96,7 +100,7 @@ export default function Contact() {
               Failed to send. Please try again.
             </div>
           )}
-
+ */}
           <p className="text-xs font-medium text-gray-500 mb-2.5">
             What's this about?
           </p>
@@ -106,7 +110,7 @@ export default function Contact() {
                 key={reason.label}
                 type="button"
                 onClick={() => handleReasonClick(reason.prefix)}
-                className="px-3.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-gray-700 text-xs font-medium transition-all duration-200 hover:border-[#5ae4a8] hover:text-[#2f9e6d] hover:bg-[#5ae4a8]/5 active:scale-95"
+                className="px-3.5 py-1.5 rounded-full border border-gray-300 bg-gray-50 text-gray-700 text-xs font-medium transition-all duration-200 hover:border-[#5ae4a8] hover:text-[#2f9e6d] hover:bg-[#5ae4a8]/5 active:scale-95"
               >
                 {reason.label}
               </button>
@@ -128,7 +132,7 @@ export default function Contact() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Amine Benali"
+                  placeholder="Mohamed Kader"
                   required
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white"
                 />
