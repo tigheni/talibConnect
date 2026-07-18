@@ -31,7 +31,6 @@ export function useLocations() {
     fetchWilayas();
   }, []);
 
-  // Fetch institutions
   useEffect(() => {
     if (!selectedWilaya) {
       setInstitutions([]);
@@ -87,7 +86,6 @@ export function useLocations() {
     fetchFaculties();
   }, [selectedInstitution]);
 
-  // Fetch Departments
   useEffect(() => {
     if (!selectedFaculty) {
       setDepartments([]);

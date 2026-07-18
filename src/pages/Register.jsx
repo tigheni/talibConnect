@@ -76,8 +76,6 @@ export default function Register() {
     }
   };
 
-  // Single handler for the cascading location selects — replaces the
-  // duplicated handleChange + setSelected... + setFormData calls
   const handleLocationChange = (field, setter) => (e) => {
     const { value } = e.target;
 
@@ -121,17 +119,6 @@ export default function Register() {
         options: {
           data: {
             username: formData.username.trim(),
-            role: formData.role,
-            wilaya_id: formData.wilaya_id ? Number(formData.wilaya_id) : null,
-            university_id: formData.university_id
-              ? Number(formData.university_id)
-              : null,
-            faculty_id: formData.faculty_id
-              ? Number(formData.faculty_id)
-              : null,
-            department_id: formData.department_id
-              ? Number(formData.department_id)
-              : null,
           },
         },
       });
@@ -148,10 +135,13 @@ export default function Register() {
         navigate("/exams");
       } else {
         toast.success("Check your email to confirm your account.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       }
     } catch (err) {
       const friendlyMessage = getAuthErrorMessage(err);
-      toast.error(friendlyMessage);
+      toast.error(`talibConnect: ${friendlyMessage}`);
       formTopRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",

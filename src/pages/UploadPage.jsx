@@ -2,84 +2,84 @@ import { useState } from "react";
 import { useUploadExam } from "../hooks/useUploadExam";
 import { useSubjects } from "../hooks/useSubjects";
 import { useLocations } from "../hooks/useLocations";
+import { useFormErrors } from "../hooks/useFormError";
+import { validateExamForm } from "../validators/validateExamForm";
 import toast from "react-hot-toast";
 
 export default function UploadPage() {
   const subjects = useSubjects();
-  const { uploadExam, loading, error, success } = useUploadExam();
+  const { uploadExam, loading } = useUploadExam();
   const {
     wilayas,
     institutions,
     faculties,
     departments,
-
     selectedWilaya,
     selectedInstitution,
     selectedFaculty,
-
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
   } = useLocations();
+  const {
+    clearFieldError,
+    clearAllErrors,
+    setErrorsFromResponse,
+    getErrorClass,
+    getErrorMessage,
+  } = useFormErrors();
 
   const [examData, setExamData] = useState({
     title: "",
     year: "",
     subject: "",
+    teacher_name: "",
+    teacherConsent: false,
     wilaya: "",
     institution: "",
     faculty: "",
     department: "",
   });
   const [file, setFile] = useState(null);
-  const [fieldErrors, setFieldErrors] = useState({
-    title: "",
-    year: "",
-    subject: "",
-    wilaya: "",
-    institution: "",
-    faculty: "",
-    department: "",
-    file: "",
-  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setExamData({ ...examData, [name]: value });
-    if (fieldErrors[name]) {
-      setFieldErrors({ ...fieldErrors, [name]: "" });
-    }
+    const { name, value, type, checked } = e.target;
+    const val = type === "checkbox" ? checked : value;
+    setExamData({ ...examData, [name]: val });
+    clearFieldError(name);
   };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
-    if (fieldErrors.file) {
-      setFieldErrors({ ...fieldErrors, file: "" });
-    }
+    clearFieldError("file");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setFieldErrors({
-      title: "",
-      year: "",
-      subject: "",
-      wilaya: "",
-      institution: "",
-      faculty: "",
-      department: "",
-      file: "",
-    });
+    clearAllErrors();
+
+    const { isValid, errors: validationErrors } = validateExamForm(
+      examData,
+      file,
+    );
+
+    if (!isValid) {
+      setErrorsFromResponse(validationErrors);
+      toast.error("Please fix the errors in the form");
+      return;
+    }
 
     const result = await uploadExam(examData, file);
 
     if (result.success) {
-      toast.success(success || "Exam uploaded successfully!");
+      toast.success("Exam uploaded successfully!");
       setExamData({
         title: "",
         year: "",
         subject: "",
+        teacher_name: "",
+        teacherConsent: false,
         wilaya: "",
         institution: "",
         faculty: "",
@@ -87,23 +87,12 @@ export default function UploadPage() {
       });
       setFile(null);
       document.querySelector('input[type="file"]').value = "";
-      setFieldErrors({
-        title: "",
-        subject: "",
-        year: "",
-        wilaya: "",
-        institution: "",
-        faculty: "",
-        department: "",
-        file: "",
-      });
+      clearAllErrors();
     }
 
     if (result.errors) {
-      toast.error(
-        error || "Failed to upload exam. Please check the form for errors.",
-      );
-      setFieldErrors(result.errors);
+      toast.error("Failed to upload exam");
+      setErrorsFromResponse(result.errors);
     }
   };
 
@@ -124,12 +113,12 @@ export default function UploadPage() {
             placeholder="EX: Waves and vibrations"
             value={examData.title}
             onChange={handleChange}
-            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
-              fieldErrors.title ? "border-red-500" : "border-gray-400"
-            }`}
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${getErrorClass("title")}`}
           />
-          {fieldErrors.title && (
-            <div className="text-red-500 text-xs mt-1">{fieldErrors.title}</div>
+          {getErrorMessage("title") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("title")}
+            </div>
           )}
         </div>
 
@@ -144,18 +133,16 @@ export default function UploadPage() {
             value={examData.subject}
             onChange={handleChange}
             list="subjectSuggestions"
-            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
-              fieldErrors.subject ? "border-red-500" : "border-gray-400"
-            }`}
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${getErrorClass("subject")}`}
           />
           <datalist id="subjectSuggestions">
             {subjects.map((s) => (
               <option key={s} value={s} />
             ))}
           </datalist>
-          {fieldErrors.subject && (
+          {getErrorMessage("subject") && (
             <div className="text-red-500 text-xs mt-1">
-              {fieldErrors.subject}
+              {getErrorMessage("subject")}
             </div>
           )}
         </div>
@@ -163,14 +150,12 @@ export default function UploadPage() {
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Wilaya
           </label>
-
           <select
             value={selectedWilaya}
             onChange={(e) => {
               const selected = wilayas.find(
                 (w) => w.id === Number(e.target.value),
               );
-
               setSelectedWilaya(e.target.value);
               setExamData((prev) => ({
                 ...prev,
@@ -179,104 +164,123 @@ export default function UploadPage() {
                 faculty: "",
                 department: "",
               }));
+              clearFieldError("wilaya");
             }}
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 ${getErrorClass("wilaya")}`}
           >
             <option value="">Select Wilaya</option>
-
             {wilayas.map((w) => (
               <option key={w.id} value={w.id}>
                 {w.name_en}
               </option>
             ))}
           </select>
+          {getErrorMessage("wilaya") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("wilaya")}
+            </div>
+          )}
         </div>
         <div className="mb-4">
-          <label>Institution</label>
-
+          <label className="block text-gray-700 font-medium mb-1 text-sm">
+            Institution
+          </label>
           <select
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 ${getErrorClass("institution")}`}
             value={selectedInstitution}
             disabled={!selectedWilaya}
             onChange={(e) => {
               const selected = institutions.find(
                 (i) => i.id === Number(e.target.value),
               );
-
               setSelectedInstitution(e.target.value);
-
               setExamData({
                 ...examData,
                 institution: selected?.name_en || "",
                 faculty: "",
                 department: "",
               });
+              clearFieldError("institution");
             }}
           >
             <option value="">Select Institution</option>
-
             {institutions.map((i) => (
               <option key={i.id} value={i.id}>
                 {i.name_en}
               </option>
             ))}
           </select>
+          {getErrorMessage("institution") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("institution")}
+            </div>
+          )}
         </div>
-        <div className="mb-4">
-          <label>Faculty</label>
 
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-1 text-sm">
+            Faculty
+          </label>
           <select
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 ${getErrorClass("faculty")}`}
             value={selectedFaculty}
             disabled={!selectedInstitution}
             onChange={(e) => {
               const selected = faculties.find(
                 (f) => f.id === Number(e.target.value),
               );
-
               setSelectedFaculty(e.target.value);
-
               setExamData({
                 ...examData,
                 faculty: selected?.name_en || "",
                 department: "",
               });
+              clearFieldError("faculty");
             }}
           >
             <option value="">Select Faculty</option>
-
             {faculties.map((f) => (
               <option key={f.id} value={f.id}>
                 {f.name_en}
               </option>
             ))}
           </select>
+          {getErrorMessage("faculty") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("faculty")}
+            </div>
+          )}
         </div>
         <div className="mb-4">
-          <label>Department</label>
-
+          <label className="block text-gray-700 font-medium mb-1 text-sm">
+            Department
+          </label>
           <select
-            className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 ${getErrorClass("department")}`}
             disabled={!selectedFaculty}
             onChange={(e) => {
               const selected = departments.find(
                 (d) => d.id === Number(e.target.value),
               );
-
               setExamData({
                 ...examData,
                 department: selected?.name_en || "",
               });
+              clearFieldError("department");
             }}
           >
             <option value="">Select Department</option>
-
             {departments.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.name_en}
               </option>
             ))}
           </select>
+          {getErrorMessage("department") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("department")}
+            </div>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
@@ -289,13 +293,46 @@ export default function UploadPage() {
             value={examData.year}
             onChange={handleChange}
             min={2000}
-            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${
-              fieldErrors.year ? "border-red-500" : "border-gray-400"
-            }`}
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${getErrorClass("year")}`}
           />
-          {fieldErrors.year && (
-            <div className="text-red-500 text-xs mt-1">{fieldErrors.year}</div>
+          {getErrorMessage("year") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("year")}
+            </div>
           )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-1 text-sm">
+            Teacher (Optional):
+          </label>
+          <p className="text-xs text-gray-400 mb-2">
+            👨‍🏫 Credit the teacher who created the exam (only share with their
+            permission)
+          </p>
+          <input
+            type="text"
+            name="teacher_name"
+            placeholder="e.g., Dr. Ahmed Benali"
+            value={examData.teacher_name}
+            onChange={handleChange}
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${getErrorClass("teacher_name")}`}
+          />
+          {getErrorMessage("teacher_name") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("teacher_name")}
+            </div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="flex items-center gap-2 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              name="teacherConsent"
+              checked={examData.teacherConsent}
+              onChange={handleChange}
+            />
+            I have permission from the teacher to share their name
+          </label>
         </div>
 
         <div className="mb-6">
@@ -306,12 +343,12 @@ export default function UploadPage() {
             type="file"
             accept=".pdf"
             onChange={handleFileChange}
-            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94] ${
-              fieldErrors.file ? "border-red-500" : "border-gray-300"
-            }`}
+            className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#5ae4a8] file:text-black file:font-semibold hover:file:bg-[#4bcc94] ${getErrorClass("file")}`}
           />
-          {fieldErrors.file && (
-            <div className="text-red-500 text-xs mt-1">{fieldErrors.file}</div>
+          {getErrorMessage("file") && (
+            <div className="text-red-500 text-xs mt-1">
+              {getErrorMessage("file")}
+            </div>
           )}
         </div>
 

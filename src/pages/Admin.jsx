@@ -38,30 +38,30 @@ export default function Admin() {
     checkAdmin();
   }, [navigate]);
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (uuid) => {
     const { error } = await supabase
       .from("exams")
       .update({ status: "approved" })
-      .eq("id", id);
+      .eq("uuid", uuid);
 
     if (error) {
       setMessage(error.message);
       return;
     }
 
-    setPendingExams((prev) => prev.filter((exam) => exam.id !== id));
+    setPendingExams((prev) => prev.filter((exam) => exam.uuid !== uuid));
     setMessage("Exam approved!");
   };
 
-  const handleReject = async (id) => {
-    const { error } = await supabase.from("exams").delete().eq("id", id);
+  const handleReject = async (uuid) => {
+    const { error } = await supabase.from("exams").delete().eq("uuid", uuid);
 
     if (error) {
       setMessage(error.message);
       return;
     }
 
-    setPendingExams((prev) => prev.filter((exam) => exam.id !== id));
+    setPendingExams((prev) => prev.filter((exam) => exam.uuid !== uuid));
     setMessage("Exam rejected and deleted.");
   };
   if (loading) {
@@ -86,7 +86,7 @@ export default function Admin() {
         <div className="space-y-4">
           {pendingExams.map((exam) => (
             <div
-              key={exam.id}
+              key={exam.uuid}
               className="bg-white rounded-xl shadow p-4 border"
             >
               <div className="flex justify-between items-start">
@@ -109,13 +109,13 @@ export default function Admin() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleApprove(exam.id)}
+                    onClick={() => handleApprove(exam.uuid)}
                     className="px-4 py-2 bg-[#5ae4a8] text-black rounded-lg hover:bg-[#3bc85a]"
                   >
                     Approve
                   </button>
                   <button
-                    onClick={() => handleReject(exam.id)}
+                    onClick={() => handleReject(exam.uuid)}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                   >
                     Reject

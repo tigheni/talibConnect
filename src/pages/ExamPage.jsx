@@ -209,7 +209,7 @@ export default function ExamPage() {
           >
             {currentExams.map((exam, index) => (
               <ExamCard
-                key={exam.id}
+                key={exam.uuid}
                 exam={exam}
                 viewMode={viewMode}
                 index={index}

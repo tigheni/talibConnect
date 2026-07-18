@@ -4,28 +4,30 @@ import { validateExamForm } from "../validators/validateExamForm";
 
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const uploadExam = async (examData, file) => {
     const { isValid, errors } = validateExamForm(examData, file);
     if (!isValid) return { isValid: false, errors };
 
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     try {
       const {
         data: { user },
       } = await supabase.auth.getUser();
       const uploaderId = user?.id;
-      const isAdmin = user?.email === "oussama.adame12@gmail.com";
 
       if (!uploaderId) {
-        setError("You must be logged in to upload");
-        return { success: false };
+        return;
       }
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, username")
+        .eq("id", uploaderId)
+        .single();
+
+      if (profileError) throw new Error("User profile not found");
 
       const cleanFileName = file.name
         .normalize("NFD")
@@ -35,14 +37,14 @@ export function useUploadExam() {
 
       const { error: uploadError } = await supabase.storage
         .from("exams")
-        .upload(filePath, file, { upsert: true });
+        .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabase.storage
         .from("exams")
         .getPublicUrl(filePath);
-
+      const isAdmin = profile.role === "admin";
       const { error: dbError } = await supabase.from("exams").insert({
         title: examData.title,
         year: parseInt(examData.year),
@@ -51,33 +53,34 @@ export function useUploadExam() {
         faculty: examData.faculty,
         department: examData.department,
         subject: examData.subject,
-
         file_url: urlData.publicUrl,
         file_type: "PDF",
-
         downloads: 0,
         uploader_name: isAdmin
           ? "Admin"
           : user.user_metadata?.username || "unknown",
-        uploader_id: uploaderId,
+
         uploader_role: isAdmin
           ? "admin"
           : user.user_metadata?.role || "student",
-
+        uploader_id: uploaderId,
         status: "pending",
+        teacher_name: examData.teacher_name || null,
       });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        await supabase.storage.from("exams").remove([filePath]);
 
-      setSuccess("Your exam has been successfully uploaded.");
+        throw dbError;
+      }
+
       return { success: true };
     } catch (err) {
-      setError(err.message);
       return { success: false };
     } finally {
       setLoading(false);
     }
   };
 
-  return { uploadExam, loading, error, success };
+  return { uploadExam, loading };
 }

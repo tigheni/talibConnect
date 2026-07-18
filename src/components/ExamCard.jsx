@@ -6,7 +6,7 @@ export default function ExamCard({ exam, index, viewMode }) {
   if (viewMode === "grid") {
     return (
       <div
-        key={exam.id}
+        key={exam.uuid}
         className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all  duration-300 hover:-translate-y-1"
         style={{ animationDelay: `${index * 50}ms` }}
       >
@@ -32,7 +32,15 @@ export default function ExamCard({ exam, index, viewMode }) {
               </span>
             </div>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <User size={16} /> {exam.uploader_name}
+              {exam.uploader_name ? (
+                <>
+                  <User size={16} />
+                  <span>Uploader: {exam.uploader_name}</span>
+                </>
+              ) : null}
+            </p>
+            <p className="inline-flex items-center gap-1 text-gray-500">
+              {exam.teacher_name ? `👨‍🏫 Teacher ${exam.teacher_name}` : ""}
             </p>
           </div>
 
@@ -42,7 +50,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             </a>
           </button>
           <button
-            onClick={() => navigate(`/exam/${exam.id}`)}
+            onClick={() => navigate(`/exam/${exam.uuid}`)}
             className="w-full mt-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium"
           >
             Open PDF
@@ -72,8 +80,15 @@ export default function ExamCard({ exam, index, viewMode }) {
               {exam.downloads} downloads
             </span>
             <p className="inline-flex items-center gap-1 text-gray-500">
-              <User size={16} />
-              {exam.uploader_name}
+              {exam.uploader_name ? (
+                <>
+                  <User size={16} />
+                  <span>Uploader: {exam.uploader_name}</span>
+                </>
+              ) : null}
+            </p>
+            <p className="inline-flex items-center gap-1 text-gray-500">
+              {exam.teacher_name ? `👨‍🏫 Teacher ${exam.teacher_name}` : ""}
             </p>
           </div>
         </div>
@@ -87,7 +102,7 @@ export default function ExamCard({ exam, index, viewMode }) {
         </a>
 
         <button
-          onClick={() => navigate(`/exam/${exam.id}`, { state: { exam } })}
+          onClick={() => navigate(`/exam/${exam.uuid}`, { state: { exam } })}
           className="px-6 py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap"
         >
           Open PDF

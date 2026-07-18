@@ -20,7 +20,7 @@ export default function ExamViewer() {
         const { data, error } = await supabase
           .from("exams")
           .select("*")
-          .eq("id", id)
+          .eq("uuid", id)
           .single();
 
         if (error) throw error;
