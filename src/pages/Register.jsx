@@ -14,10 +14,10 @@ export default function Register() {
     username: "",
     email: "",
     role: "",
-    wilaya_id: "",
-    university_id: "",
-    faculty_id: "",
-    department_id: "",
+    wilaya: "",
+    institution: "",
+    faculty: "",
+    department: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -25,10 +25,10 @@ export default function Register() {
     username: "",
     email: "",
     role: "",
-    wilaya_id: "",
-    university_id: "",
-    faculty_id: "",
-    department_id: "",
+    wilaya: "",
+    institution: "",
+    faculty: "",
+    department: "",
     agreement: "",
   });
   const isMobile = useMobile();
@@ -119,6 +119,11 @@ export default function Register() {
         options: {
           data: {
             username: formData.username.trim(),
+            role: formData.role,
+            wilaya: formData.wilaya,
+            institution: formData.institution,
+            faculty: formData.faculty,
+            department: formData.department,
           },
         },
       });
@@ -264,7 +269,7 @@ export default function Register() {
               name="wilaya_id"
               value={selectedWilaya}
               onChange={handleLocationChange("wilaya_id", setSelectedWilaya)}
-              aria-invalid={!!fieldErrors.wilaya_id}
+              aria-invalid={!!fieldErrors.wilaya}
               disabled={!wilayas?.length}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
             >
@@ -279,9 +284,9 @@ export default function Register() {
             </select>
           </div>
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.wilaya_id ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.wilaya ? "visible" : "invisible"}`}
           >
-            {fieldErrors.wilaya_id || "placeholder"}
+            {fieldErrors.wilaya || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -295,7 +300,7 @@ export default function Register() {
                 "university_id",
                 setSelectedInstitution,
               )}
-              aria-invalid={!!fieldErrors.university_id}
+              aria-invalid={!!fieldErrors.institution}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedWilaya}
             >
@@ -313,9 +318,9 @@ export default function Register() {
             )}
           </div>
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.university_id ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.institution ? "visible" : "invisible"}`}
           >
-            {fieldErrors.university_id || "placeholder"}
+            {fieldErrors.institution || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -326,7 +331,7 @@ export default function Register() {
               name="faculty_id"
               value={selectedFaculty}
               onChange={handleLocationChange("faculty_id", setSelectedFaculty)}
-              aria-invalid={!!fieldErrors.faculty_id}
+              aria-invalid={!!fieldErrors.faculty}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedInstitution}
             >
@@ -339,9 +344,9 @@ export default function Register() {
             </select>
           </div>
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.faculty_id ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.faculty ? "visible" : "invisible"}`}
           >
-            {fieldErrors.faculty_id || "placeholder"}
+            {fieldErrors.faculty || "placeholder"}
           </div>
 
           <div className="mb-3">
@@ -350,9 +355,9 @@ export default function Register() {
             </label>
             <select
               name="department_id"
-              value={formData.department_id}
+              value={formData.department}
               onChange={handleLocationChange("department_id", () => {})}
-              aria-invalid={!!fieldErrors.department_id}
+              aria-invalid={!!fieldErrors.department}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedFaculty}
             >
@@ -365,9 +370,9 @@ export default function Register() {
             </select>
           </div>
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.department_id ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${fieldErrors.department ? "visible" : "invisible"}`}
           >
-            {fieldErrors.department_id || "placeholder"}
+            {fieldErrors.department || "placeholder"}
           </div>
 
           <label
