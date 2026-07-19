@@ -11,7 +11,7 @@ export function useLocations() {
   const [selectedWilaya, setSelectedWilaya] = useState("");
   const [selectedInstitution, setSelectedInstitution] = useState("");
   const [selectedFaculty, setSelectedFaculty] = useState("");
-
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   // Fetch Wilayas
   useEffect(() => {
     const fetchWilayas = async () => {
@@ -38,6 +38,7 @@ export function useLocations() {
       setFaculties([]);
       setSelectedFaculty("");
       setDepartments([]);
+      setSelectedDepartment("");
       return;
     }
 
@@ -65,6 +66,7 @@ export function useLocations() {
       setFaculties([]);
       setSelectedFaculty("");
       setDepartments([]);
+      setSelectedDepartment("");
       return;
     }
 
@@ -89,11 +91,12 @@ export function useLocations() {
   useEffect(() => {
     if (!selectedFaculty) {
       setDepartments([]);
+      setSelectedDepartment("");
       return;
     }
 
     const fetchDepartments = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("departments")
         .select("*")
         .eq("faculty_id", Number(selectedFaculty))
@@ -109,12 +112,12 @@ export function useLocations() {
     setSelectedWilaya("");
     setSelectedInstitution("");
     setSelectedFaculty("");
+    setSelectedDepartment("");
 
     setInstitutions([]);
     setFaculties([]);
     setDepartments([]);
   };
-
   return {
     wilayas,
     institutions,
@@ -124,10 +127,12 @@ export function useLocations() {
     selectedWilaya,
     selectedInstitution,
     selectedFaculty,
+    selectedDepartment,
 
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
+    setSelectedDepartment,
 
     resetSelections,
   };

@@ -22,17 +22,17 @@ export const validateForm = (formData, agreedToTerms) => {
   if (!formData.role) {
     errors.role = "Please select your role";
   }
-  if (!formData.wilaya_id) {
-    errors.wilaya_id = "Please select your state";
+  if (!formData.wilaya) {
+    errors.wilaya = "Please select your state";
   }
-  if (!formData.university_id) {
-    errors.university_id = "Please select your university";
+  if (!formData.institution) {
+    errors.institution = "Please select your university";
   }
-  if (!formData.faculty_id) {
-    errors.faculty_id = "Please select your faculty";
+  if (!formData.faculty) {
+    errors.faculty = "Please select your faculty";
   }
-  if (!formData.department_id) {
-    errors.department_id = "Please select your department";
+  if (!formData.department) {
+    errors.department = "Please select your department";
   }
   if (!agreedToTerms) {
     errors.agreement = "You must agree to the Terms and Privacy Policy";

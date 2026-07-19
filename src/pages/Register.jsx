@@ -42,11 +42,12 @@ export default function Register() {
     departments,
     selectedWilaya,
     selectedInstitution,
+    selectedDepartment,
     selectedFaculty,
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
-    error: locationsError, // assumes useLocations can surface a load error; safe if undefined
+    setSelectedDepartment,
   } = useLocations();
 
   const {
@@ -76,13 +77,19 @@ export default function Register() {
     }
   };
 
-  const handleLocationChange = (field, setter) => (e) => {
+  // Updated: Stores NAME in formData, ID in select state
+  const handleLocationChange = (setter, nameField) => (e) => {
     const { value } = e.target;
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    const selectedName = selectedOption?.text || "";
 
     setter(value);
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (fieldErrors[field]) {
-      setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+    setFormData((prev) => ({
+      ...prev,
+      [nameField]: selectedName,
+    }));
+    if (fieldErrors[nameField]) {
+      setFieldErrors((prev) => ({ ...prev, [nameField]: "" }));
     }
   };
 
@@ -90,9 +97,14 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submit clicked");
     if (loading) return;
+
     const { errors } = validateForm(formData, agreedToTerms);
     const passwordsOk = validatePasswords();
+    console.log(errors);
+    console.log(passwordsOk);
+    console.log(formData);
 
     if (Object.keys(errors).length > 0 || !passwordsOk) {
       setFieldErrors((prev) => ({ ...prev, ...errors }));
@@ -177,16 +189,6 @@ export default function Register() {
           />
         </Link>
 
-        {locationsError && (
-          <div
-            role="alert"
-            className="bg-amber-500/10 border border-amber-500 text-amber-600 rounded-lg p-2 mb-3 text-sm text-center w-full"
-          >
-            Couldn't load location data. Some fields may not work — try
-            refreshing the page.
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="w-full" noValidate>
           <label
             htmlFor="username"
@@ -268,7 +270,7 @@ export default function Register() {
             <select
               name="wilaya_id"
               value={selectedWilaya}
-              onChange={handleLocationChange("wilaya_id", setSelectedWilaya)}
+              onChange={handleLocationChange(setSelectedWilaya, "wilaya")}
               aria-invalid={!!fieldErrors.wilaya}
               disabled={!wilayas?.length}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
@@ -297,8 +299,8 @@ export default function Register() {
               name="university_id"
               value={selectedInstitution}
               onChange={handleLocationChange(
-                "university_id",
                 setSelectedInstitution,
+                "institution",
               )}
               aria-invalid={!!fieldErrors.institution}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
@@ -330,7 +332,7 @@ export default function Register() {
             <select
               name="faculty_id"
               value={selectedFaculty}
-              onChange={handleLocationChange("faculty_id", setSelectedFaculty)}
+              onChange={handleLocationChange(setSelectedFaculty, "faculty")}
               aria-invalid={!!fieldErrors.faculty}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedInstitution}
@@ -355,8 +357,11 @@ export default function Register() {
             </label>
             <select
               name="department_id"
-              value={formData.department}
-              onChange={handleLocationChange("department_id", () => {})}
+              value={selectedDepartment}
+              onChange={handleLocationChange(
+                setSelectedDepartment,
+                "department",
+              )}
               aria-invalid={!!fieldErrors.department}
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               disabled={!selectedFaculty}
