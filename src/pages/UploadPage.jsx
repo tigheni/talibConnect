@@ -34,7 +34,7 @@ export default function UploadPage() {
     year: "",
     subject: "",
     teacher_name: "",
-    teacherConsent: false,
+    teacher_consent: false,
     wilaya: "",
     institution: "",
     faculty: "",
@@ -79,7 +79,7 @@ export default function UploadPage() {
         year: "",
         subject: "",
         teacher_name: "",
-        teacherConsent: false,
+        teacher_consent: false,
         wilaya: "",
         institution: "",
         faculty: "",
@@ -327,8 +327,8 @@ export default function UploadPage() {
           <label className="flex items-center gap-2 text-sm text-gray-600">
             <input
               type="checkbox"
-              name="teacherConsent"
-              checked={examData.teacherConsent}
+              name="teacher_consent"
+              checked={examData.teacher_consent}
               onChange={handleChange}
             />
             I have permission from the teacher to share their name

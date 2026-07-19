@@ -70,7 +70,7 @@ export const validateExamForm = (examData, file) => {
     errors.file = "File size must be less than 10MB";
     isValid = false;
   }
-  if (examData.teacher_name?.trim() && !examData.teacherConsent) {
+  if (examData.teacher_name?.trim() && !examData.teacher_consent) {
     errors.teacher_name =
       "You must have permission from the teacher to share their name";
     isValid = false;

@@ -44,7 +44,9 @@ export function useUploadExam() {
       const { data: urlData } = supabase.storage
         .from("exams")
         .getPublicUrl(filePath);
+
       const isAdmin = profile.role === "admin";
+
       const { error: dbError } = await supabase.from("exams").insert({
         title: examData.title,
         year: parseInt(examData.year),
@@ -66,6 +68,7 @@ export function useUploadExam() {
         uploader_id: uploaderId,
         status: "pending",
         teacher_name: examData.teacher_name || null,
+        teacher_consent: examData.teacher_consent,
       });
 
       if (dbError) {

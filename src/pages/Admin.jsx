@@ -27,12 +27,26 @@ export default function Admin() {
       setLoading(false);
     }
     const checkAdmin = async () => {
-      const { data } = await supabase.auth.getUser();
-      const user = data.user;
-      if (user?.email !== "oussama.adame12@gmail.com") {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role, username")
+        .eq("id", user.id)
+        .single();
+      if (error || !profile) {
         navigate("/");
         return;
       }
+
+      const isAdmin = profile.role === "admin";
+      if (!isAdmin) {
+        navigate("/");
+        return;
+      }
+
       loadPendingExams();
     };
     checkAdmin();
