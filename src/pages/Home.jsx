@@ -190,7 +190,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {recentExams.map((exams) => (
-            <ExamCard key={exams.id} exam={exams} viewMode={"grid"} />
+            <ExamCard key={exams.uuid} exam={exams} viewMode={"grid"} />
           ))}
         </div>
       </section>
