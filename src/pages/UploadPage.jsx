@@ -20,6 +20,7 @@ export default function UploadPage() {
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
+    setSelectedDepartment,
   } = useLocations();
   const {
     clearFieldError,
@@ -85,6 +86,11 @@ export default function UploadPage() {
         faculty: "",
         department: "",
       });
+      setSelectedWilaya("");
+      setSelectedInstitution("");
+      setSelectedFaculty("");
+      setSelectedDepartment("");
+
       setFile(null);
       document.querySelector('input[type="file"]').value = "";
       clearAllErrors();
