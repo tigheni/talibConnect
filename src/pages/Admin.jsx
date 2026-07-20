@@ -120,6 +120,9 @@ export default function Admin() {
                   >
                     View PDF
                   </a>
+                  <p className="text-sm text-gray-500">
+                    teacher const: {exam.teacher_consent ? "yes" : "Noo"}
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <button

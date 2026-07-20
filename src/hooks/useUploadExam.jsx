@@ -79,6 +79,7 @@ export function useUploadExam() {
 
       return { success: true };
     } catch (err) {
+      console.log(err);
       return { success: false };
     } finally {
       setLoading(false);
