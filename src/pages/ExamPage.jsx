@@ -117,33 +117,32 @@ export default function ExamPage() {
           <div className="flex flex-wrap justify-between items-center gap-4">
             <div className=" flex flex-col gap-5 md:flex-row">
               <select
-                value={subjectFilter}
-                onChange={(e) => {
-                  setSubjectFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
-              >
-                <option value="">📚 All Subjects</option>
-                {subjects.map((subject) => (
-                  <option key={subject} value={subject}>
-                    {`📚${subject}`}
-                  </option>
-                ))}
-              </select>
-
-              <select
                 value={universityFilter}
                 onChange={(e) => {
                   setUniversityFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="px-5 py-2.5 bg-gray-100 border-0 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
+                className="px-5 py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
               >
                 <option value="">🎓 All institutions</option>
                 {institutions.map((uni) => (
                   <option key={uni} value={uni}>
                     {`🎓${uni}`}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={subjectFilter}
+                onChange={(e) => {
+                  setSubjectFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="px-5 py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
+              >
+                <option value="">📚 All Subjects</option>
+                {subjects.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {`📚${subject}`}
                   </option>
                 ))}
               </select>
