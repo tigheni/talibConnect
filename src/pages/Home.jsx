@@ -64,12 +64,12 @@ export default function Home() {
   return (
     <main className="font-inter">
       <header className="hero relative overflow-hidden">
-        <div className="hero-content relative flex flex-col items-center justify-center gap-6 px-4 py-10 md:py-16">
+        <div className="hero-content relative flex flex-col items-center justify-center gap-6 px-4  ">
           <span className=" hidden text-xs font-medium tracking-wide uppercase px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-md border border-black/10 text-gray-700 shadow-sm">
             10,000+ students already here
           </span>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-center leading-tight drop-shadow-md max-w-3xl">
+          <h1 className="text-5xl md:text-6xl font-bold text-center leading-tight drop-shadow-md max-w-7xl">
             Ace your exams with past papers from{" "}
             <span className="text-[#3fcf8e]">Algerian institutions</span>
           </h1>

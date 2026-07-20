@@ -6,7 +6,6 @@ export default function ExamCard({ exam, index, viewMode }) {
   if (viewMode === "grid") {
     return (
       <div
-        key={exam.uuid}
         className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all  duration-300 hover:-translate-y-1"
         style={{ animationDelay: `${index * 50}ms` }}
       >
@@ -31,21 +30,24 @@ export default function ExamCard({ exam, index, viewMode }) {
                 {exam.downloads} downloads
               </span>
             </div>
-            <p className="inline-flex items-center gap-1 text-gray-500">
-              {exam.uploader_name ? (
-                <>
-                  <User size={16} />
-                  <span>Uploader: {exam.uploader_name}</span>
-                </>
-              ) : null}
-            </p>
-            <p className="inline-flex items-center gap-1 text-gray-500">
-              {exam.teacher_name ? `👨‍🏫 Teacher ${exam.teacher_name}` : ""}
-            </p>
+            {exam.uploader_name && (
+              <p className="inline-flex items-center gap-1 text-gray-500">
+                <User size={16} />
+                <span>Uploader: {exam.uploader_name}</span>
+              </p>
+            )}
+            {exam.teacher_name && (
+              <p className="inline-flex items-center gap-1 text-gray-500">
+                👨‍🏫 Teacher: {exam.teacher_name}
+              </p>
+            )}
           </div>
 
           <button className="w-full mt-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium">
-            <a href={`${exam.file_url}?download=${exam.title}`} download>
+            <a
+              href={`${exam.file_url}?download=${encodeURIComponent(exam.title)}`}
+              download
+            >
               Download
             </a>
           </button>
@@ -62,7 +64,6 @@ export default function ExamCard({ exam, index, viewMode }) {
 
   return (
     <div
-      key={exam.id}
       className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
       style={{ animationDelay: `${index * 50}ms` }}
     >
@@ -79,22 +80,22 @@ export default function ExamCard({ exam, index, viewMode }) {
               <Download size={16} />
               {exam.downloads} downloads
             </span>
-            <p className="inline-flex items-center gap-1 text-gray-500">
-              {exam.uploader_name ? (
-                <>
-                  <User size={16} />
-                  <span>Uploader: {exam.uploader_name}</span>
-                </>
-              ) : null}
-            </p>
-            <p className="inline-flex items-center gap-1 text-gray-500">
-              {exam.teacher_name ? `👨‍🏫 Teacher ${exam.teacher_name}` : ""}
-            </p>
+            {exam.uploader_name && (
+              <p className="inline-flex items-center gap-1 text-gray-500">
+                <User size={16} />
+                <span>Uploader: {exam.uploader_name}</span>
+              </p>
+            )}
+            {exam.teacher_name && (
+              <p className="inline-flex items-center gap-1 text-gray-500">
+                👨‍🏫 Teacher: {exam.teacher_name}
+              </p>
+            )}
           </div>
         </div>
 
         <a
-          href={`${exam.file_url}?download=${exam.title}`}
+          href={`${exam.file_url}?download=${encodeURIComponent(exam.title)}`}
           download
           className="px-6 py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium whitespace-nowrap inline-block text-center"
         >
