@@ -149,7 +149,7 @@ export default function CompleteProfile() {
                 onChange={handleLocationChange(setSelectedWilaya, "wilaya")}
                 aria-invalid={!!errors.wilaya}
                 disabled={!wilayas?.length}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               >
                 <option value="">
                   {wilayas?.length ? "Select your state" : "Loading states..."}
@@ -179,7 +179,7 @@ export default function CompleteProfile() {
                   "institution",
                 )}
                 aria-invalid={!!errors.institution}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
                 disabled={!selectedWilaya}
               >
                 <option value="">Select your university</option>
@@ -210,7 +210,7 @@ export default function CompleteProfile() {
                 value={selectedFaculty}
                 onChange={handleLocationChange(setSelectedFaculty, "faculty")}
                 aria-invalid={!!errors.faculty}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
                 disabled={!selectedInstitution}
               >
                 <option value="">Select your faculty</option>
