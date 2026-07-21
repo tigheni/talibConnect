@@ -17,7 +17,7 @@ export default function ExamCard({ exam, index, viewMode }) {
               {exam.file_type}
             </span>
           </div>
-          <h1 className="text-base sm:text-lg text-center font-bold text-gray-900 mb-2 group-hover:text-[#5ae4a8] transition-colors line-clamp-2 min-h-[3.5rem]">
+          <h1 className="text-base sm:text-lg text-center font-bold text-gray-900 mb-2 group-hover:text-[#5ae4a8] transition-colors min-h-[3.5rem]">
             {exam.title}
           </h1>
           <div className="space-y-1 mb-4 flex-1">
@@ -40,7 +40,8 @@ export default function ExamCard({ exam, index, viewMode }) {
             )}
             {exam.teacher_name && (
               <p className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 truncate w-full">
-                👨‍🏫 Teacher: {exam.teacher_name}
+                👨‍🏫 Teacher:{" "}
+                {exam.teacher_name ? exam.teacher_name : "anonymous"}
               </p>
             )}
           </div>
@@ -91,7 +92,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             )}
 
             <span className="inline-flex items-center gap-1 truncate">
-              👨‍🏫 {exam.teacher_name ? exam.teacher_name : "anonymous"}
+              👨‍🏫 Teacher: {exam.teacher_name ? exam.teacher_name : "anonymous"}
             </span>
           </div>
         </div>

@@ -171,7 +171,7 @@ export default function Login() {
           <div className="text-right mt-1">
             <Link
               to="/forgot-password"
-              className="text-xs text-[#5ae4a8] hover:underline"
+              className="text-xs text-[#52c76a] hover:underline"
             >
               Forgot password?
             </Link>
@@ -191,7 +191,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="text-[#5ae4a8] hover:text-[#3aa855] hover:underline transition-colors"
+              className="text-[#52c76a] hover:text-[#3aa855] hover:underline transition-colors"
             >
               Register
             </Link>

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/Mainlayout";
 import ScrollToTop from "./components/ScrollToTop";
 import AuthLayout from "./layouts/AuthLayout";
-import ExamViewer from "./pages/ExamViewer";
+const ExamViewer = lazy(() => import("./pages/ExamViewer"));
 import ProtectedRoute from "./components/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -14,8 +14,9 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
 const ExamPage = lazy(() => import("./pages/ExamPage"));
 const Admin = lazy(() => import("./pages/Admin"));
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const CompleteProfile = lazy(() => import("./pages/CompleteProfile"));
 import { Toaster } from "react-hot-toast";
 
 // Inside your routes:
@@ -42,6 +43,7 @@ export default function App() {
           </Route>
           <Route path="/exam/:id" element={<ExamViewer />} />
           <Route element={<AuthLayout />}>
+            <Route path="/complete-profile" element={<CompleteProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password" element={<ResetPassword />} />

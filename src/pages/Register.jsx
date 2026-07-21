@@ -3,145 +3,65 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/LoginBg.jpg";
 import { supabase } from "../lib/supabase";
-import usePasswordValidation from "../hooks/PasswordValidation";
 import useMobile from "../hooks/useMobile";
-import { useLocations } from "../hooks/useLocations";
 import toast from "react-hot-toast";
-import { validateForm } from "../validators/validateRegesterForm";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
+import useRegisterValidation from "../validators/useRegisterValidation";
+
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    role: "",
-    wilaya: "",
-    institution: "",
-    faculty: "",
-    department: "",
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
 
-  const [fieldErrors, setFieldErrors] = useState({
-    username: "",
-    email: "",
-    role: "",
-    wilaya: "",
-    institution: "",
-    faculty: "",
-    department: "",
-    agreement: "",
-  });
   const isMobile = useMobile();
   const navigate = useNavigate();
   const formTopRef = useRef(null);
-
-  const {
-    wilayas,
-    institutions,
-    faculties,
-    departments,
-    selectedWilaya,
-    selectedInstitution,
-    selectedDepartment,
-    selectedFaculty,
-    setSelectedWilaya,
-    setSelectedInstitution,
-    setSelectedFaculty,
-    setSelectedDepartment,
-  } = useLocations();
-
-  const {
-    password,
-    confirmPassword,
-    setPassword,
-    setConfirmPassword,
-    errors: passwordErrors,
-    validatePasswords,
-    clearErrors,
-  } = usePasswordValidation();
+  const { errors, validate, clearErrors } = useRegisterValidation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "username" || name === "email" || name === "role") {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      if (fieldErrors[name]) {
-        setFieldErrors((prev) => ({ ...prev, [name]: "" }));
-      }
-    } else if (name === "password") {
-      setPassword(value);
-      clearErrors("password");
-    } else if (name === "confirmPassword") {
-      setConfirmPassword(value);
-      clearErrors("confirmPassword");
-    }
-  };
-
-  // Updated: Stores NAME in formData, ID in select state
-  const handleLocationChange = (setter, nameField) => (e) => {
-    const { value } = e.target;
-    const selectedOption = e.target.options[e.target.selectedIndex];
-    const selectedName = selectedOption?.text || "";
-
-    setter(value);
     setFormData((prev) => ({
       ...prev,
-      [nameField]: selectedName,
+      [name]: value,
     }));
-    if (fieldErrors[nameField]) {
-      setFieldErrors((prev) => ({ ...prev, [nameField]: "" }));
-    }
+
+    clearErrors(name);
   };
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit clicked");
     if (loading) return;
+    const result = validate(formData, agreedToTerms);
 
-    const { errors } = validateForm(formData, agreedToTerms);
-    const passwordsOk = validatePasswords();
-    console.log(errors);
-    console.log(passwordsOk);
-    console.log(formData);
-
-    if (Object.keys(errors).length > 0 || !passwordsOk) {
-      setFieldErrors((prev) => ({ ...prev, ...errors }));
+    if (!result.isValid) {
       formTopRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+
       return;
     }
-
-    if (!wilayas?.length) {
-      toast.error(
-        "Location data hasn't finished loading. Please wait a moment and try again.",
-      );
-      return;
-    }
-
     setLoading(true);
 
     try {
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email.trim(),
-        password,
+        password: formData.password,
         options: {
           data: {
             username: formData.username.trim(),
-            role: formData.role,
-            wilaya: formData.wilaya,
-            institution: formData.institution,
-            faculty: formData.faculty,
-            department: formData.department,
           },
+          emailRedirectTo: `${window.location.origin}/complete-profile`, // ← Capital P, no dash,
         },
       });
 
       if (signUpError) throw signUpError;
-
+      //todo: redirect the user to complete his profile first if he skipped send him to the exam page
       if (!data?.user) {
         throw new Error(
           "Registration didn't complete as expected. Please try again.",
@@ -149,7 +69,7 @@ export default function Register() {
       }
 
       if (data.session) {
-        navigate("/exams");
+        navigate("/complete-profile");
       } else {
         toast.success("Check your email to confirm your account.");
         setTimeout(() => {
@@ -177,13 +97,13 @@ export default function Register() {
     >
       <div
         ref={formTopRef}
-        className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6"
+        className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-4 rounded-2xl shadow-md px-6"
       >
         <Link to="/">
           <img
             src={logo}
             alt="Logo"
-            className="h-7 mb-4"
+            className="h-7 m-6"
             width={220}
             height={110}
           />
@@ -192,7 +112,7 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="w-full" noValidate>
           <label
             htmlFor="username"
-            className="block mb-1 font-medium text-gray-700 text-sm"
+            className="block mb-2 font-medium text-gray-700 text-sm"
           >
             Username:
           </label>
@@ -205,20 +125,20 @@ export default function Register() {
             onChange={handleChange}
             maxLength={20}
             autoComplete="username"
-            aria-invalid={!!fieldErrors.username}
+            aria-invalid={!!errors.username}
             aria-describedby="username-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
             id="username-error"
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.username ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${errors.username ? "visible" : "invisible"}`}
           >
-            {fieldErrors.username || "placeholder"}
+            {errors.username || "placeholder"}
           </div>
 
           <label
             htmlFor="email"
-            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
+            className="block text-gray-700 font-medium mb-2 mt-1 text-sm"
           >
             Email:
           </label>
@@ -230,159 +150,20 @@ export default function Register() {
             placeholder="Email"
             onChange={handleChange}
             autoComplete="email"
-            aria-invalid={!!fieldErrors.email}
+            aria-invalid={!!errors.email}
             aria-describedby="email-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
             id="email-error"
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${errors.email ? "visible" : "invisible"}`}
           >
-            {fieldErrors.email || "placeholder"}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">
-              Are you a student or teacher?
-            </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              aria-invalid={!!fieldErrors.role}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3"
-            >
-              <option value="">Select your role</option>
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-            </select>
-          </div>
-          <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.role ? "visible" : "invisible"}`}
-          >
-            {fieldErrors.role || "placeholder"}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700 font-medium mb-1 text-sm">
-              State (Wilaya):
-            </label>
-            <select
-              name="wilaya_id"
-              value={selectedWilaya}
-              onChange={handleLocationChange(setSelectedWilaya, "wilaya")}
-              aria-invalid={!!fieldErrors.wilaya}
-              disabled={!wilayas?.length}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
-            >
-              <option value="">
-                {wilayas?.length ? "Select your state" : "Loading states..."}
-              </option>
-              {wilayas?.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.name_en}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.wilaya ? "visible" : "invisible"}`}
-          >
-            {fieldErrors.wilaya || "placeholder"}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700 font-medium mb-1 text-sm">
-              University:
-            </label>
-            <select
-              name="university_id"
-              value={selectedInstitution}
-              onChange={handleLocationChange(
-                setSelectedInstitution,
-                "institution",
-              )}
-              aria-invalid={!!fieldErrors.institution}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
-              disabled={!selectedWilaya}
-            >
-              <option value="">Select your university</option>
-              {institutions?.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name_en}
-                </option>
-              ))}
-            </select>
-            {selectedWilaya && institutions?.length === 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                No institutions found for this state
-              </p>
-            )}
-          </div>
-          <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.institution ? "visible" : "invisible"}`}
-          >
-            {fieldErrors.institution || "placeholder"}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700 font-medium mb-1 text-sm">
-              Faculty:
-            </label>
-            <select
-              name="faculty_id"
-              value={selectedFaculty}
-              onChange={handleLocationChange(setSelectedFaculty, "faculty")}
-              aria-invalid={!!fieldErrors.faculty}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
-              disabled={!selectedInstitution}
-            >
-              <option value="">Select your faculty</option>
-              {faculties?.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.name_en}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.faculty ? "visible" : "invisible"}`}
-          >
-            {fieldErrors.faculty || "placeholder"}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700 font-medium mb-1 text-sm">
-              Department:
-            </label>
-            <select
-              name="department_id"
-              value={selectedDepartment}
-              onChange={handleLocationChange(
-                setSelectedDepartment,
-                "department",
-              )}
-              aria-invalid={!!fieldErrors.department}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
-              disabled={!selectedFaculty}
-            >
-              <option value="">Select your department</option>
-              {departments?.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name_en}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.department ? "visible" : "invisible"}`}
-          >
-            {fieldErrors.department || "placeholder"}
+            {errors.email || "placeholder"}
           </div>
 
           <label
             htmlFor="password"
-            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
+            className="block text-gray-700 font-medium mb-2 mt-1 text-sm"
           >
             Password:
           </label>
@@ -390,22 +171,22 @@ export default function Register() {
             type="password"
             name="password"
             id="password"
-            value={password}
+            value={formData.password}
             placeholder="Password"
             onChange={handleChange}
             autoComplete="new-password"
-            aria-invalid={!!passwordErrors.password}
+            aria-invalid={errors.password}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-xs mt-1 ${passwordErrors.password ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${errors.password ? "visible" : "invisible"}`}
           >
-            {passwordErrors.password || "placeholder"}
+            {errors.password || "placeholder"}
           </div>
 
           <label
             htmlFor="confirmPassword"
-            className="block text-gray-700 font-medium mb-1 mt-3 text-sm"
+            className="block text-gray-700 font-medium mb-2 mt-1 text-sm"
           >
             Confirm Password:
           </label>
@@ -413,17 +194,17 @@ export default function Register() {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
-            value={confirmPassword}
+            value={formData.confirmPassword}
             placeholder="Confirm Password"
             onChange={handleChange}
             autoComplete="new-password"
-            aria-invalid={!!passwordErrors.confirmPassword}
+            aria-invalid={errors.confirmPassword}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
-            className={`text-red-500 text-xs mt-1 ${passwordErrors.confirmPassword ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${errors.confirmPassword ? "visible" : "invisible"}`}
           >
-            {passwordErrors.confirmPassword || "placeholder"}
+            {errors.confirmPassword || "placeholder"}
           </div>
 
           <div className="mb-4">
@@ -434,9 +215,7 @@ export default function Register() {
                 checked={agreedToTerms}
                 onChange={(e) => {
                   setAgreedToTerms(e.target.checked);
-                  if (fieldErrors.agreement) {
-                    setFieldErrors((prev) => ({ ...prev, agreement: "" }));
-                  }
+                  clearErrors("agreement");
                 }}
                 className="mt-1"
               />
@@ -459,9 +238,9 @@ export default function Register() {
                 </Link>
               </span>
             </label>
-            {fieldErrors.agreement && (
+            {errors.agreement && (
               <div className="text-red-500 text-xs mt-1">
-                {fieldErrors.agreement}
+                {errors.agreement}
               </div>
             )}
           </div>
