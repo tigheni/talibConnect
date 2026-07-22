@@ -5,10 +5,30 @@ import { supabase } from "../lib/supabase";
 import useWelcomeValidation from "../validators/WelcomValidator";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import toast from "react-hot-toast";
+
+const YEAR_OPTIONS = {
+  lmd: [
+    { value: "L1", label: "Licence 1" },
+    { value: "L2", label: "Licence 2" },
+    { value: "L3", label: "Licence 3" },
+    { value: "M1", label: "Master 1" },
+    { value: "M2", label: "Master 2" },
+  ],
+  engineering: [
+    { value: "1", label: "1st year" },
+    { value: "2", label: "2nd year" },
+    { value: "3", label: "3rd year" },
+    { value: "4", label: "4th year" },
+    { value: "5", label: "5th year" },
+  ],
+};
+
 export default function CompleteProfile() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     role: "",
+    study_system: "",
+    year_of_study: "",
     wilaya: "",
     institution: "",
     faculty: "",
@@ -31,6 +51,8 @@ export default function CompleteProfile() {
     setSelectedDepartment,
   } = useLocations();
 
+  const { errors, validate, clearErrors } = useWelcomeValidation();
+
   const handleLocationChange = (setter, nameField) => (e) => {
     const { value } = e.target;
     const selectedOption = e.target.options[e.target.selectedIndex];
@@ -50,25 +72,27 @@ export default function CompleteProfile() {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+      // switching study system invalidates the previously picked year
+      ...(name === "study_system" ? { year_of_study: "" } : {}),
     }));
 
     clearErrors(name);
   };
-  const { errors, validate, clearErrors } = useWelcomeValidation();
 
   const handlSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
 
     const result = validate(formData);
-
     if (!result.isValid) return;
-    setLoading(true);
 
+    setLoading(true);
     try {
       const { error: updateError } = await supabase.auth.updateUser({
         data: {
           role: formData.role,
+          study_system: formData.study_system,
+          year_of_study: formData.year_of_study,
           wilaya: formData.wilaya,
           institution: formData.institution,
           faculty: formData.faculty,
@@ -76,6 +100,7 @@ export default function CompleteProfile() {
         },
       });
       if (updateError) throw updateError;
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -84,19 +109,18 @@ export default function CompleteProfile() {
         .from("profiles")
         .update({
           role: formData.role,
+          study_system: formData.study_system,
+          year_of_study: formData.year_of_study,
           wilaya: formData.wilaya,
           institution: formData.institution,
           faculty: formData.faculty,
           department: formData.department,
-          wilaya_id: selectedWilaya,
-          institution_id: selectedInstitution,
-          faculty_id: selectedFaculty,
-          department_id: selectedDepartment,
           profile_completed: true,
         })
         .eq("id", user.id);
 
       if (error) throw error;
+
       toast.success("Profile completed!");
       navigate("/exams");
     } catch (err) {
@@ -106,6 +130,7 @@ export default function CompleteProfile() {
       setLoading(false);
     }
   };
+
   return (
     <div className="max-h-full h-screen flex items-center justify-center">
       <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
@@ -126,7 +151,7 @@ export default function CompleteProfile() {
                 value={formData.role}
                 onChange={handleChange}
                 aria-invalid={!!errors.role}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"
               >
                 <option value="">Select your role</option>
                 <option value="student">Student</option>
@@ -139,6 +164,63 @@ export default function CompleteProfile() {
               {errors.role || "placeholder"}
             </div>
 
+            {formData.role === "student" && (
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <div className="mb-2">
+                    <label className="block text-gray-700 font-medium mb-1 text-sm">
+                      Study System:
+                    </label>
+                    <select
+                      name="study_system"
+                      value={formData.study_system}
+                      onChange={handleChange}
+                      aria-invalid={!!errors.study_system}
+                      className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+                    >
+                      <option value="">Select your system</option>
+                      <option value="lmd">LMD (Licence / Master)</option>
+                      <option value="engineering">Engineering</option>
+                    </select>
+                  </div>
+                  <div
+                    className={`text-red-500 text-xs mt-1 ${errors.study_system ? "visible" : "invisible"}`}
+                  >
+                    {errors.study_system || "placeholder"}
+                  </div>
+                </div>
+
+                {formData.study_system && (
+                  <div className="flex-1">
+                    <div className="mb-2">
+                      <label className="block text-gray-700 font-medium mb-1 text-sm">
+                        Year of Study:
+                      </label>
+                      <select
+                        name="year_of_study"
+                        value={formData.year_of_study}
+                        onChange={handleChange}
+                        aria-invalid={!!errors.year_of_study}
+                        className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8]"
+                      >
+                        <option value="">Select your year</option>
+                        {YEAR_OPTIONS[formData.study_system].map((y) => (
+                          <option key={y.value} value={y.value}>
+                            {y.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div
+                      className={`text-red-500 text-xs mt-1 ${errors.year_of_study ? "visible" : "invisible"}`}
+                    >
+                      {errors.year_of_study || "placeholder"}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="mb-2">
               <label className="block text-gray-700 font-medium mb-1 text-sm">
                 State (Wilaya):
@@ -149,7 +231,7 @@ export default function CompleteProfile() {
                 onChange={handleLocationChange(setSelectedWilaya, "wilaya")}
                 aria-invalid={!!errors.wilaya}
                 disabled={!wilayas?.length}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
               >
                 <option value="">
                   {wilayas?.length ? "Select your state" : "Loading states..."}
@@ -179,7 +261,7 @@ export default function CompleteProfile() {
                   "institution",
                 )}
                 aria-invalid={!!errors.institution}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
                 disabled={!selectedWilaya}
               >
                 <option value="">Select your university</option>
@@ -210,7 +292,7 @@ export default function CompleteProfile() {
                 value={selectedFaculty}
                 onChange={handleLocationChange(setSelectedFaculty, "faculty")}
                 aria-invalid={!!errors.faculty}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
                 disabled={!selectedInstitution}
               >
                 <option value="">Select your faculty</option>
