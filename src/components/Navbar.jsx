@@ -96,18 +96,6 @@ export default function NavBoard() {
               Exams
             </NavLink>
             <NavLink
-              to="/completeProfile"
-              className={({ isActive }) =>
-                `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                  isActive
-                    ? "bg-white text-black shadow-sm"
-                    : "text-black/60 hover:text-black hover:bg-white/60"
-                }`
-              }
-            >
-              completeProfile
-            </NavLink>
-            <NavLink
               to="/contact"
               aria-label="contact us here"
               className={({ isActive }) =>

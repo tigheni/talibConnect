@@ -318,7 +318,7 @@ export default function UploadPage() {
           <input
             type="text"
             name="teacher_name"
-            placeholder="e.g., Dr. Ahmed Benali"
+            placeholder="e.g., Dr. Mohamed Kader"
             value={examData.teacher_name}
             onChange={handleChange}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-[#5ae4a8] text-sm ${getErrorClass("teacher_name")}`}
