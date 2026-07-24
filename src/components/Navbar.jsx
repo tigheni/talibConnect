@@ -35,10 +35,12 @@ export default function NavBoard() {
   return (
     <div
       className={`sticky top-0 p-3 left-0 right-0 z-50 flex justify-center font-roboto-mono ${
-        isHome ? "bg-gradient-to-br from-gray-50 to-white shadow-sm" : ""
+        isHome
+          ? " rounded-2xl border border-white/30 bg-white/70 backdrop-blur-xl shadow-xl m-1 "
+          : ""
       }`}
     >
-      <nav className="relative h-16 w-full sm:max-w-3xl lg:max-w-5xl mx-5 flex items-center justify-between rounded-xl bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] px-5 sm:px-6 transition-shadow duration-300">
+      <nav className="relative h-16 w-full sm:max-w-3xl lg:max-w-6xl mx-5 flex items-center justify-between rounded-xl bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] px-5 sm:px-6 transition-shadow duration-300">
         <Link
           to="/"
           className="shrink-0 transition-transform duration-200 hover:scale-[1.03] active:scale-95"
