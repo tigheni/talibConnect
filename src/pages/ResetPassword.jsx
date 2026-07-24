@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import usePasswordValidation from "../hooks/PasswordValidation";
+import usePasswordValidation from "../validators/passwordValidation";
 import { supabase } from "../lib/supabase";
 
 export default function ResetPassword() {
