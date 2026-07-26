@@ -1,30 +1,117 @@
 import ExamCard from "../components/ExamCard";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
+const SUBJECTS = [
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Law",
+  "Medicine",
+  "Computer Science",
+  "Biology",
+];
+
+const FEATURES = [
+  {
+    title: "Fast search",
+    description: "Search by subject, university, teacher, or year.",
+    icon: "01",
+  },
+  {
+    title: "Approved papers",
+    description: "Only approved exam papers appear on the homepage.",
+    icon: "02",
+  },
+  {
+    title: "Clear organization",
+    description: "A simple layout that helps students find papers quickly.",
+    icon: "03",
+  },
+];
+
+function formatNumber(value) {
+  const num = Number(value) || 0;
+  return new Intl.NumberFormat("en-US").format(num);
+}
+
+function FeatureBlock({ title, description, icon }) {
+  return (
+    <div className="group relative overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+      <div className="mb-4">
+        <span className="text-3xl font-black tracking-tight text-slate-950">
+          {icon}
+        </span>
+      </div>
+      <h3 className="text-lg font-bold tracking-tight text-slate-950">
+        {title}
+      </h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function StatCard({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm">
+      <div className="text-xl font-extrabold text-slate-950 lg:text-2xl">
+        {value}
+      </div>
+      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+        {label}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState([]);
+  const searchInputRef = useRef(null);
+  const [stats, setStats] = useState([
+    { id: 1, number: "0+", label: "Exams Available" },
+    { id: 2, number: "0+", label: "Institutions" },
+    { id: 3, number: "0+", label: "Active Students" },
+  ]);
+  const [recentExams, setRecentExams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchValue, setSearchValue] = useState("");
+
+  const heroStats = useMemo(
+    () => [
+      { label: "Approved papers", value: stats[0].number },
+      { label: "Universities covered", value: stats[1].number },
+      { label: "Students helped", value: stats[2].number },
+    ],
+    [stats],
+  );
+
   const handleSearch = (e) => {
     e.preventDefault();
-    const query = e.target.search.value;
-    if (query.trim()) {
-      navigate(`/exams?search=${query}`);
+    const query = searchValue.trim();
+    if (query) {
+      navigate(`/exams?search=${encodeURIComponent(query)}`);
     }
   };
-  const [recentExams, setRecentExams] = useState([]);
+
+  const handleSubjectClick = (subject) => {
+    setSearchValue(subject);
+    searchInputRef.current?.focus();
+  };
 
   useEffect(() => {
     const fetchAllData = async () => {
+      setLoading(true);
+
       const { data: examsData, error: examsError } = await supabase
         .from("exams")
         .select("*")
-        .order("created_at", { ascending: false })
-        .eq("status", "approved");
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
 
       if (examsError) {
         console.error("Error fetching exams:", examsError);
+        setLoading(false);
         return;
       }
 
@@ -36,199 +123,189 @@ export default function Home() {
         .from("exams")
         .select("institution")
         .eq("status", "approved");
+
       let universityCount = 0;
       if (!uniError && uniData) {
         const uniqueUniversities = [
-          ...new Set(uniData.map((item) => item.institution)),
+          ...new Set(uniData.map((item) => item.institution).filter(Boolean)),
         ];
-
-        uniqueUniversities[0]
-          ? (universityCount = uniqueUniversities.length)
-          : (universityCount = 0);
+        universityCount = uniqueUniversities.length;
       }
-      setRecentExams(examsData.slice(0, 6) || []);
 
+      setRecentExams((examsData || []).slice(0, 6));
       setStats([
         {
           id: 1,
-          number: `${examsData?.length || 0}+`,
+          number: `${formatNumber(examsData?.length || 0)}+`,
           label: "Exams Available",
         },
-        { id: 2, number: `${universityCount}+`, label: "institutions" },
-        { id: 3, number: `${userCount}+`, label: "Active Students" },
+        {
+          id: 2,
+          number: `${formatNumber(universityCount)}+`,
+          label: "Institutions",
+        },
+        {
+          id: 3,
+          number: `${formatNumber(userCount)}+`,
+          label: "Active Students",
+        },
       ]);
+      setLoading(false);
     };
 
     fetchAllData();
   }, []);
+
   return (
-    <main className="font-inter">
-      <header className="hero relative overflow-hidden">
-        <div className="hero-content relative flex flex-col items-center justify-center gap-6 px-4  ">
-          <span className=" hidden text-xs font-medium tracking-wide uppercase px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-md border border-black/10 text-gray-700 shadow-sm">
-            10,000+ students already here
-          </span>
+    <main className="min-h-screen bg-slate-50 text-slate-950">
+      <header className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,158,109,0.10),transparent_28%),radial-gradient(circle_at_left,rgba(15,23,42,0.04),transparent_30%)]" />
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
+            <div className="relative">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">
+                Algerian exam archive
+              </p>
+              <h1 className="mt-4 max-w-4xl text-5xl font-black tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-6xl lg:leading-[0.95]">
+                Find approved exam papers from Algerian universities.
+              </h1>
 
-          <h1 className="text-5xl md:text-6xl font-bold text-center leading-tight drop-shadow-md max-w-7xl">
-            Ace your exams with past papers from{" "}
-            <span className="text-[#3fcf8e]">Algerian institutions</span>
-          </h1>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-slate-700 sm:text-lg">
+                Search exam papers by subject, university, teacher, or year. The
+                homepage shows the latest approved uploads in one place.
+              </p>
 
-          <h2 className="text-base md:text-xl italic text-center mx-auto drop-shadow text-gray-700">
-            Every past exam, organized in one place
-          </h2>
+              <form onSubmit={handleSearch} className="mt-10 max-w-3xl">
+                <div className="flex flex-col gap-3 rounded-[1.4rem] border border-slate-900/15 bg-white p-3 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:flex-row sm:items-stretch">
+                  <div className="flex items-center gap-3 rounded-[1rem] border border-slate-200 bg-[#fbfaf7] px-4 py-3 sm:flex-1">
+                    <span className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      Search
+                    </span>
+                    <input
+                      ref={searchInputRef}
+                      type="search"
+                      name="search"
+                      placeholder="subject, university, teacher, year"
+                      aria-label="Search exams"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      className="w-full bg-transparent text-[15px] text-slate-950 outline-none placeholder:text-slate-400"
+                    />
+                  </div>
 
-          <form
-            role="search"
-            className="w-full flex justify-center mt-2 px-4"
-            onSubmit={handleSearch}
-          >
-            <div className="relative  w-full max-w-[22rem] sm:max-w-md md:max-w-lg focus-within:max-w-full sm:focus-within:max-w-xl md:focus-within:max-w-2xl transition-[max-width] duration-300 ease-in-out">
-              <svg
-                className="absolute z-10 left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <circle cx="11" cy="11" r="7" strokeWidth="2" />
-                <line
-                  x1="16.5"
-                  y1="16.5"
-                  x2="22"
-                  y2="22"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+                  <button
+                    type="submit"
+                    className="rounded-[1rem] border border-slate-950 bg-slate-950 px-6 py-3.5 text-sm font-bold uppercase tracking-[0.22em] text-white transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.99]"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
 
-              <input
-                type="search"
-                name="search"
-                placeholder="Search your exams now"
-                aria-label="Search exams"
-                className="w-full placeholder-[#575757] bg-white/90 backdrop-blur-md border border-black/10 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 outline-none transition-all duration-300 ease-in-out pl-10 pr-16 py-3.5 rounded-xl shadow-sm"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#5ae4a8] text-black text-sm font-semibold px-4 py-2 rounded-lg shadow-[0px_4px_16px_0_rgba(99,232,126,.35)] transition-transform duration-200 hover:scale-105 active:scale-95"
-              >
-                GO!
-              </button>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {SUBJECTS.map((subject) => (
+                  <button
+                    key={subject}
+                    type="button"
+                    onClick={() => handleSubjectClick(subject)}
+                    className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-950 hover:text-slate-950"
+                  >
+                    {subject}
+                  </button>
+                ))}
+              </div>
             </div>
-          </form>
-          <div className="flex w-full max-w-xl relative flex-wrap justify-center gap-2 mt-2">
-            {[
-              "Mathematics",
-              "Physics",
-              "Chemistry",
-              "Law",
-              "Medicine",
-              "Computer Science",
-              "Biology",
-            ].map((subject) => (
-              <button
-                key={subject}
-                className="px-4 py-1.5 rounded-full border border-black/10 bg-white/70 backdrop-blur-md text-black text-sm font-medium transition-all duration-200 hover:border-[#5ae4a8] hover:text-[#2f9e6d] hover:bg-white active:scale-95"
-                onClick={() => {
-                  document.querySelector('input[name="search"]').value =
-                    subject;
-                }}
-              >
-                {subject}
-              </button>
+
+            <div className="hidden lg:flex lg:h-full lg:flex-col lg:justify-center lg:gap-3">
+              {heroStats.map((item) => (
+                <StatCard
+                  key={item.label}
+                  label={item.label}
+                  value={item.value}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:hidden">
+            {heroStats.map((item) => (
+              <StatCard
+                key={item.label}
+                label={item.label}
+                value={item.value}
+              />
             ))}
           </div>
         </div>
       </header>
-      <section className="py-16">
-        <div className="text-center px-4">
-          <span className="text-xs font-semibold tracking-widest uppercase text-[#3fcf8e]">
-            The numbers
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-black mt-2 mb-3">
-            Our community by the numbers
-          </h2>
-          <p className="text-gray-600">
-            Join 10,000+ students already preparing smarter
-          </p>
-        </div>
-        <div className="max-w-6xl mx-auto py-10 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            {stats.map((stat) => (
-              <div
-                key={stat.id}
-                className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/5 transition-all duration-300 hover:border-[#5ae4a8]/30 hover:-translate-y-1"
-              >
-                <h3 className="text-4xl md:text-5xl font-bold text-[#5ae4a8] mb-2 tracking-tight">
-                  {stat.number}
-                </h3>
-                <p className="text-gray-400 text-sm uppercase tracking-wide">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-5 md:grid-cols-3">
+          {FEATURES.map((feature) => (
+            <FeatureBlock key={feature.title} {...feature} />
+          ))}
         </div>
       </section>
-      <section className="max-w-6xl mx-auto px-4">
-        <div className="flex items-end justify-between flex-wrap gap-2 mb-1">
+
+      <section className="mx-auto max-w-6xl px-4">
+        <div className="mb-1 flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">
+            <h2 className="text-2xl font-bold md:text-3xl">
               Latest exam papers
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Freshly uploaded by students like you
+            </h2>
+            <p className="mt-1 text-gray-600">
+              Recently approved papers uploaded by students.
             </p>
           </div>
           <Link
             to="/exams"
-            className="text-sm font-medium text-[#2f9e6d] hover:text-[#237a54] transition-colors duration-150 whitespace-nowrap"
+            className="whitespace-nowrap text-sm font-medium text-[#2f9e6d] transition-colors duration-150 hover:text-[#237a54]"
           >
             View all exams →
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {recentExams.map((exams) => (
-            <ExamCard key={exams.uuid} exam={exams} viewMode={"grid"} />
-          ))}
+
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-52 animate-pulse rounded-2xl bg-slate-100"
+                />
+              ))
+            : recentExams.map((exams) => (
+                <ExamCard key={exams.uuid} exam={exams} viewMode={"grid"} />
+              ))}
         </div>
       </section>
-      <div className="max-w-6xl mx-auto my-8 py-8">
-        <div className="flex justify-center gap-1.5">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1 h-3 bg-gray-800/70 rounded-full"
-              style={{ transform: "rotate(45deg)" }}
-            ></div>
-          ))}
-        </div>
-      </div>
-      <section className="max-w-6xl mx-auto px-4 pb-16">
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 md:p-14 text-center border border-white/5">
-          <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#5ae4a8]/10 blur-3xl pointer-events-none" />
-          <div className="relative">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to ace your exams?
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-              Join for free. Start browsing exams in 30 seconds.
+
+      <section className="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">
+        <div className="grid gap-6 rounded-[1.8rem] border border-slate-300 bg-slate-950 p-8 shadow-[0_18px_60px_rgba(15,23,42,0.2)] lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
+              Registration
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/register"
-                className="bg-[#5ae4a8] text-black px-8 py-3 rounded-xl font-semibold shadow-[0px_4px_24px_0_rgba(99,232,126,.35)] transition-all duration-300 hover:bg-[#4bc864] hover:scale-105 active:scale-95"
-              >
-                Register now
-              </Link>
-              <Link
-                to="/exams"
-                className="border border-gray-600 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-white/10 hover:border-gray-400"
-              >
-                Browse exams
-              </Link>
-            </div>
+            <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-white md:text-5xl">
+              Create an account and start browsing papers.
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 md:text-base">
+              Register for free, search the archive, and find the papers you
+              need for revision.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Link
+              to="/register"
+              className="rounded-full bg-white px-8 py-3.5 text-center text-sm font-bold uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              Register now
+            </Link>
+            <Link
+              to="/exams"
+              className="rounded-full border border-white/15 bg-white/5 px-8 py-3.5 text-center text-sm font-bold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:bg-white/10"
+            >
+              Browse exams
+            </Link>
           </div>
         </div>
       </section>

@@ -84,8 +84,8 @@
 body {
   min-height: 100vh;
   /*   background-image: url("./assets/axiom-pattern-1920x1080.png"); */
-  background-color: #e3e3e3;
-  background-image: url("https://www.transparenttextures.com/patterns/axiom-pattern.png");
+  background-color: #ffffff;
+  /*background-image: url("https://www.transparenttextures.com/patterns/axiom-pattern.png");*/
   /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 html {

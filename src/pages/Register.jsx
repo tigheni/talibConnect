@@ -56,12 +56,11 @@ export default function Register() {
           data: {
             username: formData.username.trim(),
           },
-          emailRedirectTo: `${window.location.origin}/complete-profile`, // ← Capital P, no dash,
+          emailRedirectTo: `${window.location.origin}/complete-profile`,
         },
       });
 
       if (signUpError) throw signUpError;
-      //todo: redirect the user to complete his profile first if he skipped send him to the exam page
       if (!data?.user) {
         throw new Error(
           "Registration didn't complete as expected. Please try again.",

@@ -1,46 +1,78 @@
 import logo from "../assets/logo.svg";
-import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Link, useNavigate, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
 
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
-  const isHome = location.pathname === "/exams";
   const isMobile = useMobile();
-
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-
   useEffect(() => {
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
-      setUser(data.user);
-      const userEmail = data.user?.email;
-      setIsAdmin(userEmail === "oussama.adame12@gmail.com");
+      const currentUser = data.user || null;
+
+      setUser(currentUser);
     };
 
     getUser();
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user || null);
-      },
-    );
 
-    return () => listener?.subscription.unsubscribe();
-  }, []);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      const currentUser = session?.user || null;
+      setUser(currentUser);
+    });
+    const checkAdmin = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        navigate("/");
+        return;
+      }
+
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role, username")
+        .eq("id", user.id)
+        .single();
+
+      const isAdmin = profile.role === "admin";
+      if (error || !profile || !isAdmin) {
+        navigate("/");
+        return;
+      }
+
+      setIsAdmin(true);
+    };
+
+    checkAdmin();
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const navLinkClass = ({ isActive }) =>
+    `relative rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+      isActive
+        ? "bg-[#2f9e6d] text-white shadow-sm"
+        : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+    }`;
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setIsAdmin(false);
+    setIsMenuOpen(false);
+    navigate("/");
+  };
 
   return (
-    <div
-      className={`sticky top-0 p-3 left-0 right-0 z-50 flex justify-center font-roboto-mono ${
-        isHome
-          ? " rounded-2xl border border-white/30 bg-white/70 backdrop-blur-xl shadow-xl m-1 "
-          : ""
-      }`}
-    >
-      <nav className="relative h-16 w-full sm:max-w-3xl lg:max-w-6xl mx-5 flex items-center justify-between rounded-xl bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] px-5 sm:px-6 transition-shadow duration-300">
+    <div className="sticky top-0 z-50 flex justify-center px-3 pt-3">
+      <nav className="relative flex h-16 w-full max-w-7xl items-center justify-between rounded-2xl border border-slate-200 bg-white/80 px-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:px-6">
         <Link
           to="/"
           className="shrink-0 transition-transform duration-200 hover:scale-[1.03] active:scale-95"
@@ -48,7 +80,7 @@ export default function NavBoard() {
           <img
             src={logo}
             srcSet={`${logo} 2x`}
-            className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto"
+            className="h-5 w-auto sm:h-6 lg:h-7"
             alt="logo"
             width={250}
             height={100}
@@ -56,219 +88,170 @@ export default function NavBoard() {
         </Link>
 
         <div className="hidden lg:flex flex-1 justify-center px-4 xl:px-10">
-          <div className="flex items-center gap-1 bg-black/[0.03] rounded-full p-1 border border-black/5">
-            <NavLink
-              to="/"
-              end
-              aria-label="Go to Homepage"
-              className={({ isActive }) =>
-                `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                  isActive
-                    ? "bg-white text-black shadow-sm"
-                    : "text-black/60 hover:text-black hover:bg-white/60"
-                }`
-              }
-            >
+          <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1">
+            <NavLink to="/" end className={navLinkClass}>
               Home
             </NavLink>
-            <NavLink
-              to="/upload"
-              aria-label="Upload a new exam"
-              className={({ isActive }) =>
-                `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                  isActive
-                    ? "bg-white text-black shadow-sm"
-                    : "text-black/60 hover:text-black hover:bg-white/60"
-                }`
-              }
-            >
+            <NavLink to="/upload" className={navLinkClass}>
               Upload
             </NavLink>
-            <NavLink
-              to="/exams"
-              aria-label="Browse all exams"
-              className={({ isActive }) =>
-                `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                  isActive
-                    ? "bg-white text-black shadow-sm"
-                    : "text-black/60 hover:text-black hover:bg-white/60"
-                }`
-              }
-            >
+            <NavLink to="/exams" className={navLinkClass}>
               Exams
             </NavLink>
-            <NavLink
-              to="/contact"
-              aria-label="contact us here"
-              className={({ isActive }) =>
-                `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                  isActive
-                    ? "bg-white text-black shadow-sm"
-                    : "text-black/60 hover:text-black hover:bg-white/60"
-                }`
-              }
-            >
+            <NavLink to="/contact" className={navLinkClass}>
               Contact
             </NavLink>
             {isAdmin && (
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  `relative text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all duration-200 ${
-                    isActive
-                      ? "bg-white text-black shadow-sm"
-                      : "text-black/60 hover:text-black hover:bg-white/60"
-                  }`
-                }
-              >
+              <NavLink to="/admin" className={navLinkClass}>
                 Admin
               </NavLink>
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-3 sm:gap-4">
           {user && !isMobile ? (
             <>
-              <div className="flex items-center gap-2.5 pr-1">
+              <div className="hidden items-center gap-2.5 pr-1 sm:flex">
                 <div className="relative">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#3fcf8e] flex items-center justify-center text-black font-bold text-sm ring-2 ring-[#5ae4a8]/30 ring-offset-2 ring-offset-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#2f9e6d] text-sm font-bold text-white ring-2 ring-[#5ae4a8]/25 ring-offset-2 ring-offset-white">
                     {user.email?.charAt(0).toUpperCase()}
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#5ae4a8] border-2 border-white" />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#5ae4a8]" />
                 </div>
-                <span className="text-sm font-medium text-gray-700 hidden lg:block">
-                  {user.user_metadata?.username}
+                <span className="hidden text-sm font-medium text-slate-700 xl:block">
+                  {user.user_metadata?.username || user.email?.split("@")[0]}
                 </span>
               </div>
 
               <button
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  setUser(null);
-                  navigate("/");
-                }}
-                className="text-[#f35f62] bg-[#3b1c1d] text-sm font-medium px-4 py-2.5 rounded-xl border-none transition-all duration-200 hover:scale-105 hover:bg-[#4a2223] active:scale-95"
+                onClick={handleLogout}
+                className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-medium text-rose-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rose-100 active:scale-95"
               >
                 Logout
               </button>
             </>
           ) : (
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="hidden items-center gap-3 lg:flex">
               <Link
                 to="/login"
-                className="login-btn text-sm font-medium px-4 py-2.5 rounded-xl border border-gray-400 text-gray-800 transition-all duration-200 hover:border-gray-600 hover:bg-black/[0.05]"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50"
               >
-                <span className="relative z-10">Login</span>
+                Login
               </Link>
 
               <Link
                 to="/register"
-                className="cursor-pointer bg-[var(--cp)] shadow-[0px_4px_32px_0_rgba(99,232,126,.40)] px-6 py-2.5 rounded-xl border border-[#5ae4a8] text-[#0f0f0f] font-medium group transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+                className="rounded-xl border border-[#5ae4a8] bg-[#5ae4a8] px-5 py-2.5 text-sm font-bold text-[#0f0f0f] shadow-[0_8px_24px_rgba(90,228,168,0.22)] transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
               >
-                <div className="relative overflow-hidden h-5 leading-5">
-                  <p className="leading-5 group-hover:-translate-y-5 duration-[0.6s] ease-[cubic-bezier(0.19,1,0.22,1)]">
-                    Register
-                  </p>
-                  <p className="absolute top-5 left-0 leading-5 group-hover:top-0 duration-[0.6s] ease-[cubic-bezier(0.19,1,0.22,1)]">
-                    Register
-                  </p>
-                </div>
+                Register
               </Link>
             </div>
           )}
-        </div>
-        <div className="lg:hidden">
+
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] focus:outline-none"
+            className="relative flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-xl border border-slate-200 bg-white lg:hidden"
           >
             <span
-              className={`block h-[2px] w-6 bg-black rounded-full transition-all duration-300 ${
-                isMenuOpen ? "rotate-45 translate-y-[7px]" : ""
+              className={`block h-[2px] w-6 rounded-full bg-slate-900 transition-all duration-300 ${
+                isMenuOpen ? "translate-y-[7px] rotate-45" : ""
               }`}
             />
             <span
-              className={`block h-[2px] w-6 bg-black rounded-full transition-all duration-300 ${
+              className={`block h-[2px] w-6 rounded-full bg-slate-900 transition-all duration-300 ${
                 isMenuOpen ? "opacity-0" : "opacity-100"
               }`}
             />
             <span
-              className={`block h-[2px] w-6 bg-black rounded-full transition-all duration-300 ${
-                isMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""
+              className={`block h-[2px] w-6 rounded-full bg-slate-900 transition-all duration-300 ${
+                isMenuOpen ? "-translate-y-[7px] -rotate-45" : ""
               }`}
             />
           </button>
         </div>
+
         {isMenuOpen && (
           <>
             <div
-              className="fixed inset-0 top-[72px] bg-black/20 backdrop-blur-[2px] lg:hidden animate-[fadeIn_0.2s_ease]"
+              className="fixed inset-0 top-[72px] z-40 bg-black/20 backdrop-blur-[2px] lg:hidden"
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white/95 backdrop-blur-xl rounded-2xl border border-black/10 shadow-2xl flex flex-col p-3 gap-1 lg:hidden animate-[slideDown_0.25s_cubic-bezier(0.19,1,0.22,1)]">
+            <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 flex flex-col gap-1 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl lg:hidden">
               <Link
                 to="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-medium px-4 py-3 rounded-xl text-gray-800 transition-colors duration-150 hover:bg-black/[0.04] active:bg-black/[0.06]"
+                className="rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
               >
                 Home
               </Link>
               <Link
                 to="/exams"
                 onClick={() => setIsMenuOpen(false)}
-                aria-label="Browse all exams"
-                className="text-sm font-medium px-4 py-3 rounded-xl text-gray-800 transition-colors duration-150 hover:bg-black/[0.04] active:bg-black/[0.06]"
+                className="rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
               >
                 Exams
               </Link>
               <Link
                 to="/upload"
                 onClick={() => setIsMenuOpen(false)}
-                aria-label="Upload a new exam"
-                className="text-sm font-medium px-4 py-3 rounded-xl text-gray-800 transition-colors duration-150 hover:bg-black/[0.04] active:bg-black/[0.06]"
+                className="rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
               >
                 Upload
               </Link>
+              <Link
+                to="/contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
+              >
+                Contact
+              </Link>
 
-              <div className="h-px bg-black/10 my-1.5 mx-2" />
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
+                >
+                  Admin
+                </Link>
+              )}
+
+              <div className="my-1 h-px bg-slate-200" />
 
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-2">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#3fcf8e] flex items-center justify-center text-black font-bold text-sm ring-2 ring-[#5ae4a8]/30">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#2f9e6d] text-sm font-bold text-white">
                       {user.email?.charAt(0).toUpperCase() || "U"}
                     </div>
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-slate-700">
                       {user.user_metadata?.username ||
                         user.email?.split("@")[0] ||
                         "User"}
                     </span>
                   </div>
                   <button
-                    onClick={async () => {
-                      await supabase.auth.signOut();
-                      setUser(null);
-                      setIsMenuOpen(false);
-                    }}
-                    className="text-left text-[#f35f62] text-sm font-medium px-4 py-3 rounded-xl transition-colors duration-150 hover:bg-[#3b1c1d]/5"
+                    onClick={handleLogout}
+                    className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-medium text-rose-700 transition-colors duration-150 hover:bg-rose-100"
                   >
                     Logout
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col gap-1 p-1">
+                <div className="flex flex-col gap-2 p-1">
                   <Link
                     to="/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-sm font-medium px-4 py-3 rounded-xl text-gray-800 border border-gray-300 text-center transition-colors duration-150 hover:bg-black/[0.03]"
+                    className="rounded-xl border border-slate-300 px-4 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-sm font-medium px-4 py-3 rounded-xl bg-[var(--cp)] text-[#0f0f0f] text-center shadow-[0px_4px_20px_0_rgba(99,232,126,.35)] transition-transform duration-150 active:scale-95"
+                    className="rounded-xl border border-[#5ae4a8] bg-[#5ae4a8] px-4 py-3 text-center text-sm font-bold text-[#0f0f0f] transition-transform duration-150 active:scale-95"
                   >
                     Register
                   </Link>
