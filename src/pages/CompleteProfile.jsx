@@ -132,8 +132,8 @@ export default function CompleteProfile() {
   };
 
   return (
-    <div className="max-h-full h-screen flex items-center justify-center">
-      <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
+    <div className="max-h-full h-screen flex items-center justify-center ">
+      <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-400 bg-white py-5 rounded-2xl shadow-md px-6">
         <h1 className=" text-2xl mb-2"> 🎓 Welcome to TalibConnect!</h1>
         <p>
           Thanks for joining! Complete your academic profile to receive
