@@ -114,7 +114,7 @@ export default function ExamPage() {
 
       <div className="sticky top-0 z-50 bg-white backdrop-blur-lg border-b border-gray-200 shadow-md ">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex flex-wrap justify-between items-center gap-4">
+          <div className="  flex flex-wrap justify-between items-center gap-4">
             <div className=" flex flex-col gap-5 md:flex-row">
               <select
                 value={universityFilter}
@@ -122,7 +122,7 @@ export default function ExamPage() {
                   setUniversityFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="px-5 py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
+                className="px-5 w-full py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
               >
                 <option value="">🎓 All institutions</option>
                 {institutions.map((uni) => (
@@ -137,7 +137,7 @@ export default function ExamPage() {
                   setSubjectFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="px-5 py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
+                className="px-5 w-full py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
               >
                 <option value="">📚 All Subjects</option>
                 {subjects.map((subject) => (
