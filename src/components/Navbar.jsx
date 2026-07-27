@@ -32,7 +32,6 @@ export default function NavBoard() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        navigate("/");
         return;
       }
 
