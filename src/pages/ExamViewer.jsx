@@ -15,6 +15,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 export default function ExamViewer() {
   const [exam, setExam] = useState(null);
   const { id } = useParams();
+
+  const shortId = id.match(/[a-f0-9]{8}$/)?.[0];
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -30,14 +33,23 @@ export default function ExamViewer() {
         setError("");
         setExam(null);
 
+        if (!shortId) {
+          setError("Invalid exam URL");
+          setLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase
           .from("exams")
           .select("*")
-          .eq("uuid", id)
+          .eq("short_id", shortId)
           .single();
 
         if (error) throw error;
 
+        if (!data) {
+          throw new Error("Exam not found");
+        }
         setExam(data);
       } catch (err) {
         setError(

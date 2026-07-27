@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
+import { v4 as uuidv4 } from "uuid";
 
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,7 @@ export function useUploadExam() {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-zA-Z0-9.-]/g, "_");
+
       const filePath = `${Date.now()}_${cleanFileName}`;
 
       const { error: uploadError } = await supabase.storage
@@ -46,8 +48,11 @@ export function useUploadExam() {
         .getPublicUrl(filePath);
 
       const isAdmin = profile.role === "admin";
-
+      const uuid = uuidv4();
+      const shortId = uuid.slice(0, 8);
       const { error: dbError } = await supabase.from("exams").insert({
+        uuid,
+        short_id: shortId,
         title: examData.title,
         year: parseInt(examData.year),
         wilaya: examData.wilaya,

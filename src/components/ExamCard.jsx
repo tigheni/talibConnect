@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Download, User } from "lucide-react";
 import { useDownloadExam } from "../hooks/useDownloadExam.jsx";
-
+import { getExamUrl } from "../utils/getExanUrl.jsx";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
   const { downloadExam, loading } = useDownloadExam();
@@ -55,7 +55,9 @@ export default function ExamCard({ exam, index, viewMode }) {
               Download
             </button>
             <button
-              onClick={() => navigate(`/exam/${exam.uuid}`)}
+              onClick={() => {
+                navigate(getExamUrl(exam));
+              }}
               className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium text-sm"
             >
               Open PDF
@@ -106,7 +108,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             Download
           </button>
           <button
-            onClick={() => navigate(`/exam/${exam.uuid}`)}
+            onClick={() => navigate(getExamUrl(exam))}
             className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-sm"
           >
             Open PDF
