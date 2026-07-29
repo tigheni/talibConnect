@@ -1,14 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+@utility btn_hover_effects {
+  @apply hover:rounded-xl hover:bg-black/5 transition-all ease-in duration-200;
+}
+@theme {
+  --font-mono: "Roboto Mono", monospace;
+  --font-inter: "Inter", sans-serif;
+}
 
-@layer components {
-  .font-roboto-mono {
-    font-family: "Roboto Mono", monospace;
-  }
-  .font-inter {
-    font-family: "Inter", sans-serif;
-  }
+:root {
+  --color-light-green-50: #f1faeb;
+  --color-light-green-100: #e2f5d6;
+  --color-light-green-200: #c6ebad;
+  --color-light-green-300: #a9e085;
+  --color-light-green-400: #8dd65c;
+  --color-light-green-500: #70cc33;
+  --cp: #5ae4a8;
+  --cp2: #5ae4a8;
+  --color-light-green-600: #5aa329;
+  --color-light-green-700: #437a1f;
+  --color-light-green-800: #2d5214;
+  --color-light-green-900: #16290a;
+  --color-light-green-950: #101d07;
+}
+body {
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: "Inter", sans-serif;
+}
+html {
+  scroll-behavior: smooth;
 }
 
 .btn_hover_effects {
@@ -61,36 +83,6 @@
   padding: 0 1rem;
 }
 
-@utility btn_hover_effects {
-  @apply hover:rounded-xl hover:bg-black/5 transition-all ease-in duration-200;
-}
-
-:root {
-  --color-light-green-50: #f1faeb;
-  --color-light-green-100: #e2f5d6;
-  --color-light-green-200: #c6ebad;
-  --color-light-green-300: #a9e085;
-  --color-light-green-400: #8dd65c;
-  --color-light-green-500: #70cc33;
-  --cp: #5ae4a8;
-  --cp2: #5ae4a8;
-  --color-light-green-600: #5aa329;
-  --color-light-green-700: #437a1f;
-  --color-light-green-800: #2d5214;
-  --color-light-green-900: #16290a;
-  --color-light-green-950: #101d07;
-}
-
-body {
-  min-height: 100vh;
-  /*   background-image: url("./assets/axiom-pattern-1920x1080.png"); */
-  background-color: #ffffff;
-  /*background-image: url("https://www.transparenttextures.com/patterns/axiom-pattern.png");*/
-  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-}
-html {
-  scroll-behavior: smooth;
-}
 button:hover {
   cursor: pointer;
 }

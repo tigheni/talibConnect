@@ -96,7 +96,7 @@ export default function Register() {
     >
       <div
         ref={formTopRef}
-        className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-4 rounded-2xl shadow-md px-6"
+        className="w-full max-w-sm md:max-w-md flex justify-center  flex-col items-center border border-gray-200 bg-white py-4 rounded-2xl shadow-md px-6"
       >
         <Link to="/">
           <img

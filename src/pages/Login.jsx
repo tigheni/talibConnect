@@ -106,7 +106,7 @@ export default function Login() {
       }
     >
       {/* Made the card smaller: reduced padding, max-width, and rounded corners */}
-      <div className="w-full max-w-sm md:max-w-md flex justify-center font-inter flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
+      <div className="w-full max-w-sm md:max-w-md flex justify-center  flex-col items-center border border-gray-200 bg-white py-5 rounded-2xl shadow-md px-6">
         <Link to="/">
           <img
             src={logo}
