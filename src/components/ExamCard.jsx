@@ -40,8 +40,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             )}
             {exam.teacher_name && (
               <p className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 truncate w-full">
-                👨‍🏫 Teacher:{" "}
-                {exam.teacher_name ? exam.teacher_name : "anonymous"}
+                👨‍🏫 Teacher: {exam.teacher_name}
               </p>
             )}
           </div>
@@ -94,7 +93,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             )}
 
             <span className="inline-flex items-center gap-1 truncate">
-              👨‍🏫 Teacher: {exam.teacher_name ? exam.teacher_name : "anonymous"}
+              👨‍🏫 Teacher: {exam.teacher_name}
             </span>
           </div>
         </div>

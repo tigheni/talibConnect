@@ -8,19 +8,49 @@ import toast from "react-hot-toast";
 
 export default function UploadPage() {
   const subjects = useSubjects();
+  const YEAR_OPTIONS = {
+    lmd: [
+      { value: "L1", label: "Licence 1" },
+      { value: "L2", label: "Licence 2" },
+      { value: "L3", label: "Licence 3" },
+      { value: "M1", label: "Master 1" },
+      { value: "M2", label: "Master 2" },
+    ],
+    engineering: [
+      { value: "1", label: "1st year" },
+      { value: "2", label: "2nd year" },
+      { value: "3", label: "3rd year" },
+      { value: "4", label: "4th year" },
+      { value: "5", label: "5th year" },
+    ],
+    medical_education: [
+      { value: "1", label: "1st year" },
+      { value: "2", label: "2nd year" },
+      { value: "3", label: "3rd year" },
+      { value: "4", label: "4th year" },
+      { value: "5", label: "5th year" },
+      { value: "6", label: "6th year" },
+      { value: "7", label: "7th year" },
+    ],
+  };
   const { uploadExam, loading } = useUploadExam();
   const {
     wilayas,
     institutions,
     faculties,
     departments,
+
     selectedWilaya,
     selectedInstitution,
     selectedFaculty,
+    selectedDepartment,
+
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
     setSelectedDepartment,
+
+    resetSelections,
   } = useLocations();
   const {
     clearFieldError,
@@ -40,6 +70,8 @@ export default function UploadPage() {
     institution: "",
     faculty: "",
     department: "",
+    year_of_study: "",
+    education_system: "",
   });
   const [file, setFile] = useState(null);
 
@@ -81,15 +113,10 @@ export default function UploadPage() {
         subject: "",
         teacher_name: "",
         teacher_consent: false,
-        wilaya: "",
-        institution: "",
-        faculty: "",
-        department: "",
+        year_of_study: "",
+        education_system: "",
       });
-      setSelectedWilaya("");
-      setSelectedInstitution("");
-      setSelectedFaculty("");
-      setSelectedDepartment("");
+      resetSelections();
 
       setFile(null);
       document.querySelector('input[type="file"]').value = "";
@@ -127,7 +154,6 @@ export default function UploadPage() {
             </div>
           )}
         </div>
-
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Subject:
@@ -151,6 +177,64 @@ export default function UploadPage() {
               {getErrorMessage("subject")}
             </div>
           )}
+        </div>
+        <div className="flex gap-5 ">
+          <div className="mb-4 flex-1">
+            <label className="block text-gray-700 font-medium mb-1 text-sm">
+              Education System
+            </label>
+
+            <select
+              name="education_system"
+              value={examData.education_system}
+              onChange={(e) =>
+                setExamData((prev) => ({
+                  ...prev,
+                  education_system: e.target.value,
+                  year_of_study: "",
+                }))
+              }
+              className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm ${getErrorClass("education_system")}`}
+            >
+              <option value="">Select Education System</option>
+              <option value="lmd">LMD</option>
+              <option value="engineering">Engineering School</option>
+              <option value="medical_education">Medical School</option>
+            </select>
+            {getErrorMessage("education_system") && (
+              <div className="text-red-500 text-xs mt-1">
+                {getErrorMessage("education_system")}
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <div className="mb-2">
+              <label className="block text-gray-700 font-medium mb-1 text-sm">
+                Year of Study:
+              </label>
+              <select
+                name="year_of_study"
+                value={examData.year_of_study}
+                onChange={handleChange}
+                disabled={!examData.education_system}
+                className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm ${getErrorClass("year_of_study")}`}
+              >
+                <option value="">Select Year</option>
+
+                {examData.education_system &&
+                  YEAR_OPTIONS[examData.education_system].map((year) => (
+                    <option key={year.value} value={year.value}>
+                      {year.label}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            {getErrorMessage("year_of_study") && (
+              <div className="text-red-500 text-xs mt-1">
+                {getErrorMessage("year_of_study")}
+              </div>
+            )}
+          </div>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
@@ -222,7 +306,6 @@ export default function UploadPage() {
             </div>
           )}
         </div>
-
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Faculty
@@ -262,16 +345,20 @@ export default function UploadPage() {
             Department
           </label>
           <select
+            value={selectedDepartment}
             className={`w-full bg-gray-100 border rounded-lg px-3 py-2 ${getErrorClass("department")}`}
             disabled={!selectedFaculty}
             onChange={(e) => {
+              setSelectedDepartment(e.target.value);
+
               const selected = departments.find(
                 (d) => d.id === Number(e.target.value),
               );
-              setExamData({
-                ...examData,
+              setExamData((prev) => ({
+                ...prev,
                 department: selected?.name_en || "",
-              });
+              }));
+
               clearFieldError("department");
             }}
           >
@@ -290,7 +377,7 @@ export default function UploadPage() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
-            Year:
+            Exam Year :
           </label>
           <input
             type="number"
@@ -340,7 +427,6 @@ export default function UploadPage() {
             I have permission from the teacher to share their name
           </label>
         </div>
-
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-1 text-sm">
             Exam File (PDF):
@@ -357,7 +443,6 @@ export default function UploadPage() {
             </div>
           )}
         </div>
-
         <button
           type="submit"
           disabled={loading}

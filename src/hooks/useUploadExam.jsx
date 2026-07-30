@@ -27,6 +27,7 @@ export function useUploadExam() {
         .select("role, username")
         .eq("id", uploaderId)
         .single();
+      const isAdmin = profile.role === "admin";
 
       if (profileError) throw new Error("User profile not found");
 
@@ -47,7 +48,6 @@ export function useUploadExam() {
         .from("exams")
         .getPublicUrl(filePath);
 
-      const isAdmin = profile.role === "admin";
       const uuid = uuidv4();
       const shortId = uuid.slice(0, 8);
       const { error: dbError } = await supabase.from("exams").insert({
@@ -72,8 +72,10 @@ export function useUploadExam() {
           : user.user_metadata?.role || "student",
         uploader_id: uploaderId,
         status: "pending",
-        teacher_name: examData.teacher_name || null,
+        teacher_name: examData.teacher_name || "Anonymous",
         teacher_consent: examData.teacher_consent,
+        education_system: examData.education_system,
+        year_of_study: examData.year_of_study,
       });
 
       if (dbError) {

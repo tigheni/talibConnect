@@ -19,7 +19,6 @@ export const validateExamForm = (examData, file) => {
     isValid = false;
   }
 
-  // Subject validation
   if (!examData.subject?.trim()) {
     errors.subject = "Subject is required";
     isValid = false;
@@ -59,7 +58,15 @@ export const validateExamForm = (examData, file) => {
     errors.year = `Year cannot be later than ${currentYear + 1}`;
     isValid = false;
   }
+  if (!examData.education_system) {
+    errors.education_system = "Please select an education system.";
+    isValid = false;
+  }
 
+  if (!examData.year_of_study) {
+    errors.year_of_study = "Please select your year of study.";
+    isValid = false;
+  }
   if (!file) {
     errors.file = "Please select a PDF file";
     isValid = false;

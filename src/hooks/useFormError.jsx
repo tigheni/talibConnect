@@ -2,6 +2,9 @@ import { useState } from "react";
 
 export function useFormErrors(initialErrors = {}) {
   const [errors, setErrors] = useState(initialErrors);
+  const setErrorsFromResponse = (errorObject) => {
+    setErrors(errorObject);
+  };
 
   const setFieldError = (field, message) => {
     setErrors((prev) => ({ ...prev, [field]: message }));
@@ -13,10 +16,6 @@ export function useFormErrors(initialErrors = {}) {
 
   const clearAllErrors = () => {
     setErrors({});
-  };
-
-  const setErrorsFromResponse = (errorObject) => {
-    setErrors(errorObject);
   };
 
   const hasErrors = () => {
