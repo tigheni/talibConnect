@@ -63,9 +63,17 @@ export const validateExamForm = (examData, file) => {
     isValid = false;
   }
 
-  if (!examData.year_of_study) {
-    errors.year_of_study = "Please select your year of study.";
+  if (!examData.systems || examData.systems.length === 0) {
+    errors.systems = "Please select at least one education system and year";
     isValid = false;
+  } else {
+    for (const systemObj of examData.systems) {
+      if (!systemObj.years || systemObj.years.length === 0) {
+        errors.systems = `Please select at least one year for ${systemObj.system}`;
+        isValid = false;
+        break;
+      }
+    }
   }
   if (!file) {
     errors.file = "Please select a PDF file";
