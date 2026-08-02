@@ -5,11 +5,25 @@ import { useSearchParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
 import useMobile from "../hooks/useMobile";
+import {
+  Search,
+  SlidersHorizontal,
+  X,
+  LayoutGrid,
+  List,
+  SearchX,
+  ChevronDown,
+} from "lucide-react";
+
 export default function ExamPage() {
   const [subjectFilter, setSubjectFilter] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
+  const [systemFilter, setSystemFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
   const isMobile = useMobile();
+
   const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +61,32 @@ export default function ExamPage() {
   const subjects = [
     ...new Set(exams.map((exam) => exam.subject).filter(Boolean)),
   ];
+  const systems = [
+    ...new Set(
+      exams
+        .flatMap((exam) => exam.systems || [])
+        .map((s) => s.system)
+        .filter(Boolean),
+    ),
+  ];
+  const allYears = [
+    ...new Set(
+      exams
+        .flatMap((exam) => exam.systems || [])
+        .flatMap((s) => s.years || [])
+        .filter(Boolean),
+    ),
+  ];
+  console.log(allYears);
+  const availableYears = systemFilter
+    ? allYears.filter((year) =>
+        exams.some((exam) =>
+          (exam.systems || []).some(
+            (s) => s.system === systemFilter && s.years.includes(year),
+          ),
+        ),
+      )
+    : allYears;
 
   const filteredExams = exams.filter((exam) => {
     const matchSearch =
@@ -57,8 +97,21 @@ export default function ExamPage() {
     const matchSubject = !subjectFilter || exam.subject === subjectFilter;
     const matchInstitution =
       !universityFilter || exam.institution === universityFilter;
+    const matchSystem =
+      !systemFilter ||
+      (exam.systems || []).some((s) => s.system === systemFilter);
 
-    return matchSearch && matchSubject && matchInstitution;
+    const matchYear =
+      !yearFilter ||
+      (exam.systems || []).some((s) => (s.years || []).includes(yearFilter));
+
+    return (
+      matchSearch &&
+      matchSubject &&
+      matchInstitution &&
+      matchSystem &&
+      matchYear
+    );
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,135 +121,231 @@ export default function ExamPage() {
   const endIndex = startIndex + examsPerPage;
   const currentExams = filteredExams.slice(startIndex, endIndex);
 
+  const activeFilters = [
+    universityFilter && {
+      key: "university",
+      label: universityFilter,
+      clear: () => setUniversityFilter(""),
+    },
+    subjectFilter && {
+      key: "subject",
+      label: subjectFilter,
+      clear: () => setSubjectFilter(""),
+    },
+    systemFilter && {
+      key: "system",
+      label:
+        systemFilter === "lmd"
+          ? "LMD"
+          : systemFilter === "engineering"
+            ? "Engineering"
+            : "Medical",
+      clear: () => {
+        setSystemFilter("");
+        setYearFilter("");
+      },
+    },
+    yearFilter && {
+      key: "year",
+      label: yearFilter,
+      clear: () => setYearFilter(""),
+    },
+  ].filter(Boolean);
+
+  const selectBase =
+    "w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-gray-700 text-sm outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed appearance-none";
+
   if (loading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <main className="min-h-screen ">
-      <div className=" mx-auto px-6 pt-12 pb-6 bg-white">
-        <h1 className="text-5xl md:text-5xl font-bold mb-4 tracking-tight">
-          All Exams
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl">
-          Browse thousands of past exams shared by students across Algeria
-        </p>
-      </div>
-      <div className=" w-full mx-auto px-6 pb-8 bg-white">
-        <div className="relative max-w-2xl mx-auto">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg
-              className="h-5 w-5 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+    <main className="min-h-screen bg-gray-50/40">
+      {/* HERO / SEARCH */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 pt-14 pb-8 text-center">
+          <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
+            {exams.length}+ exams shared
+          </span>
+          <h1 className="text-3xl md:text-4xl font-bold mt-2 mb-6 tracking-tight">
+            Find your exam
+          </h1>
+
+          <div className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                placeholder="Search by title, subject, or university..."
+                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-300 rounded-xl focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white focus:outline-none transition-all text-sm"
               />
-            </svg>
-          </div>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder="Search exams by title, subject, or university..."
-            className="w-full pl-12 pr-4 py-4 border-0 bg-gray-300/75 rounded-2xl focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none transition-all text-lg"
-          />
-        </div>
-      </div>
-
-      <div className="sticky top-0 z-50 bg-white backdrop-blur-lg border-b border-gray-200 shadow-md ">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="  flex flex-wrap justify-between items-center gap-4">
-            <div className=" flex flex-col gap-5 md:flex-row">
-              <select
-                value={universityFilter}
-                onChange={(e) => {
-                  setUniversityFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-5 w-full py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer transition-all"
-              >
-                <option value="">🎓 All institutions</option>
-                {institutions.map((uni) => (
-                  <option key={uni} value={uni}>
-                    {`🎓${uni}`}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={subjectFilter}
-                onChange={(e) => {
-                  setSubjectFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-5 w-full py-2.5 bg-gray-100 border border-gray-400 rounded-xl text-gray-700 focus:ring-2 focus:ring-[#5ae4a8] focus:outline-none cursor-pointer  transition-all"
-              >
-                <option value="">📚 All Subjects</option>
-                {subjects.map((subject) => (
-                  <option key={subject} value={subject}>
-                    {`📚${subject}`}
-                  </option>
-                ))}
-              </select>
             </div>
-            {!isMobile && (
-              <div className="flex gap-2 bg-gray-300 rounded-xl p-1">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-xl transition-all ${viewMode === "grid" ? "bg-white shadow-sm text-[#5ae4a8]" : "text-gray-500"}`}
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white shadow-sm text-[#5ae4a8]" : "text-gray-500"}`}
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-3 text-sm text-gray-500">
-            Found {filteredExams.length} exam
-            {filteredExams.length !== 1 ? "s" : ""}
+            <button
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-200 shrink-0 ${
+                filtersOpen || activeFilters.length > 0
+                  ? "bg-[#5ae4a8]/10 border-[#5ae4a8] text-[#2f9e6d]"
+                  : "bg-gray-50 border-gray-300 text-gray-600 hover:border-gray-300"
+              }`}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              Filters
+              {activeFilters.length > 0 && (
+                <span className="w-5 h-5 flex items-center justify-center rounded-full bg-[#5ae4a8] text-black text-xs font-bold">
+                  {activeFilters.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </div>
 
+      {/* COLLAPSIBLE FILTER PANEL */}
+      {filtersOpen && (
+        <div className="bg-white border-b border-gray-100 animate-[slideDown_0.2s_ease]">
+          <div className="max-w-5xl mx-auto px-6 py-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="relative">
+                <select
+                  value={universityFilter}
+                  onChange={(e) => {
+                    setUniversityFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className={selectBase}
+                >
+                  <option value="">All institutions</option>
+                  {institutions.map((uni) => (
+                    <option key={uni} value={uni}>
+                      {uni}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={subjectFilter}
+                  onChange={(e) => {
+                    setSubjectFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className={selectBase}
+                >
+                  <option value="">All subjects</option>
+                  {subjects.map((subject) => (
+                    <option key={subject} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={systemFilter}
+                  onChange={(e) => {
+                    setSystemFilter(e.target.value);
+                    setYearFilter("");
+                    setCurrentPage(1);
+                  }}
+                  className={selectBase}
+                >
+                  <option value="">All systems</option>
+                  {systems.map((system) => (
+                    <option key={system} value={system}>
+                      {system === "lmd"
+                        ? "LMD"
+                        : system === "engineering"
+                          ? "Engineering"
+                          : "Medical"}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={yearFilter}
+                  onChange={(e) => {
+                    setYearFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className={selectBase}
+                  disabled={!systemFilter}
+                >
+                  <option value="">Year of study</option>
+                  {availableYears.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ACTIVE FILTER CHIPS + RESULT COUNT + VIEW TOGGLE */}
+      <div className="max-w-5xl mx-auto px-6 pt-5 pb-2 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-500">
+            <span className="font-semibold text-gray-800">
+              {filteredExams.length}
+            </span>{" "}
+            exam{filteredExams.length !== 1 ? "s" : ""}
+          </span>
+          {activeFilters.map((f) => (
+            <button
+              key={f.key}
+              onClick={f.clear}
+              className="flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-[#5ae4a8]/10 border border-[#5ae4a8]/30 text-[#2f9e6d] text-xs font-medium hover:bg-[#5ae4a8]/20 transition-colors"
+            >
+              {f.label}
+              <X className="w-3 h-3" />
+            </button>
+          ))}
+        </div>
+
+        {!isMobile && (
+          <div className="flex gap-1 bg-gray-100 rounded-xl p-1 shrink-0">
+            <button
+              onClick={() => setViewMode("grid")}
+              aria-label="Grid view"
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                viewMode === "grid"
+                  ? "bg-white shadow-sm text-[#2f9e6d]"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode("list")}
+              aria-label="List view"
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                viewMode === "list"
+                  ? "bg-white shadow-sm text-[#2f9e6d]"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              <List className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* RESULTS */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {filteredExams.length > 0 ? (
           <div
@@ -217,11 +366,13 @@ export default function ExamPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+              <SearchX className="w-6 h-6 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-1.5">
               No exams found
             </h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-sm">
               Try adjusting your search or filters
             </p>
             <button
@@ -230,8 +381,10 @@ export default function ExamPage() {
                 setSubjectFilter("");
                 setUniversityFilter("");
                 setCurrentPage(1);
+                setSystemFilter("");
+                setYearFilter("");
               }}
-              className="mt-6 px-6 py-2 bg-[#5ae4a8] text-black rounded-lg hover:bg-[#3bc85a] transition-all"
+              className="mt-6 px-6 py-2.5 bg-[#5ae4a8] text-black font-medium rounded-xl shadow-[0px_4px_20px_0_rgba(99,232,126,.30)] hover:bg-[#4bcc94] hover:scale-105 active:scale-95 transition-all duration-200"
             >
               Clear all filters
             </button>

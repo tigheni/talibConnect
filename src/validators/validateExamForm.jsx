@@ -58,10 +58,6 @@ export const validateExamForm = (examData, file) => {
     errors.year = `Year cannot be later than ${currentYear + 1}`;
     isValid = false;
   }
-  if (!examData.education_system) {
-    errors.education_system = "Please select an education system.";
-    isValid = false;
-  }
 
   if (!examData.systems || examData.systems.length === 0) {
     errors.systems = "Please select at least one education system and year";

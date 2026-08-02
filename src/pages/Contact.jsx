@@ -61,7 +61,7 @@ export default function Contact() {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 sm:px-6">
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] rounded-xl overflow-hidden border border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] rounded-xl overflow-hidden border border-black/15 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
         <div className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] px-8 py-10 sm:px-10 sm:py-12 flex flex-col justify-between overflow-hidden">
           <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-[#5ae4a8]/10 blur-3xl pointer-events-none" />
 
@@ -134,7 +134,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Mohamed Kader"
                   required
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white"
+                  className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="you@example.com"
                   required
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white"
+                  className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white"
                 />
               </div>
             </div>
@@ -172,7 +172,7 @@ export default function Contact() {
                 placeholder="Tell us what's on your mind..."
                 required
                 rows={6}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white resize-none"
+                className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white resize-none"
               />
             </div>
 

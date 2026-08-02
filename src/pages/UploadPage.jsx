@@ -159,7 +159,7 @@ export default function UploadPage() {
         <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
           Contribute
         </span>
-        <h1 className="text-3xl font-bold mt-2">Upload an exam</h1>
+        <h1 className="text-3xl  font-bold mt-2">Upload an Exam</h1>
         <p className="text-gray-500 text-sm mt-2 max-w-sm mx-auto">
           Help other students by sharing a past exam. Takes about a minute.
         </p>
@@ -167,7 +167,7 @@ export default function UploadPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl border border-black/10 shadow-[0_8px_30px_rgba(0,0,0,0.06)] divide-y divide-gray-100"
+        className="bg-white rounded-2xl border border-black/15 shadow-[0_8px_30px_rgba(0,0,0,0.06)] divide-y divide-gray-100"
       >
         <div className="p-6 sm:p-8">
           <SectionHeader
@@ -276,7 +276,7 @@ export default function UploadPage() {
                       className={`inline-block px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
                         isChecked
                           ? "bg-[#5ae4a8] border-[#5ae4a8] text-black"
-                          : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300"
+                          : "bg-gray-50 border-gray-300 text-gray-600 hover:border-gray-300"
                       }`}
                     >
                       {label}
@@ -292,7 +292,7 @@ export default function UploadPage() {
               Years of study
             </label>
             {examData.systems.length === 0 ? (
-              <p className="text-sm text-gray-400 italic bg-gray-50 border border-dashed border-gray-200 rounded-xl px-4 py-3">
+              <p className="text-sm text-gray-400 italic bg-gray-50 border border-dashed border-gray-300 rounded-xl px-4 py-3">
                 Select an education system first
               </p>
             ) : (
@@ -342,7 +342,7 @@ export default function UploadPage() {
                               className={`inline-block px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
                                 isChecked
                                   ? "bg-[#5ae4a8] border-[#5ae4a8] text-black"
-                                  : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                                  : "bg-white border-gray-300 text-gray-600 hover:border-gray-300"
                               }`}
                             >
                               {year.label}
@@ -588,7 +588,7 @@ export default function UploadPage() {
             className={`relative flex flex-col items-center justify-center gap-2 w-full rounded-xl border-2 border-dashed px-4 py-8 text-center cursor-pointer transition-all duration-200 ${
               file
                 ? "border-[#5ae4a8] bg-[#5ae4a8]/5"
-                : "border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100/60"
+                : "border-gray-300 bg-gray-50 hover:border-gray-300 hover:bg-gray-100/60"
             } ${getErrorClass("file")}`}
           >
             <input
@@ -617,7 +617,7 @@ export default function UploadPage() {
                     setFile(null);
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
-                  className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 transition-colors"
+                  className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 transition-colors"
                   aria-label="Remove file"
                 >
                   <X className="w-3.5 h-3.5" />

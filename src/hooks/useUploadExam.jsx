@@ -74,8 +74,7 @@ export function useUploadExam() {
         status: "pending",
         teacher_name: examData.teacher_name || "Anonymous",
         teacher_consent: examData.teacher_consent,
-        education_system: examData.education_system,
-        year_of_study: examData.year_of_study,
+        systems: examData.systems || [],
       });
 
       if (dbError) {
