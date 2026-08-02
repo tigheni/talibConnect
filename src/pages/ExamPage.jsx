@@ -77,7 +77,6 @@ export default function ExamPage() {
         .filter(Boolean),
     ),
   ];
-  console.log(allYears);
   const availableYears = systemFilter
     ? allYears.filter((year) =>
         exams.some((exam) =>
@@ -161,7 +160,6 @@ export default function ExamPage() {
 
   return (
     <main className="min-h-screen bg-gray-50/40">
-      {/* HERO / SEARCH */}
       <div className="bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6 pt-14 pb-8 text-center">
           <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
@@ -204,10 +202,8 @@ export default function ExamPage() {
           </div>
         </div>
       </div>
-
-      {/* COLLAPSIBLE FILTER PANEL */}
       {filtersOpen && (
-        <div className="bg-white border-b border-gray-100 animate-[slideDown_0.2s_ease]">
+        <div className="bg-white border-b border-gray-100 animate-[slideDown_0.4s_ease-in]">
           <div className="max-w-5xl mx-auto px-6 py-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className="relative">
@@ -296,7 +292,6 @@ export default function ExamPage() {
         </div>
       )}
 
-      {/* ACTIVE FILTER CHIPS + RESULT COUNT + VIEW TOGGLE */}
       <div className="max-w-5xl mx-auto px-6 pt-5 pb-2 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-gray-500">
