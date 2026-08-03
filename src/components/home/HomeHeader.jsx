@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
 function StatCard({ label, value }) {
   return (
     <div className="group relative rounded-xl border border-[#1E2A4A]/12 bg-[#FBF9F4] px-6 py-5 text-left shadow-[0_1px_2px_rgba(30,42,74,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(30,42,74,0.12)]">
@@ -34,15 +35,7 @@ export function HomeHeader({ stats }) {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef(null);
-  const SUBJECTS = [
-    "Mathematics",
-    "Physics",
-    "Chemistry",
-    "Law",
-    "Medicine",
-    "Computer Science",
-    "Biology",
-  ];
+
   const heroStats = useMemo(
     () => [
       { label: "Approved papers", value: stats[0].number },
@@ -64,6 +57,30 @@ export function HomeHeader({ stats }) {
     setSearchValue(subject);
     searchInputRef.current?.focus();
   };
+
+  const fetchSubjects = async () => {
+    const { data, error } = await supabase
+      .from("exams")
+      .select("subject")
+      .eq("status", "approved");
+    setSubjectsLength(data.length - 15);
+
+    if (error) {
+      throw error;
+    }
+
+    return [...new Set(data.slice(0, 15).map((item) => item.subject))];
+  };
+  const [subjects, setSubjects] = useState([]);
+  const [subjectsLength, setSubjectsLength] = useState([]);
+
+  useEffect(() => {
+    const loadSubjects = async () => {
+      const data = await fetchSubjects();
+      setSubjects(data);
+    };
+    loadSubjects();
+  }, []);
   return (
     <header className="relative h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50">
       <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
@@ -145,7 +162,7 @@ export function HomeHeader({ stats }) {
             </form>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              {SUBJECTS.map((subject) => (
+              {subjects.map((subject) => (
                 <button
                   key={subject}
                   type="button"
@@ -155,6 +172,13 @@ export function HomeHeader({ stats }) {
                   {subject}
                 </button>
               ))}
+              <button
+                key={subjectsLength}
+                type="button"
+                className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-950 hover:text-slate-950"
+              >
+                + {subjectsLength}
+              </button>
             </div>
           </div>
           <div className="hidden lg:flex lg:flex-col lg:justify-center lg:gap-4">
