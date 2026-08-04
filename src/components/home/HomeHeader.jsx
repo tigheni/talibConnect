@@ -63,13 +63,16 @@ export function HomeHeader({ stats }) {
       .from("exams")
       .select("subject")
       .eq("status", "approved");
-    setSubjectsLength(data.length - 15);
+
+    const subjects = [...new Set(data.map((item) => item.subject))];
+
+    setSubjectsLength(subjects.length - 10);
 
     if (error) {
       throw error;
     }
 
-    return [...new Set(data.slice(0, 15).map((item) => item.subject))];
+    return subjects.slice(0, 10);
   };
   const [subjects, setSubjects] = useState([]);
   const [subjectsLength, setSubjectsLength] = useState([]);
@@ -89,10 +92,9 @@ export function HomeHeader({ stats }) {
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">
               Algerian exam archive
             </p>
-            <h1 className="mt-3 max-w-4xl text-4xl font-black tracking-[-0.05em] text-slate-950 sm:text-5xl lg:text-6xl lg:leading-[0.95]">
+            <h1 className="mt-3 max-w-4xl text-4xl font-black tracking-[-0.05em] text-slate-900 sm:text-5xl lg:text-6xl">
               Find approved exam papers from Algerian universities.
             </h1>
-
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
               Search exam papers by subject, university, teacher, or year. The
               homepage shows the latest approved uploads in one place.
@@ -100,7 +102,7 @@ export function HomeHeader({ stats }) {
 
             <form onSubmit={handleSearch} className="mt-8 max-w-3xl">
               <div className="flex flex-col gap-2 rounded-[1.4rem] border border-[#1E2A4A]/12 bg-white p-2 shadow-[0_12px_35px_rgba(30,42,74,0.08)] transition-shadow duration-300 focus-within:shadow-[0_12px_35px_rgba(30,42,74,0.14)] sm:flex-row sm:items-stretch sm:gap-3 sm:p-3">
-                <div className="flex flex-1 items-center gap-3 rounded-[1rem] border border-[#1E2A4A]/10 bg-[#FBF9F4] px-4 py-3 transition-colors duration-200 focus-within:border-[#1E2A4A]/30 focus-within:bg-white">
+                <div className="flex flex-1 items-center gap-3 rounded-[1rem] border border-[#1E2A4A]/50 bg-[#FBF9F4] px-4 py-3 transition-colors duration-200 focus-within:border-[#1E2A4A]/30 focus-within:bg-white">
                   <svg
                     viewBox="0 0 24 24"
                     className="h-4 w-4 shrink-0 text-[#1E2A4A]/40"
@@ -128,7 +130,7 @@ export function HomeHeader({ stats }) {
                     aria-label="Search exams"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    className="w-full bg-transparent text-[15px] text-[#1E2A4A] outline-none placeholder:text-slate-400 [&::-webkit-search-cancel-button]:hidden"
+                    className="w-full bg-transparent text-[15px] text-[#1E2A4A]  outline-none placeholder:text-slate-400 [&::-webkit-search-cancel-button]:hidden"
                   />
 
                   {searchValue && (

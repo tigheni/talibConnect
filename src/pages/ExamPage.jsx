@@ -165,7 +165,7 @@ export default function ExamPage() {
           <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
             {exams.length}+ exams shared
           </span>
-          <h1 className="text-3xl md:text-4xl font-bold mt-2 mb-6 tracking-tight">
+          <h1 className="text-3xl md:text-6xl font-bold mt-2 mb-6 tracking-tight">
             Find your exam
           </h1>
 
@@ -188,7 +188,7 @@ export default function ExamPage() {
               className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-200 shrink-0 ${
                 filtersOpen || activeFilters.length > 0
                   ? "bg-[#5ae4a8]/10 border-[#5ae4a8] text-[#2f9e6d]"
-                  : "bg-gray-50 border-gray-300 text-gray-600 hover:border-gray-300"
+                  : "bg-[#16203a] border-gray-300 text-white hover:border-gray-300"
               }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
