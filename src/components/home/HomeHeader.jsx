@@ -86,7 +86,7 @@ export function HomeHeader({ stats }) {
   }, []);
   return (
     <header className="relative h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50">
-      <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-full max-w-7xl items-center p-5 sm:px-4 lg:px-8">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="relative">
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">

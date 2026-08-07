@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
-import contactIll from "../assets/undraw_email_b5yu1111.svg";
+import contactIll from "../assets/contact.svg";
 import toast from "react-hot-toast";
 
 const REASONS = [
@@ -88,19 +88,6 @@ export default function Contact() {
         </div>
 
         <div className="bg-white px-6 py-10 sm:px-10 sm:py-12">
-          {/*  {status === "success" && (
-            <div className="flex items-center gap-2 bg-[#5ae4a8]/10 border border-[#5ae4a8]/50 text-[#2f9e6d] rounded-xl px-4 py-3 mb-6 text-sm">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
-              Message sent — we'll get back to you soon.
-            </div>
-          )}
-          {status === "error" && (
-            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/40 text-red-500 rounded-xl px-4 py-3 mb-6 text-sm">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              Failed to send. Please try again.
-            </div>
-          )}
- */}
           <p className="text-xs font-medium text-gray-500 mb-2.5">
             What's this about?
           </p>

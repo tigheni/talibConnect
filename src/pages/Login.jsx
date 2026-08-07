@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/LoginBg.jpg";
-import { supabase } from "../lib/supabase";
+import { loginUser } from "../services/authService";
 import useMobile from "../hooks/useMobile";
 import LoadingSpinner from "../components/LoadingSpinner";
-
+import { validateLoginForm } from "../validators/validationLogin";
+import { getSession } from "../services/getSession";
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -24,62 +25,49 @@ export default function Login() {
   const redirectTo = searchParams.get("redirect") || "/exams";
 
   useEffect(() => {
-    const redirectAuthenticatedUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
+    const checkSession = async () => {
+      const session = await getSession();
       if (session) {
         navigate(redirectTo, { replace: true });
       }
     };
 
-    redirectAuthenticatedUser();
+    checkSession();
   }, [navigate, redirectTo]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
 
-    if (fieldErrors[e.target.name]) {
-      setFieldErrors({ ...fieldErrors, [e.target.name]: "" });
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setFieldErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const errors = validateLoginForm(formData);
+
+    if (errors.email || errors.password) {
+      setFieldErrors(errors);
+      return;
+    }
     setFieldErrors({
       email: "",
       password: "",
     });
-
-    if (!formData.email) {
-      setFieldErrors({ ...fieldErrors, email: "Email is required" });
-      return;
-    }
-    if (!formData.password) {
-      setFieldErrors({ ...fieldErrors, password: "Password is required" });
-      return;
-    }
-    if (formData.password.length < 6) {
-      setFieldErrors({
-        ...fieldErrors,
-        password: "Password must be at least 6 characters",
-      });
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-      if (error) throw error;
+      await loginUser(formData.email, formData.password);
+
       if (redirectTo) {
         navigate(redirectTo);
       } else {
@@ -105,7 +93,6 @@ export default function Login() {
         !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
       }
     >
-      {/* Made the card smaller: reduced padding, max-width, and rounded corners */}
       <div className="w-full max-w-sm md:max-w-md flex justify-center  flex-col items-center border border-gray-300 bg-white py-5 rounded-2xl shadow-md px-6">
         <Link to="/">
           <img
@@ -137,7 +124,7 @@ export default function Login() {
             value={formData.email}
             placeholder="Email"
             required
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
@@ -159,7 +146,7 @@ export default function Login() {
             value={formData.password}
             placeholder="Password"
             required
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
           <div
