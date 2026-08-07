@@ -85,14 +85,14 @@ export function HomeHeader({ stats }) {
     loadSubjects();
   }, []);
   return (
-    <header className="relative h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50">
-      <div className="mx-auto flex h-full max-w-7xl items-center p-5 sm:px-4 lg:px-8">
+    <header className="relative min-h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50 lg:h-dvh">
+      <div className="mx-auto flex h-full max-w-7xl items-center px-4 py-20 sm:px-4 lg:px-8 lg:py-0">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="relative">
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">
               Algerian exam archive
             </p>
-            <h1 className="mt-3 max-w-4xl text-4xl font-black tracking-[-0.05em] text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-3 max-w-4xl text-3xl font-black tracking-[-0.05em] text-slate-900 sm:text-5xl lg:text-6xl">
               Find approved exam papers from Algerian universities.
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">

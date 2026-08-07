@@ -76,7 +76,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen mt-20 lg:mt-0 bg-slate-50 text-slate-950">
+    <main className="min-h-screen  bg-slate-50 text-slate-950">
       <HomeHeader stats={stats} />
 
       <FeatureSection />
