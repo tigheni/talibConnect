@@ -6,7 +6,7 @@ import { loginUser } from "../services/authService";
 import useMobile from "../hooks/useMobile";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { validateLoginForm } from "../validators/validationLogin";
-import { getSession } from "../services/getSession";
+import { getSession } from "../services/sessionService";
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
