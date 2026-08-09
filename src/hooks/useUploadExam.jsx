@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
-import { v4 as uuidv4 } from "uuid";
 
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
@@ -48,11 +47,7 @@ export function useUploadExam() {
         .from("exams")
         .getPublicUrl(filePath);
 
-      const uuid = uuidv4();
-      const shortId = uuid.slice(0, 8);
       const { error: dbError } = await supabase.from("exams").insert({
-        uuid,
-        short_id: shortId,
         title: examData.title.toUpperCase(),
         year: parseInt(examData.year),
         wilaya: examData.wilaya,
@@ -62,16 +57,7 @@ export function useUploadExam() {
         subject: examData.subject.toUpperCase(),
         file_url: urlData.publicUrl,
         file_type: "PDF",
-        downloads: 0,
-        uploader_name: isAdmin
-          ? "Admin"
-          : user.user_metadata?.username || "unknown",
-
-        uploader_role: isAdmin
-          ? "admin"
-          : user.user_metadata?.role || "student",
         uploader_id: uploaderId,
-        status: "pending",
         teacher_name: examData.teacher_name || "Anonymous",
         teacher_consent: examData.teacher_consent,
         systems: examData.systems || [],

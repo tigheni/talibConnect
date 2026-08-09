@@ -81,7 +81,9 @@ export default function UploadPage() {
         <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
           Contribute
         </span>
-        <h1 className="text-3xl  font-bold mt-2">Upload an Exam</h1>
+        <h1 className="text-4xl  font-bold mt-2 text-slate-900">
+          Upload an Exam
+        </h1>
         <p className="text-gray-500 text-sm mt-2 max-w-sm mx-auto">
           Help other students by sharing a past exam. Takes about a minute.
         </p>
