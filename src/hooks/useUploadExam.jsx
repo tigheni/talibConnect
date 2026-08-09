@@ -21,15 +21,6 @@ export function useUploadExam() {
         return;
       }
 
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role, username")
-        .eq("id", uploaderId)
-        .single();
-      const isAdmin = profile.role === "admin";
-
-      if (profileError) throw new Error("User profile not found");
-
       const cleanFileName = file.name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -43,10 +34,6 @@ export function useUploadExam() {
 
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage
-        .from("exams")
-        .getPublicUrl(filePath);
-
       const { error: dbError } = await supabase.from("exams").insert({
         title: examData.title.toUpperCase(),
         year: parseInt(examData.year),
@@ -55,14 +42,13 @@ export function useUploadExam() {
         faculty: examData.faculty,
         department: examData.department,
         subject: examData.subject.toUpperCase(),
-        file_url: urlData.publicUrl,
+        file_path: filePath,
         file_type: "PDF",
         uploader_id: uploaderId,
         teacher_name: examData.teacher_name || "Anonymous",
         teacher_consent: examData.teacher_consent,
         systems: examData.systems || [],
       });
-
       if (dbError) {
         await supabase.storage.from("exams").remove([filePath]);
 
@@ -71,7 +57,8 @@ export function useUploadExam() {
 
       return { success: true };
     } catch (err) {
-      console.log(err);
+      console.error("UPLOAD ERROR:", err);
+      console.error("UPLOAD ERROR JSON:", JSON.stringify(err, null, 2));
       return { success: false };
     } finally {
       setLoading(false);

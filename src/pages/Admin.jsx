@@ -223,14 +223,30 @@ export default function Admin() {
                         <span className="font-semibold text-slate-900">
                           File:
                         </span>{" "}
-                        <a
-                          href={exam.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          onClick={async () => {
+                            const { data, error } = await supabase.storage
+                              .from("exams")
+                              .createSignedUrl(exam.file_path, 60 * 60);
+
+                            if (error) {
+                              console.error(
+                                "Failed to create signed URL:",
+                                error,
+                              );
+                              return;
+                            }
+
+                            window.open(
+                              data.signedUrl,
+                              "_blank",
+                              "noopener,noreferrer",
+                            );
+                          }}
                           className="text-[#2f9e6d] hover:underline"
                         >
                           View PDF
-                        </a>
+                        </button>
                       </p>
                       <p>
                         <span className="font-semibold text-slate-900">

@@ -17,7 +17,7 @@ export default function ExamViewer() {
   const { id } = useParams();
 
   const shortId = id.match(/[a-f0-9]{8}$/)?.[0];
-
+  const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -50,7 +50,18 @@ export default function ExamViewer() {
         if (!data) {
           throw new Error("Exam not found");
         }
+
+        const { data: signedUrlData, error: signedUrlError } =
+          await supabase.storage
+            .from("exams")
+            .createSignedUrl(data.file_path, 60 * 60);
+        console.log("file path:", data.file_path);
+        console.log("signed data:", signedUrlData);
+        console.log("signed error:", signedUrlError);
+        if (signedUrlError) throw signedUrlError;
+
         setExam(data);
+        setFileUrl(signedUrlData.signedUrl);
       } catch (err) {
         setError(
           err.message || "An unexpected error occurred. Please try again.",
@@ -90,6 +101,9 @@ export default function ExamViewer() {
       </main>
     );
   }
+  if (!fileUrl) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -107,7 +121,7 @@ export default function ExamViewer() {
           </div>
           <div className="flex-shrink-0 w-full sm:w-auto">
             <a
-              href={exam.file_url}
+              href={fileUrl}
               download
               className="w-full sm:w-auto inline-block text-center bg-[#5ae4a8] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
             >
@@ -126,7 +140,7 @@ export default function ExamViewer() {
                 Couldn't load the PDF preview.
               </p>
               <a
-                href={exam.file_url}
+                href={fileUrl}
                 download
                 className="bg-[#5ae4a8] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
               >
@@ -135,7 +149,7 @@ export default function ExamViewer() {
             </div>
           ) : (
             <Document
-              file={exam.file_url}
+              file={fileUrl}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
               onLoadError={() => setPdfError("Failed to load PDF document")}
               loading={
