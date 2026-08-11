@@ -29,12 +29,16 @@ export default function Admin() {
   }, [pendingExams, filter]);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadPendingExams() {
       const { data, error } = await supabase
         .from("exams")
         .select("*")
         .eq("status", "pending")
         .order("created_at", { ascending: false });
+
+      if (cancelled) return;
 
       if (error) {
         setMessage(error.message);
@@ -48,10 +52,13 @@ export default function Admin() {
     const checkAdmin = async () => {
       const {
         data: { user },
+        error: userError,
       } = await supabase.auth.getUser();
 
-      if (!user) {
-        navigate("/");
+      if (cancelled) return;
+
+      if (userError || !user) {
+        navigate("/", { replace: true });
         return;
       }
 
@@ -61,9 +68,10 @@ export default function Admin() {
         .eq("id", user.id)
         .single();
 
-      const isAdmin = profile.role === "admin";
-      if (error || !profile || !isAdmin) {
-        navigate("/");
+      if (cancelled) return;
+
+      if (error || !profile || profile.role !== "admin") {
+        navigate("/", { replace: true });
         return;
       }
 
@@ -71,6 +79,10 @@ export default function Admin() {
     };
 
     checkAdmin();
+
+    return () => {
+      cancelled = true;
+    };
   }, [navigate]);
 
   const handleApprove = async (uuid) => {
@@ -155,14 +167,8 @@ export default function Admin() {
             </div>
 
             <div className="text-sm text-slate-600">
-              Showing{" "}
-              <span className="font-semibold text-slate-950">
-                {visibleExams.length}
-              </span>{" "}
-              of{" "}
-              <span className="font-semibold text-slate-950">
-                {pendingExams.length}
-              </span>
+              Showing <span className="font-semibold text-slate-950">{visibleExams.length}</span> of{" "}
+              <span className="font-semibold text-slate-950">{pendingExams.length}</span>
             </div>
           </div>
 
@@ -207,22 +213,10 @@ export default function Admin() {
                     </p>
 
                     <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
+                      <p><span className="font-semibold text-slate-900">Uploaded by:</span>{" "}{exam.uploader_name || "Unknown"}</p>
+                      <p><span className="font-semibold text-slate-900">Teacher consent:</span>{" "}{exam.teacher_consent ? "Yes" : "No"}</p>
                       <p>
-                        <span className="font-semibold text-slate-900">
-                          Uploaded by:
-                        </span>{" "}
-                        {exam.uploader_name || "Unknown"}
-                      </p>
-                      <p>
-                        <span className="font-semibold text-slate-900">
-                          Teacher consent:
-                        </span>{" "}
-                        {exam.teacher_consent ? "Yes" : "No"}
-                      </p>
-                      <p>
-                        <span className="font-semibold text-slate-900">
-                          File:
-                        </span>{" "}
+                        <span className="font-semibold text-slate-900">File:</span>{" "}
                         <button
                           onClick={async () => {
                             const { data, error } = await supabase.storage
@@ -230,32 +224,18 @@ export default function Admin() {
                               .createSignedUrl(exam.file_path, 60 * 60);
 
                             if (error) {
-                              console.error(
-                                "Failed to create signed URL:",
-                                error,
-                              );
+                              setMessage(error.message);
                               return;
                             }
 
-                            window.open(
-                              data.signedUrl,
-                              "_blank",
-                              "noopener,noreferrer",
-                            );
+                            window.open(data.signedUrl, "_blank", "noopener,noreferrer");
                           }}
                           className="text-[#2f9e6d] hover:underline"
                         >
                           View PDF
                         </button>
                       </p>
-                      <p>
-                        <span className="font-semibold text-slate-900">
-                          Uploaded:
-                        </span>{" "}
-                        {exam.created_at
-                          ? new Date(exam.created_at).toLocaleDateString()
-                          : "Unknown"}
-                      </p>
+                      <p><span className="font-semibold text-slate-900">Uploaded:</span>{" "}{exam.created_at ? new Date(exam.created_at).toLocaleDateString() : "Unknown"}</p>
                     </div>
                   </div>
 
