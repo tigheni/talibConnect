@@ -20,7 +20,6 @@ export function useUploadExam() {
       if (userError) throw userError;
 
       const uploaderId = user?.id;
-
       if (!uploaderId) {
         return {
           success: false,
@@ -56,16 +55,15 @@ export function useUploadExam() {
         teacher_consent: examData.teacher_consent,
         systems: examData.systems || [],
       });
+
       if (dbError) {
         await supabase.storage.from("exams").remove([filePath]);
-
         throw dbError;
       }
 
-      return { success: true, error: null };
+      return { success: true, errors: null };
     } catch (err) {
       console.error("UPLOAD ERROR:", err);
-
       return {
         success: false,
         errors: { upload: err?.message || "Failed to upload exam." },
