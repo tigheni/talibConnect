@@ -4,19 +4,27 @@ import { supabase } from "../lib/supabase";
 export function useExams() {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchExams() {
       setLoading(true);
+      setError(null);
 
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from("exams")
         .select("*")
         .order("created_at", { ascending: false })
         .eq("status", "approved");
 
-      if (error) {
-        console.error("Error fetching exams:", error);
+      if (cancelled) return;
+
+      if (fetchError) {
+        console.error("Error fetching exams:", fetchError);
+        setError(fetchError);
+        setExams([]);
       } else {
         setExams(data ?? []);
       }
@@ -25,7 +33,11 @@ export function useExams() {
     }
 
     fetchExams();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  return { exams, loading };
+  return { exams, loading, error };
 }
