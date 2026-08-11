@@ -47,11 +47,96 @@ function buildContactEmail({
   message,
 }) {
   const html = `
-      <h2>New contact message</h2>
-      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>Message:</strong></p>
-      <p>${escapeHtml(message).replaceAll("\n", "<br>")}</p>
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <title>New contact message</title>
+          <style>
+            body {
+              margin: 0;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+              background: #f4f6fb;
+              color: #111827;
+            }
+            .wrapper {
+              padding: 24px;
+            }
+            .card {
+              max-width: 600px;
+              margin: 0 auto;
+              background: #ffffff;
+              border-radius: 18px;
+              box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+              overflow: hidden;
+            }
+            .header {
+              padding: 24px;
+              background: linear-gradient(135deg, #4f46e5, #7c3aed);
+              color: #ffffff;
+            }
+            .header h2 {
+              margin: 0;
+              font-size: 24px;
+            }
+            .content {
+              padding: 24px;
+            }
+            .field {
+              margin-bottom: 18px;
+            }
+            .field strong {
+              display: block;
+              margin-bottom: 8px;
+              font-size: 14px;
+              color: #374151;
+            }
+            .value {
+              background: #f8fafc;
+              padding: 16px;
+              border-radius: 14px;
+              line-height: 1.6;
+              word-break: break-word;
+            }
+            .message {
+              white-space: pre-wrap;
+            }
+            .footer {
+              padding: 20px 24px;
+              background: #f8fafc;
+              text-align: center;
+              color: #6b7280;
+              font-size: 13px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="wrapper">
+            <div class="card">
+              <div class="header">
+                <h2>New contact message</h2>
+              </div>
+              <div class="content">
+                <div class="field">
+                  <strong>Name</strong>
+                  <div class="value">${escapeHtml(name)}</div>
+                </div>
+                <div class="field">
+                  <strong>Email</strong>
+                  <div class="value">${escapeHtml(email)}</div>
+                </div>
+                <div class="field">
+                  <strong>Message</strong>
+                  <div class="value message">${escapeHtml(message).replaceAll("\n", "<br>")}</div>
+                </div>
+              </div>
+              <div class="footer">
+                Sent from the TalibConnect contact form.
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
    `;
   const text = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
   const boundary = `talibconnect-${crypto.randomUUID()}`;
