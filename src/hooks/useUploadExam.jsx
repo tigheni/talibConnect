@@ -7,18 +7,25 @@ export function useUploadExam() {
 
   const uploadExam = async (examData, file) => {
     const { isValid, errors } = validateExamForm(examData, file);
-    if (!isValid) return { isValid: false, errors };
+    if (!isValid) return { success: false, errors };
 
     setLoading(true);
 
     try {
       const {
         data: { user },
+        error: userError,
       } = await supabase.auth.getUser();
+
+      if (userError) throw userError;
+
       const uploaderId = user?.id;
 
       if (!uploaderId) {
-        return;
+        return {
+          success: false,
+          errors: { auth: "You must be signed in to upload an exam." },
+        };
       }
 
       const cleanFileName = file.name
@@ -26,11 +33,11 @@ export function useUploadExam() {
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-zA-Z0-9.-]/g, "_");
 
-      const filePath = `${Date.now()}_${cleanFileName}`;
+      const filePath = `${uploaderId}/${crypto.randomUUID()}_${cleanFileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from("exams")
-        .upload(filePath, file);
+        .upload(filePath, file, { upsert: false });
 
       if (uploadError) throw uploadError;
 
@@ -55,11 +62,14 @@ export function useUploadExam() {
         throw dbError;
       }
 
-      return { success: true };
+      return { success: true, error: null };
     } catch (err) {
       console.error("UPLOAD ERROR:", err);
-      console.error("UPLOAD ERROR JSON:", JSON.stringify(err, null, 2));
-      return { success: false };
+
+      return {
+        success: false,
+        errors: { upload: err?.message || "Failed to upload exam." },
+      };
     } finally {
       setLoading(false);
     }

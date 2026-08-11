@@ -55,9 +55,7 @@ export default function ExamViewer() {
           await supabase.storage
             .from("exams")
             .createSignedUrl(data.file_path, 60 * 60);
-        console.log("file path:", data.file_path);
-        console.log("signed data:", signedUrlData);
-        console.log("signed error:", signedUrlError);
+
         if (signedUrlError) throw signedUrlError;
 
         setExam(data);

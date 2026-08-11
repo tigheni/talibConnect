@@ -1,10 +1,10 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainLayout from "./components/Mainlayout";
+const MainLayout = lazy(() => import("./components/Mainlayout"));
 import ScrollToTop from "./components/ScrollToTop";
-import AuthLayout from "./layouts/AuthLayout";
+const AuthLayout = lazy(() => import("./layouts/AuthLayout"));
 const ExamViewer = lazy(() => import("./pages/ExamViewer"));
-import ProtectedRoute from "./components/ProtectedRoute";
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -19,7 +19,6 @@ const Terms = lazy(() => import("./pages/Terms"));
 const CompleteProfile = lazy(() => import("./pages/CompleteProfile"));
 import { Toaster } from "react-hot-toast";
 
-// Inside your routes:
 export default function App() {
   return (
     <BrowserRouter>

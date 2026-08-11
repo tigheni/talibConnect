@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import img from "../assets/LoginBg.jpg";
-import { loginUser } from "../services/authService";
+import { loginUser } from "../services/loginUser";
 import useMobile from "../hooks/useMobile";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { validateLoginForm } from "../validators/validationLogin";
