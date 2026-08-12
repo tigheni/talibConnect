@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 
 export function useDownloadExam() {
   const [loading, setLoading] = useState(false);
