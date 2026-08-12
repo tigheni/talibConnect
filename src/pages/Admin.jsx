@@ -155,10 +155,14 @@ export default function Admin() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="w-full max-w-xl rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 shadow-sm">
-              <label className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+              <label
+                htmlFor="filterExam"
+                className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500"
+              >
                 Search pending exams
               </label>
               <input
+                id="filterExam"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 placeholder="title, subject, university, uploader, year"
@@ -167,8 +171,14 @@ export default function Admin() {
             </div>
 
             <div className="text-sm text-slate-600">
-              Showing <span className="font-semibold text-slate-950">{visibleExams.length}</span> of{" "}
-              <span className="font-semibold text-slate-950">{pendingExams.length}</span>
+              Showing{" "}
+              <span className="font-semibold text-slate-950">
+                {visibleExams.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-slate-950">
+                {pendingExams.length}
+              </span>
             </div>
           </div>
 
@@ -213,10 +223,22 @@ export default function Admin() {
                     </p>
 
                     <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-                      <p><span className="font-semibold text-slate-900">Uploaded by:</span>{" "}{exam.uploader_name || "Unknown"}</p>
-                      <p><span className="font-semibold text-slate-900">Teacher consent:</span>{" "}{exam.teacher_consent ? "Yes" : "No"}</p>
                       <p>
-                        <span className="font-semibold text-slate-900">File:</span>{" "}
+                        <span className="font-semibold text-slate-900">
+                          Uploaded by:
+                        </span>{" "}
+                        {exam.uploader_name || "Unknown"}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-slate-900">
+                          Teacher consent:
+                        </span>{" "}
+                        {exam.teacher_consent ? "Yes" : "No"}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-slate-900">
+                          File:
+                        </span>{" "}
                         <button
                           onClick={async () => {
                             const { data, error } = await supabase.storage
@@ -228,14 +250,25 @@ export default function Admin() {
                               return;
                             }
 
-                            window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+                            window.open(
+                              data.signedUrl,
+                              "_blank",
+                              "noopener,noreferrer",
+                            );
                           }}
                           className="text-[#2f9e6d] hover:underline"
                         >
                           View PDF
                         </button>
                       </p>
-                      <p><span className="font-semibold text-slate-900">Uploaded:</span>{" "}{exam.created_at ? new Date(exam.created_at).toLocaleDateString() : "Unknown"}</p>
+                      <p>
+                        <span className="font-semibold text-slate-900">
+                          Uploaded:
+                        </span>{" "}
+                        {exam.created_at
+                          ? new Date(exam.created_at).toLocaleDateString()
+                          : "Unknown"}
+                      </p>
                     </div>
                   </div>
 
