@@ -39,14 +39,23 @@ export function useExams(filters = {}, page = 1) {
     }
 
     if (filters.systemFilter) {
-      query = query.contains("systems", [filters.systemFilter]);
+      query = query.contains(
+        "systems",
+        JSON.stringify([{ system: filters.systemFilter }]),
+      );
     }
 
     if (filters.yearFilter) {
-      query = query.eq("year", Number(filters.yearFilter));
+      query = query.contains(
+        "systems",
+        JSON.stringify([
+          { system: filters.systemFilter, years: [filters.yearFilter] },
+        ]),
+      );
     }
 
     const { data, count, error: queryError } = await query;
+    console.log(data);
 
     if (queryError) {
       setError(queryError);
