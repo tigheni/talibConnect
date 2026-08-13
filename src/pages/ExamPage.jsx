@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
@@ -16,9 +16,10 @@ export default function ExamPage() {
   const [universityFilter, setUniversityFilter] = useState("");
   const [systemFilter, setSystemFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
-  const isMobile = useMobile();
 
+  const isMobile = useMobile();
   const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
+
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -26,6 +27,9 @@ export default function ExamPage() {
   const [searchTerm, setSearchTerm] = useState(
     () => searchParams.get("search") || "",
   );
+
+  const [searchInput, setSearchInput] = useState(searchTerm);
+  const searchTimeout = useRef(null);
 
   const filters = {
     searchTerm,
@@ -37,10 +41,6 @@ export default function ExamPage() {
 
   const { exams, totalCount, loading, error } = useExams(filters, currentPage);
   const totalPages = Math.ceil(totalCount / EXAMS_PER_PAGE);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, subjectFilter, universityFilter, systemFilter, yearFilter]);
 
   const activeFilters = [
     universityFilter && {
@@ -83,10 +83,6 @@ export default function ExamPage() {
     },
   ].filter(Boolean);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
   if (error) {
     return (
       <main className="min-h-screen bg-gray-50/40 px-6 py-16">
@@ -107,9 +103,16 @@ export default function ExamPage() {
     <main className="min-h-screen bg-gray-50/40">
       <ExamHeader
         examCount={totalCount}
-        searchTerm={searchTerm}
+        searchTerm={searchInput}
         onSearchChange={(e) => {
-          setSearchTerm(e.target.value);
+          const value = e.target.value;
+          setSearchInput(value);
+
+          clearTimeout(searchTimeout.current);
+          searchTimeout.current = setTimeout(() => {
+            setSearchTerm(value);
+            setCurrentPage(1);
+          }, 300);
         }}
         filtersOpen={filtersOpen}
         onToggleFilters={() => setFiltersOpen((open) => !open)}
@@ -153,12 +156,19 @@ export default function ExamPage() {
         onViewModeChange={setViewMode}
         isMobile={isMobile}
       />
+      {loading && (
+        <div className="py-4">
+          <LoadingSpinner />
+        </div>
+      )}
 
       <div className="mx-auto max-w-7xl px-6 py-8">
         <ExamResults
           exams={exams}
           viewMode={viewMode}
           onClearFilters={() => {
+            clearTimeout(searchTimeout.current);
+            setSearchInput("");
             setSearchTerm("");
             setSubjectFilter("");
             setUniversityFilter("");
