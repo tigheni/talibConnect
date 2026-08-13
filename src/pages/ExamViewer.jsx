@@ -16,7 +16,9 @@ export default function ExamViewer() {
   const [exam, setExam] = useState(null);
   const { id } = useParams();
 
-  const shortId = id.match(/[a-f0-9]{8}$/)?.[0];
+  const examUuid = id.match(
+    /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i,
+  )?.[0];
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -33,7 +35,7 @@ export default function ExamViewer() {
         setError("");
         setExam(null);
 
-        if (!shortId) {
+        if (!examUuid) {
           setError("Invalid exam URL");
           setLoading(false);
           return;
@@ -42,8 +44,8 @@ export default function ExamViewer() {
         const { data, error } = await supabase
           .from("exams")
           .select("*")
-          .eq("short_id", shortId)
-          .single();
+          .eq("uuid", examUuid)
+          .maybeSingle();
 
         if (error) throw error;
 
@@ -69,7 +71,7 @@ export default function ExamViewer() {
       }
     };
     fetchExamById();
-  }, [id]);
+  }, [examUuid]);
 
   useEffect(() => {
     const updateWidth = () => {

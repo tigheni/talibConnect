@@ -1,7 +1,18 @@
-import { useLocations } from "../../hooks/useLocations";
 import { MapPin } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 export function InstitutionSection({
+  wilayas,
+  institutions,
+  faculties,
+  departments,
+  selectedWilaya,
+  selectedInstitution,
+  selectedFaculty,
+  selectedDepartment,
+  setSelectedWilaya,
+  setSelectedInstitution,
+  setSelectedFaculty,
+  setSelectedDepartment,
   setExamData,
   clearFieldError,
   inputBase,
@@ -9,22 +20,6 @@ export function InstitutionSection({
   getErrorMessage,
   examData,
 }) {
-  const {
-    wilayas,
-    institutions,
-    faculties,
-    departments,
-
-    selectedWilaya,
-    selectedInstitution,
-    selectedFaculty,
-    selectedDepartment,
-
-    setSelectedWilaya,
-    setSelectedInstitution,
-    setSelectedFaculty,
-    setSelectedDepartment,
-  } = useLocations();
   return (
     <div className="p-6 sm:p-8">
       <SectionHeader

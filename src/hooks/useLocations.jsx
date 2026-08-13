@@ -60,7 +60,6 @@ export function useLocations() {
     fetchInstitutions();
   }, [selectedWilaya]);
 
-  // Fetch Faculties
   useEffect(() => {
     if (!selectedInstitution) {
       setFaculties([]);

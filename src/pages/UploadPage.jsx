@@ -14,7 +14,7 @@ import { FileUploadSection } from "../components/upload/FileUploadSection";
 export default function UploadPage() {
   const fileInputRef = useRef(null);
   const { uploadExam, loading } = useUploadExam();
-  const { resetSelections } = useLocations();
+  const locations = useLocations();
 
   const {
     clearFieldError,
@@ -60,7 +60,7 @@ export default function UploadPage() {
     if (result.success) {
       toast.success("Exam uploaded successfully!");
       setExamData(INITIAL_EXAM_DATA);
-      resetSelections();
+      locations.resetSelections();
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       clearAllErrors();
@@ -106,6 +106,7 @@ export default function UploadPage() {
           setExamData={setExamData}
         />
         <InstitutionSection
+          {...locations}
           setExamData={setExamData}
           clearFieldError={clearFieldError}
           inputBase={inputBase}
