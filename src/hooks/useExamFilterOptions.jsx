@@ -8,7 +8,6 @@ export function useExamFilterOptions() {
     institutions: [],
     subjects: [],
     systems: SYSTEMS,
-    availableYears: [],
   });
 
   useEffect(() => {
@@ -28,16 +27,7 @@ export function useExamFilterOptions() {
       const subjects = [
         ...new Set((data || []).map((exam) => exam.subject).filter(Boolean)),
       ].sort();
-      const availableYears = [
-        ...new Set(
-          (data || [])
-            .flatMap((exam) => exam.systems || [])
-            .flatMap((system) => system.years || [])
-            .filter(Boolean),
-        ),
-      ].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
-
-      setOptions({ institutions, subjects, systems: SYSTEMS, availableYears });
+      setOptions({ institutions, subjects, systems: SYSTEMS });
     };
 
     fetchOptions();
