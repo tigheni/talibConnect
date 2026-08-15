@@ -141,13 +141,13 @@ export default function ExamViewer() {
               <p className="text-red-500 text-lg">
                 Couldn't load the PDF preview.
               </p>
-              <a
-                href={fileUrl}
-                download
-                className="bg-[#5ae4a8] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
+              <button
+                onClick={() => downloadExam(exam)}
+                disabled={loadingDownload}
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
               >
-                Download PDF instead
-              </a>
+                Download
+              </button>
             </div>
           ) : (
             <Document

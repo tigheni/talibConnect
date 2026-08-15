@@ -42,6 +42,13 @@ export function useDownloadExam() {
 
       window.URL.revokeObjectURL(url);
 
+      const { error: countError } = await supabase.rpc("increment_download", {
+        p_exam_uuid: exam.uuid,
+      });
+
+      if (countError) {
+        console.error("DOWNLOAD COUNTER ERROR:", countError);
+      }
       toast.success("Download complete", { id: "download" });
     } catch (err) {
       setError(err.message);
