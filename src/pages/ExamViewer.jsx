@@ -5,6 +5,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useDownloadExam } from "../hooks/useDownloadExam";
 import ReturnBackButton from "../components/ReturnBackButton";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -27,6 +28,7 @@ export default function ExamViewer() {
   const [pdfError, setPdfError] = useState("");
   const [containerWidth, setContainerWidth] = useState(null);
   const containerRef = useRef(null);
+  const { downloadExam, loadingDownload } = useDownloadExam();
 
   useEffect(() => {
     const fetchExamById = async () => {
@@ -120,13 +122,13 @@ export default function ExamViewer() {
             </p>
           </div>
           <div className="flex-shrink-0 w-full sm:w-auto">
-            <a
-              href={fileUrl}
-              download
-              className="w-full sm:w-auto inline-block text-center bg-[#5ae4a8] text-black px-6 py-3 rounded-lg hover:bg-[#3bc85a] transition"
+            <button
+              onClick={() => downloadExam(exam)}
+              disabled={loadingDownload}
+              className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
             >
-              Download PDF
-            </a>
+              Download
+            </button>
           </div>
         </div>
 

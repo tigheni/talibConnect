@@ -1,5 +1,5 @@
 import { SearchX } from "lucide-react";
-import ExamCard from "../ExamCard";
+import ExamCard from "./ExamCard";
 
 export default function ExamResults({ exams, viewMode, onClearFilters }) {
   if (exams.length === 0) {

@@ -3,11 +3,11 @@ import { supabase } from "../lib/supabase";
 import { toast } from "react-hot-toast";
 
 export function useDownloadExam() {
-  const [loading, setLoading] = useState(false);
+  const [loadingDownload, setLoadingDownload] = useState(false);
   const [error, setError] = useState(null);
 
   const downloadExam = async (exam) => {
-    setLoading(true);
+    setLoadingDownload(true);
     setError(null);
 
     try {
@@ -44,13 +44,12 @@ export function useDownloadExam() {
 
       toast.success("Download complete", { id: "download" });
     } catch (err) {
-      console.error("Download error:", err);
       setError(err.message);
       toast.error("Failed to download PDF", { id: "download" });
     } finally {
-      setLoading(false);
+      setLoadingDownload(false);
     }
   };
 
-  return { downloadExam, loading, error };
+  return { downloadExam, loadingDownload, error };
 }

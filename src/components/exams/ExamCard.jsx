@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Download, User } from "lucide-react";
-import { useDownloadExam } from "../hooks/useDownloadExam.jsx";
-import { getExamUrl } from "../utils/getExanUrl.jsx";
+import { useDownloadExam } from "../../hooks/useDownloadExam.jsx";
+import { getExamUrl } from "../../utils/getExanUrl.jsx";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
-  const { downloadExam, loading } = useDownloadExam();
+  const { downloadExam, loadingDownload } = useDownloadExam();
   if (viewMode === "grid") {
     return (
       <div
@@ -48,7 +48,7 @@ export default function ExamCard({ exam, index, viewMode }) {
           <div className="flex flex-col sm:flex-row gap-2 mt-auto pt-2">
             <button
               onClick={() => downloadExam(exam)}
-              disabled={loading}
+              disabled={loadingDownload}
               className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium text-center text-sm"
             >
               Download
@@ -101,7 +101,7 @@ export default function ExamCard({ exam, index, viewMode }) {
         <div className="flex flex-row sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={() => downloadExam(exam)}
-            disabled={loading}
+            disabled={loadingDownload}
             className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
           >
             Download
