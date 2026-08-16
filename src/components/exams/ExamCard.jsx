@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Download, User } from "lucide-react";
 import { useDownloadExam } from "../../hooks/useDownloadExam.jsx";
-import { getExamUrl } from "../../utils/getExanUrl.jsx";
+import { getExamUrl } from "../../utils/getExamUrl.jsx";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
   const { downloadExam, loadingDownload } = useDownloadExam();

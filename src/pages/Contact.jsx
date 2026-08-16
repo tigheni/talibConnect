@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Send } from "lucide-react";
 import contactIll from "../assets/contact.svg";
 import toast from "react-hot-toast";
 
