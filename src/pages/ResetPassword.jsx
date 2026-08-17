@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import usePasswordValidation from "../validators/passwordValidation";
 import { supabase } from "../lib/supabase";
+import { getSession } from "../services/sessionService";
 
 export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -50,9 +51,7 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const session = await getSession();
 
       if (!session) {
         setError(
