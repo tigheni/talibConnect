@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
-
+import { getUser } from "../services/getUser";
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
 
@@ -12,12 +12,7 @@ export function useUploadExam() {
     setLoading(true);
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError) throw userError;
+      const user = await getUser();
 
       const uploaderId = user?.id;
       if (!uploaderId) {

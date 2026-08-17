@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { getUser } from "../services/getUser";
 import LoadingSpinner from "./LoadingSpinner";
 import { useEffect, useState } from "react";
 
@@ -12,8 +12,8 @@ export default function ProtectedRoute({ children }) {
     const checkUser = async () => {
       setLoading(true);
 
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
+      const { user } = await getUser();
+      if (!user) {
         navigate(`/login?redirect=${location.pathname}`, { replace: true });
       } else {
         setIsAuthenticated(true);

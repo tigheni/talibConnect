@@ -12,8 +12,8 @@ export default function NavBoard() {
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const currentUser = data.user || null;
+      const { user } = await getUser();
+      const currentUser = user || null;
 
       setUser(currentUser);
     };
@@ -27,9 +27,7 @@ export default function NavBoard() {
       setUser(currentUser);
     });
     const checkAdmin = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const user = await getUser();
 
       if (!user) {
         return;
