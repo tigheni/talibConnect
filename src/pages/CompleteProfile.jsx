@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase";
 import useWelcomeValidation from "../validators/WelcomValidator";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import toast from "react-hot-toast";
+import { getUser } from "../services/getUser";
 
 const YEAR_OPTIONS = {
   lmd: [
@@ -101,9 +102,7 @@ export default function CompleteProfile() {
       });
       if (updateError) throw updateError;
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const user = await getUser();
 
       const { error } = await supabase
         .from("profiles")

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../services/getUser";
 
 export default function Admin() {
   const [pendingExams, setPendingExams] = useState([]);
@@ -50,14 +51,11 @@ export default function Admin() {
     }
 
     const checkAdmin = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+      const { user } = await getUser();
 
       if (cancelled) return;
 
-      if (userError || !user) {
+      if (!user) {
         navigate("/", { replace: true });
         return;
       }
