@@ -27,6 +27,7 @@ export default function Login() {
   useEffect(() => {
     const checkSession = async () => {
       const session = await getSession();
+
       if (session) {
         navigate(redirectTo, { replace: true });
       }

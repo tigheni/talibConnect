@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { getUser } from "../services/getUser";
+import { getSession } from "../services/sessionService";
 import { isUserAdmin } from "../services/profiles";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -15,28 +16,38 @@ export function AuthProvider({ children }) {
       setIsAdmin(false);
       return;
     }
-
     try {
       const admin = await isUserAdmin(currentUser.id);
-
       setIsAdmin(admin);
     } catch (error) {
-      console.error("Failed to fetch profile:", error);
+      console.error("Failed to fetch admin status:", error);
       setIsAdmin(false);
     }
   };
 
   useEffect(() => {
+    let mounted = true;
+
     const initializeAuth = async () => {
       try {
-        const { user } = await getUser();
+        const currentSession = await getSession();
 
-        setUser(user || null);
-        await checkAdmin(user);
+        if (!mounted) return;
+
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+
+        await checkAdmin(currentSession?.user ?? null);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to initialize auth:", error);
+
+        setSession(null);
+        setUser(null);
+        setIsAdmin(false);
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -44,15 +55,25 @@ export function AuthProvider({ children }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user || null;
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      const currentUser = newSession?.user ?? null;
 
+      setSession(newSession);
       setUser(currentUser);
-      await checkAdmin(currentUser);
-      setLoading(false);
+
+      setTimeout(async () => {
+        if (!mounted) return;
+
+        await checkAdmin(currentUser);
+
+        if (mounted) {
+          setLoading(false);
+        }
+      }, 0);
     });
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, []);
@@ -60,6 +81,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
+        session,
         user,
         isAdmin,
         loading,

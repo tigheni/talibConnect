@@ -2,15 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../services/getUser";
+import { useAuth } from "../context/AuthContext";
 
 export default function Admin() {
   const [pendingExams, setPendingExams] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [examsLoading, setExamsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [filter, setFilter] = useState("");
-
   const navigate = useNavigate();
+  const { user, isAdmin, loading: authLoading } = useAuth();
 
   const visibleExams = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -30,9 +30,17 @@ export default function Admin() {
   }, [pendingExams, filter]);
 
   useEffect(() => {
+    if (authLoading) return;
+
+    if (!user || !isAdmin) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     let cancelled = false;
 
     async function loadPendingExams() {
+      setExamsLoading(true);
       const { data, error } = await supabase
         .from("exams")
         .select("*")
@@ -47,41 +55,15 @@ export default function Admin() {
         setPendingExams(data || []);
       }
 
-      setLoading(false);
+      setExamsLoading(false);
     }
 
-    const checkAdmin = async () => {
-      const { user } = await getUser();
-
-      if (cancelled) return;
-
-      if (!user) {
-        navigate("/", { replace: true });
-        return;
-      }
-
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role, username")
-        .eq("id", user.id)
-        .single();
-
-      if (cancelled) return;
-
-      if (error || !profile || profile.role !== "admin") {
-        navigate("/", { replace: true });
-        return;
-      }
-
-      loadPendingExams();
-    };
-
-    checkAdmin();
+    loadPendingExams();
 
     return () => {
       cancelled = true;
     };
-  }, [navigate]);
+  }, [authLoading, user, isAdmin, navigate]);
 
   const handleApprove = async (uuid) => {
     const { error } = await supabase
@@ -110,7 +92,7 @@ export default function Admin() {
     setMessage("Exam rejected and removed.");
   };
 
-  if (loading) {
+  if (examsLoading) {
     return <LoadingSpinner />;
   }
 
