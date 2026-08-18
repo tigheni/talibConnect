@@ -18,40 +18,42 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CompleteProfile = lazy(() => import("./pages/CompleteProfile"));
 import { Toaster } from "react-hot-toast";
-
+import { AuthProvider } from "./context/AuthContext";
 export default function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" />
-      <ScrollToTop />
-      <Suspense fallback={null}>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/upload"
-              element={
-                <ProtectedRoute>
-                  <Upload />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/exams" element={<ExamPage />} />
-            <Route path="/admin" element={<Admin />} />
-          </Route>
-          <Route path="/exam/:id" element={<ExamViewer />} />
-          <Route element={<AuthLayout />}>
-            <Route path="/complete-profile" element={<CompleteProfile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-          </Route>
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-        </Routes>
-      </Suspense>
+      <AuthProvider>
+        <Toaster position="top-right" />
+        <ScrollToTop />
+        <Suspense fallback={null}>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/upload"
+                element={
+                  <ProtectedRoute>
+                    <Upload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/exams" element={<ExamPage />} />
+              <Route path="/admin" element={<Admin />} />
+            </Route>
+            <Route path="/exam/:id" element={<ExamViewer />} />
+            <Route element={<AuthLayout />}>
+              <Route path="/complete-profile" element={<CompleteProfile />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+            </Route>
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+          </Routes>
+        </Suspense>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

@@ -1,48 +1,15 @@
 import logo from "../assets/logo.svg";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
-import { getUser } from "../services/getUser";
-import { isUserAdmin } from "../services/profiles";
+import { useAuth } from "../context/AuthContext";
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const isMobile = useMobile();
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const checkAdmin = async (user) => {
-      if (!user) {
-        setIsAdmin(false);
-        return;
-      }
-      const admin = await isUserAdmin(user.id);
-
-      setIsAdmin(admin);
-    };
-
-    const initializeUser = async () => {
-      const { user } = await getUser();
-
-      setUser(user || null);
-      await checkAdmin(user);
-    };
-
-    initializeUser();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user || null;
-
-      setUser(currentUser);
-      await checkAdmin(currentUser);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const { user, isAdmin } = useAuth();
 
   const navLinkClass = ({ isActive }) =>
     `relative rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
@@ -53,8 +20,6 @@ export default function NavBoard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    setIsAdmin(false);
     setIsMenuOpen(false);
     navigate("/");
   };

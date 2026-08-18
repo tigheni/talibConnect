@@ -55,7 +55,6 @@ export function useExams(filters = {}, page = 1) {
     }
 
     const { data, count, error: queryError } = await query;
-    console.log(data);
 
     if (queryError) {
       setError(queryError);
