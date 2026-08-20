@@ -14,7 +14,7 @@ data
 scripts/import-kuliya.js
 worker
 wrangler.jsonc
-
+_headers
 .vscode/*
 !.vscode/extensions.json
 .idea
