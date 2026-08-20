@@ -48,7 +48,7 @@ export default function Home() {
         const uniqueUniversities = [
           ...new Set(uniData.map((item) => item.institution).filter(Boolean)),
         ];
-        universityCount = uniqueUniversities.length;
+        universityCount = uniqueUniversities?.length;
       }
 
       setRecentExams((examsData || []).slice(0, 6));
