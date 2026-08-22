@@ -14,10 +14,22 @@ import { YEAR_OPTIONS } from "../constants/uploadForm";
 const EXAMS_PER_PAGE = 9;
 
 export default function ExamPage() {
-  const [subjectFilter, setSubjectFilter] = useState("");
-  const [universityFilter, setUniversityFilter] = useState("");
-  const [systemFilter, setSystemFilter] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [subjectFilter, setSubjectFilter] = useState(
+    () => searchParams.get("subject") || "",
+  );
+
+  const [universityFilter, setUniversityFilter] = useState(
+    () => searchParams.get("university") || "",
+  );
+
+  const [systemFilter, setSystemFilter] = useState(
+    () => searchParams.get("system") || "",
+  );
+
+  const [yearFilter, setYearFilter] = useState(
+    () => searchParams.get("year") || "",
+  );
 
   const isMobile = useMobile();
   const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
@@ -25,7 +37,6 @@ export default function ExamPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(
     () => searchParams.get("search") || "",
   );
@@ -54,7 +65,12 @@ export default function ExamPage() {
       key: "university",
       label: universityFilter,
       clear: () => {
+        const params = new URLSearchParams(searchParams);
+
         setUniversityFilter("");
+        params.delete("university");
+        setSearchParams(params);
+
         setCurrentPage(1);
       },
     },
@@ -62,7 +78,11 @@ export default function ExamPage() {
       key: "subject",
       label: subjectFilter,
       clear: () => {
+        const params = new URLSearchParams(searchParams);
+
         setSubjectFilter("");
+        params.delete("subject");
+        setSearchParams(params);
         setCurrentPage(1);
       },
     },
@@ -75,8 +95,13 @@ export default function ExamPage() {
             ? "Engineering"
             : "Medical",
       clear: () => {
+        const params = new URLSearchParams(searchParams);
+
         setSystemFilter("");
         setYearFilter("");
+        params.delete("system");
+        params.delete("year");
+        setSearchParams(params);
         setCurrentPage(1);
       },
     },
@@ -84,7 +109,11 @@ export default function ExamPage() {
       key: "year",
       label: yearFilter,
       clear: () => {
+        const params = new URLSearchParams(searchParams);
+
         setYearFilter("");
+        params.delete("year");
+        setSearchParams(params);
         setCurrentPage(1);
       },
     },
@@ -174,6 +203,8 @@ export default function ExamPage() {
           exams={exams}
           viewMode={viewMode}
           onClearFilters={() => {
+            const params = new URLSearchParams(searchParams);
+
             clearTimeout(searchTimeout.current);
             setSearchInput("");
             setSearchTerm("");
@@ -181,6 +212,11 @@ export default function ExamPage() {
             setUniversityFilter("");
             setSystemFilter("");
             setYearFilter("");
+            params.delete("university");
+            params.delete("subject");
+            params.delete("system");
+            params.delete("year");
+            setSearchParams(params);
             setCurrentPage(1);
           }}
         />

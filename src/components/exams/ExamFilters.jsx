@@ -1,8 +1,8 @@
 import { ChevronDown } from "lucide-react";
 
+import { useSearchParams } from "react-router-dom";
 const selectBase =
   "w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-gray-700 text-sm outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed appearance-none";
-
 export default function ExamFilters({
   universityFilter,
   setUniversityFilter,
@@ -18,25 +18,62 @@ export default function ExamFilters({
   availableYears,
   setCurrentPage,
 }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleUniversityChange = (e) => {
-    setUniversityFilter(e.target.value);
+    const value = e.target.value;
+
+    setUniversityFilter(value);
+    updateFilter("university", value);
     setCurrentPage(1);
   };
 
   const handleSubjectChange = (e) => {
-    setSubjectFilter(e.target.value);
+    const value = e.target.value;
+
+    setSubjectFilter(value);
+    updateFilter("subject", value);
     setCurrentPage(1);
   };
 
   const handleSystemChange = (e) => {
-    setSystemFilter(e.target.value);
+    const value = e.target.value;
+
+    setSystemFilter(value);
     setYearFilter("");
+
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.set("system", value);
+    } else {
+      params.delete("system");
+    }
+
+    params.delete("year");
+
+    setSearchParams(params);
     setCurrentPage(1);
   };
 
   const handleYearChange = (e) => {
-    setYearFilter(e.target.value);
+    const value = e.target.value;
+
+    setYearFilter(value);
+    updateFilter("year", value);
     setCurrentPage(1);
+  };
+
+  const updateFilter = (name, value) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+
+    setSearchParams(params);
   };
 
   return (
