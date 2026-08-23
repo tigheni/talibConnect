@@ -18,7 +18,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CompleteProfile = lazy(() => import("./pages/CompleteProfile"));
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext.jsx";
 export default function App() {
   return (
     <BrowserRouter>
