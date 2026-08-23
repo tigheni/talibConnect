@@ -5,7 +5,7 @@ import { supabase } from "../lib/supabase";
 import useWelcomeValidation from "../validators/WelcomValidator";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import toast from "react-hot-toast";
-import { getUser } from "../services/getUser";
+import { useAuth } from "../context/useAuth";
 
 const YEAR_OPTIONS = {
   lmd: [
@@ -53,6 +53,7 @@ export default function CompleteProfile() {
   } = useLocations();
 
   const { errors, validate, clearErrors } = useWelcomeValidation();
+  const { user } = useAuth();
 
   const handleLocationChange = (setter, nameField) => (e) => {
     const { value } = e.target;
@@ -101,8 +102,6 @@ export default function CompleteProfile() {
         },
       });
       if (updateError) throw updateError;
-
-      const user = await getUser();
 
       const { error } = await supabase
         .from("profiles")

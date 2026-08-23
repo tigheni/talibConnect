@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
+
 import { useNavigate } from "react-router-dom";
 export function useDownloadExam() {
   const [loadingDownload, setLoadingDownload] = useState(false);

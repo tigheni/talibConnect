@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
-import { getUser } from "../services/getUser";
+
+import { useAuth } from "../context/useAuth";
+
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   const uploadExam = async (examData, file) => {
     const { isValid, errors } = validateExamForm(examData, file);
     if (!isValid) return { success: false, errors };
 
     setLoading(true);
-
     try {
-      const user = await getUser();
-
       const uploaderId = user?.id;
       if (!uploaderId) {
         return {
