@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react";
-
+import { YEAR_OPTIONS } from "../../constants/uploadForm";
 import { useSearchParams } from "react-router-dom";
 const selectBase =
   "w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-gray-700 text-sm outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed appearance-none";
@@ -15,9 +15,11 @@ export default function ExamFilters({
   institutions,
   subjects,
   systems,
-  availableYears,
   setCurrentPage,
 }) {
+  const availableYears = (YEAR_OPTIONS[systemFilter] || []).map(
+    (year) => year.value,
+  );
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleUniversityChange = (e) => {

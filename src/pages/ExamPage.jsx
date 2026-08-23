@@ -9,7 +9,6 @@ import ExamResults from "../components/exams/ExamResults";
 import useMobile from "../hooks/useMobile";
 import { useExams } from "../hooks/useExam";
 import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
-import { YEAR_OPTIONS } from "../constants/uploadForm";
 
 const EXAMS_PER_PAGE = 9;
 
@@ -55,9 +54,7 @@ export default function ExamPage() {
   const { exams, totalCount, loading, error } = useExams(filters, currentPage);
 
   const { institutions, subjects, systems } = useExamFilterOptions();
-  const availableYears = (YEAR_OPTIONS[systemFilter] || []).map(
-    (year) => year.value,
-  );
+
   const totalPages = Math.ceil(totalCount / EXAMS_PER_PAGE);
 
   const activeFilters = [
@@ -180,7 +177,6 @@ export default function ExamPage() {
           institutions={institutions}
           subjects={subjects}
           systems={systems}
-          availableYears={availableYears}
           setCurrentPage={setCurrentPage}
         />
       )}
