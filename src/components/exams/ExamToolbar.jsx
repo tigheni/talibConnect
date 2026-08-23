@@ -2,10 +2,10 @@ import { LayoutGrid, List, X } from "lucide-react";
 
 export default function ExamToolbar({
   examCount,
-  activeFilters,
   viewMode,
   onViewModeChange,
   isMobile,
+  activeFilters,
 }) {
   return (
     <div className="max-w-5xl mx-auto px-6 pt-5 pb-2 flex flex-wrap items-center justify-between gap-3">
@@ -28,7 +28,6 @@ export default function ExamToolbar({
         ))}
       </div>
 
-      {/* View mode */}
       {!isMobile && (
         <div className="flex gap-1 bg-gray-100 rounded-xl p-1 shrink-0">
           <button

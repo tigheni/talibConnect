@@ -18,7 +18,7 @@ export default function Register() {
   });
   const [loading, setLoading] = useState(false);
 
-  const isMobile = useMobile();
+  const { isMobile } = useMobile();
   const navigate = useNavigate();
   const formTopRef = useRef(null);
   const { errors, validate, clearErrors } = useRegisterValidation();

@@ -7,6 +7,7 @@ import ExamFilters from "../components/exams/ExamFilters";
 import ExamToolbar from "../components/exams/ExamToolbar";
 import ExamResults from "../components/exams/ExamResults";
 import useMobile from "../hooks/useMobile";
+
 import { useExams } from "../hooks/useExam";
 import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
 
@@ -14,6 +15,7 @@ const EXAMS_PER_PAGE = 9;
 
 export default function ExamPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [subjectFilter, setSubjectFilter] = useState(
     () => searchParams.get("subject") || "",
   );
@@ -30,9 +32,6 @@ export default function ExamPage() {
     () => searchParams.get("year") || "",
   );
 
-  const isMobile = useMobile();
-  const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
-
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,6 +41,8 @@ export default function ExamPage() {
 
   const [searchInput, setSearchInput] = useState(searchTerm);
   const searchTimeout = useRef(null);
+
+  const { viewMode, setViewMode, isMobile } = useMobile();
 
   const filters = {
     searchTerm,
@@ -200,7 +201,6 @@ export default function ExamPage() {
           viewMode={viewMode}
           onClearFilters={() => {
             const params = new URLSearchParams(searchParams);
-
             clearTimeout(searchTimeout.current);
             setSearchInput("");
             setSearchTerm("");

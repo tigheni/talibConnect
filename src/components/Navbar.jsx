@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const isMobile = useMobile();
+  const { isMobile } = useMobile();
 
   const { user, isAdmin } = useAuth();
 

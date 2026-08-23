@@ -18,7 +18,7 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const isMobile = useMobile();
+  const { isMobile } = useMobile();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();

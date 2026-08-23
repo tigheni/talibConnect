@@ -11,8 +11,8 @@ const useMobile = (breakpoint = 640) => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, [breakpoint]);
-
-  return isMobile;
+  const [viewMode, setViewMode] = useState(() => (isMobile ? "grid" : "list"));
+  return { isMobile, viewMode, setViewMode };
 };
 
 export default useMobile;
