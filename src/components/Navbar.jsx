@@ -11,6 +11,7 @@ export default function NavBoard() {
   const { isMobile } = useMobile();
 
   const { user, isAdmin } = useAuth();
+  console.log(user.user_metadata?.username);
 
   const navLinkClass = ({ isActive }) =>
     `relative rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
@@ -70,7 +71,7 @@ export default function NavBoard() {
               <div className="hidden items-center gap-2.5 pr-1 sm:flex">
                 <div className="relative">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#2f9e6d] text-sm font-bold text-white ring-2 ring-[#5ae4a8]/25 ring-offset-2 ring-offset-white">
-                    {user.email?.charAt(0).toUpperCase()}
+                    {user.user_metadata?.username.charAt(0).toUpperCase()}
                   </div>
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#5ae4a8]" />
                 </div>
@@ -179,7 +180,8 @@ export default function NavBoard() {
                 <>
                   <div className="flex items-center gap-3 px-4 py-2">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#2f9e6d] text-sm font-bold text-white">
-                      {user.email?.charAt(0).toUpperCase() || "U"}
+                      {user.user_metadata?.username?.charAt(0).toUpperCase() ||
+                        "U"}
                     </div>
                     <span className="text-sm font-medium text-slate-700">
                       {user.user_metadata?.username ||
