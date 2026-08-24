@@ -42,9 +42,9 @@ export function FeatureSection() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
       <div className="mb-10 text-center">
-        <h1 className=" font-bold tracking-tight text-slate-900 md:text-6xl sm:text-4xl">
+        <h2 className="font-bold tracking-tight text-slate-900 md:text-6xl sm:text-4xl">
           Made for students
-        </h1>
+        </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
           Everything you need to find, organize, and study past exams.
         </p>

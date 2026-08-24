@@ -9,9 +9,9 @@ export default function ExamResults({ exams, viewMode, onClearFilters }) {
           <SearchX className="w-6 h-6 text-gray-400" />
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 mb-1.5">
+        <h2 className="text-xl font-semibold text-gray-900 mb-1.5">
           No exams found
-        </h3>
+        </h2>
 
         <p className="text-gray-500 text-sm">
           Try adjusting your search or filters

@@ -11,6 +11,7 @@ dist
 dist-ssr
 *.local
 data
+public
 scripts/import-kuliya.js
 worker
 wrangler.jsonc

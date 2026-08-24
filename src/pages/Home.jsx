@@ -22,11 +22,19 @@ export default function Home() {
     const fetchAllData = async () => {
       setLoading(true);
 
-      const { data: examsData, error: examsError } = await supabase
-        .from("exams")
-        .select("*")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false });
+      const [examsResult, userResult, institutionsResult] = await Promise.all([
+        supabase
+          .from("exams")
+          .select(
+            "title,subject,uuid,file_type,institution,year,downloads,uploader_name,teacher_name",
+          )
+          .eq("status", "approved")
+          .order("created_at", { ascending: false }),
+        supabase.rpc("get_user_count"),
+        supabase.from("exams").select("institution").eq("status", "approved"),
+      ]);
+
+      const { data: examsData, error: examsError } = examsResult;
 
       if (examsError) {
         console.error("Error fetching exams:", examsError);
@@ -34,14 +42,10 @@ export default function Home() {
         return;
       }
 
-      const { data: userData, error: userError } =
-        await supabase.rpc("get_user_count");
+      const { data: userData, error: userError } = userResult;
       const userCount = userError ? 0 : userData || 0;
 
-      const { data: uniData, error: uniError } = await supabase
-        .from("exams")
-        .select("institution")
-        .eq("status", "approved");
+      const { data: uniData, error: uniError } = institutionsResult;
 
       let universityCount = 0;
       if (!uniError && uniData) {
@@ -93,7 +97,7 @@ export default function Home() {
           </div>
           <Link
             to="/exams"
-            className="whitespace-nowrap text-sm font-medium text-[#2f9e6d] transition-colors duration-150 hover:text-[#237a54]"
+            className="whitespace-nowrap text-sm font-medium text-[#237a54] transition-colors duration-150 hover:text-[#237a54]"
           >
             View all exams →
           </Link>

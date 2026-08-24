@@ -60,7 +60,7 @@ export function HomeHeader({ stats }) {
       <div className="mx-auto flex h-full max-w-7xl items-center px-4  sm:px-4 lg:px-8 lg:py-0">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="relative">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#237a54]">
               Algerian exam archive
             </p>
             <h1 className="mt-3 max-w-4xl text-3xl font-black tracking-[-0.05em] text-slate-900 sm:text-5xl lg:text-6xl">

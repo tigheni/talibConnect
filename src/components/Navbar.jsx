@@ -11,7 +11,6 @@ export default function NavBoard() {
   const { isMobile } = useMobile();
 
   const { user, isAdmin } = useAuth();
-  console.log(user.user_metadata?.username);
 
   const navLinkClass = ({ isActive }) =>
     `relative rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
@@ -98,7 +97,7 @@ export default function NavBoard() {
 
               <Link
                 to="/register"
-                className="rounded-xl border border-[#5ae4a8] bg-[#5ae4a8] px-5 py-2.5 text-sm font-bold text-[#0f0f0f] shadow-[0_8px_24px_rgba(90,228,168,0.22)] transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
+                className="rounded-xl border border-[#2f9e6d] bg-[#2f9e6d] px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(47,158,109,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#237a54] active:scale-95"
               >
                 Register
               </Link>
@@ -208,7 +207,7 @@ export default function NavBoard() {
                   <Link
                     to="/register"
                     onClick={() => setIsMenuOpen(false)}
-                    className="rounded-xl border border-[#5ae4a8] bg-[#5ae4a8] px-4 py-3 text-center text-sm font-bold text-[#0f0f0f] transition-transform duration-150 active:scale-95"
+                    className="rounded-xl border border-[#2f9e6d] bg-[#2f9e6d] px-4 py-3 text-center text-sm font-bold text-white transition-transform duration-150 hover:bg-[#237a54] active:scale-95"
                   >
                     Register
                   </Link>

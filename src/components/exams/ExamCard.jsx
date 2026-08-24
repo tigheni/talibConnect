@@ -13,13 +13,13 @@ export default function ExamCard({ exam, index, viewMode }) {
       >
         <div className="p-4 sm:p-5 flex flex-col flex-1">
           <div className="mb-3">
-            <span className="inline-block px-3 py-1 bg-[#5ae4a8] text-white text-xs rounded-xl font-medium">
+            <span className="inline-block px-3 py-1 bg-[#5ae4a8] text-slate-950 text-xs rounded-xl font-medium">
               {exam.file_type}
             </span>
           </div>
-          <h1 className="text-base sm:text-lg text-center font-bold text-gray-900 mb-2 group-hover:text-[#5ae4a8] transition-colors min-h-[3.5rem]">
+          <h2 className="text-base sm:text-lg text-center font-bold text-gray-900 mb-2 group-hover:text-[#237a54] transition-colors min-h-[3.5rem]">
             {exam.title}
-          </h1>
+          </h2>
           <div className="space-y-1 mb-4 flex-1">
             <p className="text-xs sm:text-sm text-gray-600 ">
               {exam.institution} • {exam.subject}
@@ -74,9 +74,9 @@ export default function ExamCard({ exam, index, viewMode }) {
     >
       <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex-1 min-w-0 w-full sm:w-auto">
-          <h1 className="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-[#5ae4a8] transition-colors line-clamp-2">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-[#237a54] transition-colors line-clamp-2">
             {exam.title}
-          </h1>
+          </h2>
           <p className="text-xs sm:text-sm text-gray-500 truncate">
             {exam.institution} • {exam.subject} • {exam.year}
           </p>
