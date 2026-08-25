@@ -18,7 +18,12 @@ export function useExams(filters = {}, page = 1) {
 
     let query = supabase
       .from("exams")
-      .select("title,subject,institution,systems", { count: "exact" })
+      .select(
+        "title,subject,institution,systems,uuid,teacher_name,uploader_name,file_type,year,downloads",
+        {
+          count: "exact",
+        },
+      )
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .range(from, to);
