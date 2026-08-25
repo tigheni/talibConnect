@@ -1,16 +1,30 @@
 import logo from "../assets/logo.svg";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import useMobile from "../hooks/useMobile";
 import { useAuth } from "../context/useAuth";
 
+import { useLoginModal } from "../context/LoginModalContext";
+
 export default function NavBoard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { isMobile } = useMobile();
+  const { openLogin } = useLoginModal();
 
   const { user, isAdmin } = useAuth();
+
+  const location = useLocation();
+
+  const handleUploadClick = () => {
+    if (!user) {
+      openLogin("/upload", location.pathname);
+      return;
+    }
+
+    navigate("/upload");
+  };
 
   const navLinkClass = ({ isActive }) =>
     `relative rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
@@ -47,9 +61,14 @@ export default function NavBoard() {
             <NavLink to="/" end className={navLinkClass}>
               Home
             </NavLink>
-            <NavLink to="/upload" className={navLinkClass}>
+            <button
+              onClick={handleUploadClick}
+              className={navLinkClass({
+                isActive: location.pathname === "/upload",
+              })}
+            >
               Upload
-            </NavLink>
+            </button>
             <NavLink to="/exams" className={navLinkClass}>
               Exams
             </NavLink>
@@ -88,12 +107,12 @@ export default function NavBoard() {
             </>
           ) : (
             <div className="hidden items-center gap-3 lg:flex">
-              <Link
-                to="/login"
+              <button
+                onClick={() => openLogin()}
                 className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50"
               >
                 Login
-              </Link>
+              </button>
 
               <Link
                 to="/register"
@@ -197,13 +216,15 @@ export default function NavBoard() {
                 </>
               ) : (
                 <div className="flex flex-col gap-2 p-1">
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="rounded-xl border border-slate-300 px-4 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      openLogin();
+                    }}
+                    className="rounded-xl border border-slate-300 px-4 py-3 text-center text-sm font-medium text-slate-700"
                   >
                     Login
-                  </Link>
+                  </button>
                   <Link
                     to="/register"
                     onClick={() => setIsMenuOpen(false)}

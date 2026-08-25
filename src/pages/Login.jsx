@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import img from "../assets/LoginBg.jpg";
-import { loginUser } from "../services/loginUser";
-import useMobile from "../hooks/useMobile";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { validateLoginForm } from "../validators/validationLogin";
+import { loginUser } from "../services/loginUser";
 import { getSession } from "../services/sessionService";
-export default function Login() {
+export default function LoginModal({ onClose, redirectTo = "/exams" }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const [fieldErrors, setFieldErrors] = useState({
     email: "",
     password: "",
   });
-  const { isMobile } = useMobile();
+
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/exams";
 
   useEffect(() => {
     const checkSession = async () => {
@@ -60,20 +58,19 @@ export default function Login() {
       setFieldErrors(errors);
       return;
     }
+
     setFieldErrors({
       email: "",
       password: "",
     });
+
     setLoading(true);
 
     try {
       await loginUser(formData.email, formData.password);
 
-      if (redirectTo) {
-        navigate(redirectTo);
-      } else {
-        navigate("/exams");
-      }
+      onClose();
+      navigate(redirectTo);
     } catch (err) {
       setError(
         err.message ||
@@ -81,21 +78,28 @@ export default function Login() {
       );
     } finally {
       setLoading(false);
+      onClose();
     }
   };
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   return (
-    <main
-      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
-      style={
-        !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
-      }
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
     >
-      <div className="w-full max-w-sm md:max-w-md flex justify-center  flex-col items-center border border-gray-300 bg-white py-5 rounded-2xl shadow-md px-6">
-        <Link to="/">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm md:max-w-md flex flex-col items-center border border-gray-300 bg-white py-5 rounded-2xl shadow-2xl px-6"
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-3 text-2xl text-gray-400 hover:text-gray-800 transition"
+          aria-label="Close login"
+        >
+          ×
+        </button>
+
+        <Link to="/" onClick={onClose}>
           <img
             src={logo}
             alt="Logo"
@@ -118,18 +122,21 @@ export default function Login() {
           >
             Email:
           </label>
+
           <input
             type="email"
             name="email"
             id="email"
             value={formData.email}
             placeholder="Email"
-            required
             onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
+
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.email ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${
+              fieldErrors.email ? "visible" : "invisible"
+            }`}
           >
             {fieldErrors.email || "placeholder"}
           </div>
@@ -140,18 +147,21 @@ export default function Login() {
           >
             Password:
           </label>
+
           <input
             type="password"
             name="password"
             id="password"
             value={formData.password}
             placeholder="Password"
-            required
             onChange={handleChange}
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
+
           <div
-            className={`text-red-500 text-xs mt-1 ${fieldErrors.password ? "visible" : "invisible"}`}
+            className={`text-red-500 text-xs mt-1 ${
+              fieldErrors.password ? "visible" : "invisible"
+            }`}
           >
             {fieldErrors.password || "placeholder"}
           </div>
@@ -159,6 +169,7 @@ export default function Login() {
           <div className="text-right mt-1">
             <Link
               to="/forgot-password"
+              onClick={onClose}
               className="text-xs text-[#52c76a] hover:underline"
             >
               Forgot password?
@@ -179,6 +190,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               to="/register"
+              onClick={onClose}
               className="text-[#52c76a] hover:text-[#3aa855] hover:underline transition-colors"
             >
               Register
@@ -186,6 +198,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
