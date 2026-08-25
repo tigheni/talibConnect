@@ -19,7 +19,7 @@ export function useExams(filters = {}, page = 1) {
     let query = supabase
       .from("exams")
       .select(
-        "title,subject,institution,systems,uuid,teacher_name,uploader_name,file_type,year,downloads",
+        "title,subject,institution,systems,uuid,teacher_name,uploader_name,file_type,year,downloads,file_path",
         {
           count: "exact",
         },

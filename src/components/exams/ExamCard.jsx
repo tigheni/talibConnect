@@ -4,7 +4,9 @@ import { useDownloadExam } from "../../hooks/useDownloadExam.jsx";
 import { getExamUrl } from "../../utils/getExamUrl.jsx";
 export default function ExamCard({ exam, index, viewMode }) {
   const navigate = useNavigate();
+
   const { downloadExam, loadingDownload } = useDownloadExam();
+
   if (viewMode === "grid") {
     return (
       <div

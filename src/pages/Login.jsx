@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { validateLoginForm } from "../validators/validationLogin";
 import { loginUser } from "../services/loginUser";
@@ -19,8 +19,6 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
   });
 
   const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const checkSession = async () => {

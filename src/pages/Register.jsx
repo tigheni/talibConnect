@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import useRegisterValidation from "../validators/useRegisterValidation";
 import { FormSection } from "../components/register/FormSection";
-
+import { useLoginModal } from "../context/LoginModalContext";
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
@@ -17,6 +17,8 @@ export default function Register() {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const { openLogin } = useLoginModal();
 
   const { isMobile } = useMobile();
   const navigate = useNavigate();
@@ -73,8 +75,9 @@ export default function Register() {
       } else {
         toast.success("Check your email to confirm your account.");
         setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+          navigate("/");
+          //          openLogin(true);
+        }, 2000);
       }
     } catch (err) {
       const friendlyMessage = getAuthErrorMessage(err);

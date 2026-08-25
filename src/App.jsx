@@ -5,15 +5,14 @@ import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { LoginModalProvider, useLoginModal } from "./context/LoginModalContext";
-
+import LoginModal from "./pages/Login.jsx";
+const Upload = lazy(() => import("./pages/UploadPage"));
 const MainLayout = lazy(() => import("./components/Mainlayout"));
 const AuthLayout = lazy(() => import("./layouts/AuthLayout"));
 const ExamViewer = lazy(() => import("./pages/ExamViewer"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const Home = lazy(() => import("./pages/Home"));
-const LoginModal = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
-const Upload = lazy(() => import("./pages/UploadPage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgetPassword"));
