@@ -17,7 +17,7 @@ export function useLocations() {
     const fetchWilayas = async () => {
       const { data, error } = await supabase
         .from("wilayas")
-        .select("*")
+        .select("id,name_en")
         .order("name_en");
 
       if (error) {
@@ -45,7 +45,7 @@ export function useLocations() {
     const fetchInstitutions = async () => {
       const { data, error } = await supabase
         .from("institutions")
-        .select("*")
+        .select("id,name_en")
         .eq("wilaya_id", Number(selectedWilaya))
         .order("name_en");
 
@@ -72,7 +72,7 @@ export function useLocations() {
     const fetchFaculties = async () => {
       const { data, error } = await supabase
         .from("faculties")
-        .select("*")
+        .select("id,name_en")
         .eq("institution_id", Number(selectedInstitution))
         .order("name_en");
 
@@ -97,7 +97,7 @@ export function useLocations() {
     const fetchDepartments = async () => {
       const { data } = await supabase
         .from("departments")
-        .select("*")
+        .select("id,name_en")
         .eq("faculty_id", Number(selectedFaculty))
         .order("name_en");
 
