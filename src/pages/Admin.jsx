@@ -20,7 +20,7 @@ export default function Admin() {
       return (
         exam.title?.toLowerCase().includes(q) ||
         exam.subject?.toLowerCase().includes(q) ||
-        exam.university?.toLowerCase().includes(q) ||
+        exam.institution?.toLowerCase().includes(q) ||
         exam.uploader_name?.toLowerCase().includes(q) ||
         String(exam.year || "")
           .toLowerCase()
@@ -43,7 +43,9 @@ export default function Admin() {
       setExamsLoading(true);
       const { data, error } = await supabase
         .from("exams")
-        .select("*")
+        .select(
+          "uuid,title,institution,year,created_at,file_path,teacher_consent,uploader_name,subject",
+        )
         .eq("status", "pending")
         .order("created_at", { ascending: false });
 
@@ -199,7 +201,7 @@ export default function Admin() {
                     </div>
 
                     <p className="mt-2 text-sm text-slate-600">
-                      {exam.university} • {exam.subject} • {exam.year}
+                      {exam.institution} • {exam.subject} • {exam.year}
                     </p>
 
                     <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">

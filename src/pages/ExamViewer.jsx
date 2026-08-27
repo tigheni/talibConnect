@@ -45,7 +45,7 @@ export default function ExamViewer() {
 
         const { data, error } = await supabase
           .from("exams")
-          .select("*")
+          .select("title,institution,subject,year,uuid,file_path")
           .eq("uuid", examUuid)
           .maybeSingle();
 
@@ -118,7 +118,7 @@ export default function ExamViewer() {
               {exam.title}
             </h1>
             <p className="text-gray-600 text-sm sm:text-base">
-              {exam.university} • {exam.subject} • {exam.year}
+              {exam.institution} • {exam.subject} • {exam.year}
             </p>
           </div>
           <div className="flex-shrink-0 w-full sm:w-auto">
