@@ -12,7 +12,8 @@ export function useLocations() {
   const [selectedInstitution, setSelectedInstitution] = useState("");
   const [selectedFaculty, setSelectedFaculty] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
-  // Fetch Wilayas
+  const [departmentsLoading, setDepartmentsLoading] = useState(false);
+
   useEffect(() => {
     const fetchWilayas = async () => {
       const { data, error } = await supabase
@@ -95,6 +96,7 @@ export function useLocations() {
     }
 
     const fetchDepartments = async () => {
+      setDepartmentsLoading(true);
       const { data } = await supabase
         .from("departments")
         .select("id,name_en")
@@ -102,10 +104,14 @@ export function useLocations() {
         .order("name_en");
 
       setDepartments(data || []);
+      setDepartmentsLoading(false);
     };
 
     fetchDepartments();
   }, [selectedFaculty]);
+
+  const hasNoDepartments =
+    Boolean(selectedFaculty) && !departmentsLoading && departments.length === 0;
 
   const resetSelections = () => {
     setSelectedWilaya("");
@@ -122,6 +128,8 @@ export function useLocations() {
     institutions,
     faculties,
     departments,
+    hasNoDepartments,
+    departmentsLoading,
 
     selectedWilaya,
     selectedInstitution,

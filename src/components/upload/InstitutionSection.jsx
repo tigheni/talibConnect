@@ -18,6 +18,7 @@ export function InstitutionSection({
   inputBase,
   getErrorClass,
   getErrorMessage,
+  hasNoDepartments,
   examData,
 }) {
   return (
@@ -135,42 +136,43 @@ export function InstitutionSection({
             </div>
           )}
         </div>
+        {!hasNoDepartments && (
+          <div>
+            <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+              Department
+            </label>
+            <select
+              value={selectedDepartment}
+              className={`${inputBase} ${getErrorClass("department")}`}
+              disabled={!selectedFaculty}
+              onChange={(e) => {
+                setSelectedDepartment(e.target.value);
 
-        <div>
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Department
-          </label>
-          <select
-            value={selectedDepartment}
-            className={`${inputBase} ${getErrorClass("department")}`}
-            disabled={!selectedFaculty}
-            onChange={(e) => {
-              setSelectedDepartment(e.target.value);
+                const selected = departments.find(
+                  (d) => d.id === Number(e.target.value),
+                );
+                setExamData((prev) => ({
+                  ...prev,
+                  department: selected?.name_en || "",
+                }));
 
-              const selected = departments.find(
-                (d) => d.id === Number(e.target.value),
-              );
-              setExamData((prev) => ({
-                ...prev,
-                department: selected?.name_en || "",
-              }));
-
-              clearFieldError("department");
-            }}
-          >
-            <option value="">Select Department</option>
-            {departments.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name_en}
-              </option>
-            ))}
-          </select>
-          {getErrorMessage("department") && (
-            <div className="text-red-500 text-xs mt-1.5">
-              {getErrorMessage("department")}
-            </div>
-          )}
-        </div>
+                clearFieldError("department");
+              }}
+            >
+              <option value="">Select Department</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name_en}
+                </option>
+              ))}
+            </select>
+            {getErrorMessage("department") && (
+              <div className="text-red-500 text-xs mt-1.5">
+                {getErrorMessage("department")}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

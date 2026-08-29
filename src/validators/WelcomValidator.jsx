@@ -3,7 +3,7 @@ import { useState } from "react";
 const useWelcomeValidation = () => {
   const [errors, setErrors] = useState({});
 
-  const validate = (formData) => {
+  const validate = (formData, hasNoDepartments = false) => {
     const newErrors = {};
 
     if (!formData.role) {
@@ -26,7 +26,7 @@ const useWelcomeValidation = () => {
     if (!formData.faculty) {
       newErrors.faculty = "Please select your faculty";
     }
-    if (!formData.department) {
+    if (!hasNoDepartments && !formData.department) {
       newErrors.department = "Please select your department";
     }
 

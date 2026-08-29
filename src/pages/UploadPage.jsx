@@ -47,6 +47,7 @@ export default function UploadPage() {
     const { isValid, errors: validationErrors } = validateExamForm(
       examData,
       file,
+      locations.hasNoDepartments,
     );
 
     if (!isValid) {

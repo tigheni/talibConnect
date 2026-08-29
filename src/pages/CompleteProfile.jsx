@@ -6,23 +6,7 @@ import useWelcomeValidation from "../validators/WelcomValidator";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/useAuth";
-
-const YEAR_OPTIONS = {
-  lmd: [
-    { value: "L1", label: "Licence 1" },
-    { value: "L2", label: "Licence 2" },
-    { value: "L3", label: "Licence 3" },
-    { value: "M1", label: "Master 1" },
-    { value: "M2", label: "Master 2" },
-  ],
-  engineering: [
-    { value: "1", label: "1st year" },
-    { value: "2", label: "2nd year" },
-    { value: "3", label: "3rd year" },
-    { value: "4", label: "4th year" },
-    { value: "5", label: "5th year" },
-  ],
-};
+import { YEAR_OPTIONS } from "../constants/uploadForm";
 
 export default function CompleteProfile() {
   const navigate = useNavigate();
@@ -35,7 +19,7 @@ export default function CompleteProfile() {
     faculty: "",
     department: "",
   });
-
+  const [hasNoDepartments, setHasNoDepartments] = useState(false);
   const [loading, setLoading] = useState(false);
   const {
     wilayas,
@@ -68,13 +52,34 @@ export default function CompleteProfile() {
 
     clearErrors(nameField);
   };
+  const handleFacultyChange = async (e) => {
+    const facultyId = e.target.value;
+    const facultyName = e.target.options[e.target.selectedIndex]?.text || "";
+    console.log(facultyId);
+    setSelectedFaculty(facultyId);
+    setSelectedDepartment("");
+    setFormData((prev) => ({ ...prev, faculty: facultyName, department: "" }));
+    clearErrors("faculty");
+
+    if (!facultyId) {
+      setHasNoDepartments(false);
+      return;
+    }
+
+    const { count } = await supabase
+      .from("departments")
+      .select("id", { count: "exact", head: true })
+      .eq("faculty_id", facultyId);
+
+    setHasNoDepartments(count === 0);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      // switching study system invalidates the previously picked year
+
       ...(name === "study_system" ? { year_of_study: "" } : {}),
     }));
 
@@ -85,7 +90,7 @@ export default function CompleteProfile() {
     e.preventDefault();
     if (loading) return;
 
-    const result = validate(formData);
+    const result = validate(formData, hasNoDepartments);
     if (!result.isValid) return;
 
     setLoading(true);
@@ -288,7 +293,7 @@ export default function CompleteProfile() {
               <select
                 name="faculty_id"
                 value={selectedFaculty}
-                onChange={handleLocationChange(setSelectedFaculty, "faculty")}
+                onChange={handleFacultyChange}
                 aria-invalid={!!errors.faculty}
                 className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
                 disabled={!selectedInstitution}
@@ -306,35 +311,38 @@ export default function CompleteProfile() {
             >
               {errors.faculty || "placeholder"}
             </div>
-
-            <div className="mb-5">
-              <label className="block text-gray-700 font-medium mb-1 text-sm">
-                Department:
-              </label>
-              <select
-                name="department_id"
-                value={selectedDepartment}
-                onChange={handleLocationChange(
-                  setSelectedDepartment,
-                  "department",
-                )}
-                aria-invalid={!!errors.department}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
-                disabled={!selectedFaculty}
-              >
-                <option value="">Select your department</option>
-                {departments?.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name_en}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div
-              className={`text-red-500 text-xs mt-1 ${errors.department ? "visible" : "invisible"}`}
-            >
-              {errors.department || "placeholder"}
-            </div>
+            {!hasNoDepartments && (
+              <>
+                <div className="mb-5">
+                  <label className="block text-gray-700 font-medium mb-1 text-sm">
+                    Department:
+                  </label>
+                  <select
+                    name="department_id"
+                    value={selectedDepartment}
+                    onChange={handleLocationChange(
+                      setSelectedDepartment,
+                      "department",
+                    )}
+                    aria-invalid={!!errors.department}
+                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#5ae4a8] disabled:opacity-50"
+                    disabled={!selectedFaculty}
+                  >
+                    <option value="">Select your department</option>
+                    {departments?.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name_en}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div
+                  className={`text-red-500 text-xs mt-1 ${errors.department ? "visible" : "invisible"}`}
+                >
+                  {errors.department || "placeholder"}
+                </div>
+              </>
+            )}
           </label>
           <div className="flex justify-center items-center gap-4">
             <button

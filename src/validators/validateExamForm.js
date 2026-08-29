@@ -1,4 +1,4 @@
-export const validateExamForm = (examData, file) => {
+export const validateExamForm = (examData, file, hasNoDepartments) => {
   const errors = {
     title: "",
     subject: "",
@@ -39,7 +39,7 @@ export const validateExamForm = (examData, file) => {
     isValid = false;
   }
 
-  if (!examData.department) {
+  if (!hasNoDepartments && !examData.department) {
     errors.department = "Department is required";
     isValid = false;
   }
