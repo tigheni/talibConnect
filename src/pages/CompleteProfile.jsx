@@ -56,7 +56,6 @@ export default function CompleteProfile() {
   const handleFacultyChange = async (e) => {
     const facultyId = e.target.value;
     const facultyName = e.target.options[e.target.selectedIndex]?.text || "";
-    console.log(facultyId);
     setSelectedFaculty(facultyId);
     setSelectedDepartment("");
     setFormData((prev) => ({ ...prev, faculty: facultyName, department: "" }));

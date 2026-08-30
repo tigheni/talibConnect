@@ -36,12 +36,15 @@ export function HomeHeader({ stats }) {
       .eq("status", "approved");
 
     if (error) {
-      throw error;
+      console.error("Error fetching subjects:", error);
+      return [];
     }
 
-    const subjects = [...new Set(data.map((item) => item.subject))];
+    const subjects = [
+      ...new Set((data || []).map((item) => item.subject).filter(Boolean)),
+    ];
 
-    setSubjectsLength(subjects.length - 10);
+    setSubjectsLength(Math.max(0, subjects.length - 10));
 
     return subjects.slice(0, 10);
   };
@@ -51,8 +54,12 @@ export function HomeHeader({ stats }) {
 
   useEffect(() => {
     const loadSubjects = async () => {
-      const data = await fetchSubjects();
-      setSubjects(data);
+      try {
+        const data = await fetchSubjects();
+        setSubjects(data);
+      } catch (error) {
+        console.error("Error loading subject suggestions:", error);
+      }
     };
     loadSubjects();
   }, []);
