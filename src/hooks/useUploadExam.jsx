@@ -2,7 +2,7 @@ import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
 
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../context/authContext/useAuth";
 
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);

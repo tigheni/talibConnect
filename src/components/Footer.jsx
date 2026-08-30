@@ -1,36 +1,8 @@
 import { Link } from "react-router-dom";
 
-const legalLinks = [
-  { to: "/privacy", label: "Privacy" },
-  { to: "/terms", label: "Terms" },
-  { to: "/contact", label: "Contact" },
-];
-
-function FooterHeading({ children }) {
-  return (
-    <h3 className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-neutral-200">
-      <span className="h-3 w-[3px] rounded-full bg-[#5AE4A8]" />
-      {children}
-    </h3>
-  );
-}
-
-function FooterLink({ to, children }) {
-  return (
-    <li>
-      <Link
-        to={to}
-        className="text-[14.5px] text-neutral-400 transition-colors duration-200 hover:text-[#5AE4A8]"
-      >
-        {children}
-      </Link>
-    </li>
-  );
-}
-
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-300 bg-[#f1ede6]">
+    <footer className="border-t border-slate-400 bg-[#f8fafc]">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <div>
           <div className="text-lg font-black tracking-tight text-slate-950">

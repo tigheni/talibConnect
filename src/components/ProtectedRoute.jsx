@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
-import { useAuth } from "../context/useAuth";
-import { useLoginModal } from "../context/LoginModalContext";
+import { useAuth } from "../context/authContext/useAuth";
+
+import { useLoginModal } from "../context/loginContext/LoginModalContext";
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();

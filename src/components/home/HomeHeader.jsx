@@ -35,16 +35,17 @@ export function HomeHeader({ stats }) {
       .select("subject")
       .eq("status", "approved");
 
-    const subjects = [...new Set(data.map((item) => item.subject))];
-
-    setSubjectsLength(subjects.length - 10);
-
     if (error) {
       throw error;
     }
 
+    const subjects = [...new Set(data.map((item) => item.subject))];
+
+    setSubjectsLength(subjects.length - 10);
+
     return subjects.slice(0, 10);
   };
+
   const [subjects, setSubjects] = useState([]);
   const [subjectsLength, setSubjectsLength] = useState([]);
 

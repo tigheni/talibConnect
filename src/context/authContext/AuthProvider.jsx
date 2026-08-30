@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
-import { getSession } from "../services/sessionService";
-import { isUserAdmin } from "../services/profiles";
+import { supabase } from "../../lib/supabase";
+import { getSession } from "../../services/sessionService";
+import { isUserAdmin } from "../../services/profiles";
 import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {

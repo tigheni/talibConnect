@@ -1,7 +1,5 @@
-import { createContext, useContext, useState } from "react";
-
-const LoginModalContext = createContext();
-
+import { useState } from "react";
+import { LoginModalContext } from "./loginModalContext";
 export function LoginModalProvider({ children }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/exams");
@@ -27,14 +25,4 @@ export function LoginModalProvider({ children }) {
       {children}
     </LoginModalContext.Provider>
   );
-}
-
-export function useLoginModal() {
-  const context = useContext(LoginModalContext);
-
-  if (!context) {
-    throw new Error("useLoginModal must be used inside LoginModalProvider");
-  }
-
-  return context;
 }

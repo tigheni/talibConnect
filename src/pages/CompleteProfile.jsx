@@ -5,7 +5,8 @@ import { supabase } from "../lib/supabase";
 import useWelcomeValidation from "../validators/WelcomValidator";
 import getAuthErrorMessage from "../validators/getAuthErrorMessage";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../context/authContext/useAuth";
+
 import { YEAR_OPTIONS } from "../constants/uploadForm";
 
 export default function CompleteProfile() {

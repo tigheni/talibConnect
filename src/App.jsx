@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { LoginModalProvider, useLoginModal } from "./context/LoginModalContext";
+import { AuthProvider } from "./context/authContext/AuthProvider.jsx";
+import { LoginModalProvider } from "./context/loginContext/LoginModalContext.jsx";
+import { useLoginModal } from "./context/loginContext/useLoginModal.js";
 import LoginModal from "./pages/Login.jsx";
 const Upload = lazy(() => import("./pages/UploadPage"));
 const MainLayout = lazy(() => import("./components/Mainlayout"));
