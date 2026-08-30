@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import usePasswordValidation from "../validators/passwordValidation";
 import { supabase } from "../lib/supabase";
-import { getSession } from "../services/sessionService";
+import { useAuth } from "../context/authContext/useAuth";
 
 export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +19,8 @@ export default function ResetPassword() {
     validatePasswords,
     clearErrors,
   } = usePasswordValidation();
+
+  const { session, loading: authLoading } = useAuth();
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get("code");
@@ -51,8 +53,6 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      const session = await getSession();
-
       if (!session) {
         setError(
           "Invalid or expired reset link. Please request a new password reset link.",
@@ -152,10 +152,14 @@ export default function ResetPassword() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || authLoading}
             className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
           >
-            {loading ? "Resetting..." : "Reset Password"}
+            {authLoading
+              ? "Verifying reset link..."
+              : loading
+                ? "Resetting..."
+                : "Reset Password"}
           </button>
         </form>
 
