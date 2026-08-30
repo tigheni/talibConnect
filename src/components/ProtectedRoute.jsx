@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import { useAuth } from "../context/authContext/useAuth";
 
-import { useLoginModal } from "../context/loginContext/LoginModalContext";
+import { useLoginModal } from "../context/loginContext/useLoginModal";
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();

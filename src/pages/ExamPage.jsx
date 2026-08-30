@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
 import ExamHeader from "../components/exams/ExamHeader";
@@ -16,33 +17,29 @@ const EXAMS_PER_PAGE = 9;
 export default function ExamPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [subjectFilter, setSubjectFilter] = useState(
-    () => searchParams.get("subject") || "",
-  );
+  const { viewMode, setViewMode, isMobile } = useMobile();
 
-  const [universityFilter, setUniversityFilter] = useState(
-    () => searchParams.get("university") || "",
-  );
-
-  const [systemFilter, setSystemFilter] = useState(
-    () => searchParams.get("system") || "",
-  );
-
-  const [yearFilter, setYearFilter] = useState(
-    () => searchParams.get("year") || "",
-  );
-
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [searchTerm, setSearchTerm] = useState(
-    () => searchParams.get("search") || "",
-  );
-
-  const [searchInput, setSearchInput] = useState(searchTerm);
   const searchTimeout = useRef(null);
 
-  const { viewMode, setViewMode, isMobile } = useMobile();
+  const universityFilter = searchParams.get("university") || "";
+  const subjectFilter = searchParams.get("subject") || "";
+  const systemFilter = searchParams.get("system") || "";
+  const yearFilter = searchParams.get("year") || "";
+  const searchTerm = searchParams.get("search") || "";
+
+  const [searchInput, setSearchInput] = useState(searchTerm);
+
+  const currentPage = Math.max(1, Number(searchParams.get("page")) || 1);
+
+  useEffect(() => {
+    setSearchInput(searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(searchTimeout.current);
+    };
+  }, []);
 
   const filters = {
     searchTerm,
@@ -58,32 +55,96 @@ export default function ExamPage() {
 
   const totalPages = Math.ceil(totalCount / EXAMS_PER_PAGE);
 
+  const updateParams = (updates = {}, resetPage = true) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+
+    if (resetPage) {
+      params.delete("page");
+    }
+
+    setSearchParams(params);
+  };
+
+  const handleUniversityChange = (value) => {
+    updateParams({
+      university: value,
+    });
+  };
+
+  const handleSubjectChange = (value) => {
+    updateParams({
+      subject: value,
+    });
+  };
+
+  const handleSystemChange = (value) => {
+    updateParams({
+      system: value,
+      year: "",
+    });
+  };
+
+  const handleYearChange = (value) => {
+    updateParams({
+      year: value,
+    });
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+
+    setSearchInput(value);
+
+    clearTimeout(searchTimeout.current);
+
+    searchTimeout.current = setTimeout(() => {
+      updateParams({
+        search: value,
+      });
+    }, 300);
+  };
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (page > 1) {
+      params.set("page", page);
+    } else {
+      params.delete("page");
+    }
+
+    setSearchParams(params);
+  };
+
   const activeFilters = [
     universityFilter && {
       key: "university",
       label: universityFilter,
       clear: () => {
-        const params = new URLSearchParams(searchParams);
-
-        setUniversityFilter("");
-        params.delete("university");
-        setSearchParams(params);
-
-        setCurrentPage(1);
+        updateParams({
+          university: "",
+        });
       },
     },
+
     subjectFilter && {
       key: "subject",
       label: subjectFilter,
       clear: () => {
-        const params = new URLSearchParams(searchParams);
-
-        setSubjectFilter("");
-        params.delete("subject");
-        setSearchParams(params);
-        setCurrentPage(1);
+        updateParams({
+          subject: "",
+        });
       },
     },
+
     systemFilter && {
       key: "system",
       label:
@@ -93,29 +154,40 @@ export default function ExamPage() {
             ? "Engineering"
             : "Medical",
       clear: () => {
-        const params = new URLSearchParams(searchParams);
-
-        setSystemFilter("");
-        setYearFilter("");
-        params.delete("system");
-        params.delete("year");
-        setSearchParams(params);
-        setCurrentPage(1);
+        updateParams({
+          system: "",
+          year: "",
+        });
       },
     },
+
     yearFilter && {
       key: "year",
       label: yearFilter,
       clear: () => {
-        const params = new URLSearchParams(searchParams);
-
-        setYearFilter("");
-        params.delete("year");
-        setSearchParams(params);
-        setCurrentPage(1);
+        updateParams({
+          year: "",
+        });
       },
     },
   ].filter(Boolean);
+
+  const handleClearFilters = () => {
+    clearTimeout(searchTimeout.current);
+
+    setSearchInput("");
+
+    const params = new URLSearchParams(searchParams);
+
+    params.delete("university");
+    params.delete("subject");
+    params.delete("system");
+    params.delete("year");
+    params.delete("search");
+    params.delete("page");
+
+    setSearchParams(params);
+  };
 
   if (error) {
     return (
@@ -124,6 +196,7 @@ export default function ExamPage() {
           <h1 className="text-2xl font-black text-slate-950">
             Unable to load exams
           </h1>
+
           <p className="mt-3 text-sm text-slate-600">
             Something went wrong while loading the exam archive. Please try
             again.
@@ -135,52 +208,24 @@ export default function ExamPage() {
 
   return (
     <main className="min-h-screen bg-gray-50/40">
-      <ExamHeader
-        examCount={totalCount}
-        searchTerm={searchInput}
-        onSearchChange={(e) => {
-          const value = e.target.value;
-          setSearchInput(value);
+      <ExamHeader examCount={totalCount} />
 
-          clearTimeout(searchTimeout.current);
-          searchTimeout.current = setTimeout(() => {
-            setSearchTerm(value);
-            setCurrentPage(1);
-          }, 300);
-        }}
-        filtersOpen={filtersOpen}
-        onToggleFilters={() => setFiltersOpen((open) => !open)}
+      <ExamFilters
+        universityFilter={universityFilter}
+        setUniversityFilter={handleUniversityChange}
+        subjectFilter={subjectFilter}
+        setSubjectFilter={handleSubjectChange}
+        systemFilter={systemFilter}
+        setSystemFilter={handleSystemChange}
+        yearFilter={yearFilter}
+        setYearFilter={handleYearChange}
+        institutions={institutions}
+        subjects={subjects}
+        systems={systems}
+        searchTerm={searchInput}
+        onSearchChange={handleSearchChange}
         activeFilterCount={activeFilters.length}
       />
-
-      {filtersOpen && (
-        <ExamFilters
-          universityFilter={universityFilter}
-          setUniversityFilter={(value) => {
-            setUniversityFilter(value);
-            setCurrentPage(1);
-          }}
-          subjectFilter={subjectFilter}
-          setSubjectFilter={(value) => {
-            setSubjectFilter(value);
-            setCurrentPage(1);
-          }}
-          systemFilter={systemFilter}
-          setSystemFilter={(value) => {
-            setSystemFilter(value);
-            setCurrentPage(1);
-          }}
-          yearFilter={yearFilter}
-          setYearFilter={(value) => {
-            setYearFilter(value);
-            setCurrentPage(1);
-          }}
-          institutions={institutions}
-          subjects={subjects}
-          systems={systems}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
 
       <ExamToolbar
         examCount={totalCount}
@@ -189,6 +234,7 @@ export default function ExamPage() {
         onViewModeChange={setViewMode}
         isMobile={isMobile}
       />
+
       {loading && (
         <div className="py-4">
           <LoadingSpinner />
@@ -199,28 +245,13 @@ export default function ExamPage() {
         <ExamResults
           exams={exams}
           viewMode={viewMode}
-          onClearFilters={() => {
-            const params = new URLSearchParams(searchParams);
-            clearTimeout(searchTimeout.current);
-            setSearchInput("");
-            setSearchTerm("");
-            setSubjectFilter("");
-            setUniversityFilter("");
-            setSystemFilter("");
-            setYearFilter("");
-            params.delete("university");
-            params.delete("subject");
-            params.delete("system");
-            params.delete("year");
-            setSearchParams(params);
-            setCurrentPage(1);
-          }}
+          onClearFilters={handleClearFilters}
         />
 
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          onPageChange={handlePageChange}
         />
       </div>
     </main>
