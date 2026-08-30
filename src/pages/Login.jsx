@@ -76,7 +76,6 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
       );
     } finally {
       setLoading(false);
-      onClose();
     }
   };
 

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
@@ -53,6 +53,7 @@ function AppContent() {
           <Route path="/exam/:id" element={<ExamViewer />} />
 
           <Route element={<AuthLayout />}>
+            <Route path="/login" element={<LoginRoute />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -69,6 +70,12 @@ function AppContent() {
       </Suspense>
     </>
   );
+}
+
+function LoginRoute() {
+  const navigate = useNavigate();
+
+  return <LoginModal onClose={() => navigate("/")} />;
 }
 
 export default function App() {
