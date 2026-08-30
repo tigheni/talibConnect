@@ -87,7 +87,9 @@ export default function NavBoard() {
               <div className="hidden items-center gap-2.5 pr-1 sm:flex">
                 <div className="relative">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#5ae4a8] to-[#2f9e6d] text-sm font-bold text-white ring-2 ring-[#5ae4a8]/25 ring-offset-2 ring-offset-white">
-                    {user.user_metadata?.username.charAt(0).toUpperCase()}
+                    {(user.user_metadata?.username || user.email || "U")
+                      .charAt(0)
+                      .toUpperCase()}
                   </div>
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#5ae4a8]" />
                 </div>

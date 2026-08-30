@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/authContext/AuthProvider.jsx";
 import { LoginModalProvider } from "./context/loginContext/LoginModalContext.jsx";
 import { useLoginModal } from "./context/loginContext/useLoginModal.js";
 import LoginModal from "./pages/Login.jsx";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 const Upload = lazy(() => import("./pages/UploadPage"));
 const MainLayout = lazy(() => import("./components/Mainlayout"));
 const AuthLayout = lazy(() => import("./layouts/AuthLayout"));
@@ -22,7 +22,6 @@ const Admin = lazy(() => import("./pages/Admin"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CompleteProfile = lazy(() => import("./pages/CompleteProfile"));
-
 function AppContent() {
   const { isLoginOpen, closeLogin, redirectTo } = useLoginModal();
 
@@ -31,7 +30,7 @@ function AppContent() {
       <Toaster position="top-right" />
       <ScrollToTop />
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />

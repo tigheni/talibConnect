@@ -16,6 +16,7 @@ export default function Home() {
     { id: 3, number: "0+", label: "Active Students" },
   ]);
   const [recentExams, setRecentExams] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,6 +47,13 @@ export default function Home() {
       const userCount = userError ? 0 : userData || 0;
 
       const { data: uniData, error: uniError } = institutionsResult;
+
+      const availableSubjects = [
+        ...new Set(
+          (examsData || []).map((item) => item.subject).filter(Boolean),
+        ),
+      ];
+      setSubjects(availableSubjects);
 
       let universityCount = 0;
       if (!uniError && uniData) {
@@ -81,7 +89,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen  bg-slate-50 text-slate-950">
-      <HomeHeader stats={stats} />
+      <HomeHeader stats={stats} subjects={subjects} />
 
       <FeatureSection />
 

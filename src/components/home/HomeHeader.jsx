@@ -1,8 +1,7 @@
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../lib/supabase";
 import { StatCard } from "../../ui/StatCard";
-export function HomeHeader({ stats }) {
+export function HomeHeader({ stats, subjects = [] }) {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef(null);
@@ -29,40 +28,9 @@ export function HomeHeader({ stats }) {
     searchInputRef.current?.focus();
   };
 
-  const fetchSubjects = async () => {
-    const { data, error } = await supabase
-      .from("exams")
-      .select("subject")
-      .eq("status", "approved");
+  const subjectSuggestions = subjects.slice(0, 12);
+  const subjectsLength = Math.max(0, subjects.length - 12);
 
-    if (error) {
-      console.error("Error fetching subjects:", error);
-      return [];
-    }
-
-    const subjects = [
-      ...new Set((data || []).map((item) => item.subject).filter(Boolean)),
-    ];
-
-    setSubjectsLength(Math.max(0, subjects.length - 10));
-
-    return subjects.slice(0, 10);
-  };
-
-  const [subjects, setSubjects] = useState([]);
-  const [subjectsLength, setSubjectsLength] = useState([]);
-
-  useEffect(() => {
-    const loadSubjects = async () => {
-      try {
-        const data = await fetchSubjects();
-        setSubjects(data);
-      } catch (error) {
-        console.error("Error loading subject suggestions:", error);
-      }
-    };
-    loadSubjects();
-  }, []);
   return (
     <header className="relative min-h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50 pt-20 lg:h-dvh lg:pt-0">
       <div className="mx-auto flex h-full max-w-7xl items-center px-4  sm:px-4 lg:px-8 lg:py-0">
@@ -143,7 +111,7 @@ export function HomeHeader({ stats }) {
             </form>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              {subjects.map((subject) => (
+              {subjectSuggestions.map((subject) => (
                 <button
                   key={subject}
                   type="button"

@@ -18,6 +18,17 @@ export function useDownloadExam() {
     setError(null);
 
     try {
+      if (!user) {
+        toast(
+          <div className="flex items-center gap-3">
+            <span>🔒 Please log in to download this file.</span>
+          </div>,
+        );
+
+        openLogin("/exams");
+
+        return;
+      }
       const { data: signedUrlData, error: signedUrlError } =
         await supabase.storage
           .from("exams")
@@ -28,20 +39,13 @@ export function useDownloadExam() {
       }
 
       const response = await fetch(signedUrlData.signedUrl);
-      if (!user) {
-        toast(
-          <div className="flex items-center gap-3">
-            <span>🔒 Please log in to download this file.</span>
-          </div>,
-        );
-
-        openLogin(true);
-
-        return;
-      }
 
       if (!response.ok) {
-        console.error(error);
+        console.error(
+          "PDF download failed:",
+          response.status,
+          response.statusText,
+        );
         throw new Error("Failed to fetch file");
       }
       toast.loading("Downloading", { id: "download" });
