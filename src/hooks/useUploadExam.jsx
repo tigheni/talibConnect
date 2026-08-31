@@ -8,8 +8,12 @@ export function useUploadExam() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  const uploadExam = async (examData, file) => {
-    const { isValid, errors } = validateExamForm(examData, file);
+  const uploadExam = async (examData, file, hasNoDepartments = false) => {
+    const { isValid, errors } = validateExamForm(
+      examData,
+      file,
+      hasNoDepartments,
+    );
     if (!isValid) return { success: false, errors };
 
     setLoading(true);
@@ -46,7 +50,7 @@ export function useUploadExam() {
         file_path: filePath,
         file_type: "PDF",
         uploader_id: uploaderId,
-        teacher_name: examData.teacher_name || "Anonymous",
+        teacher_name: examData.teacher_name?.trim() || "Anonymous",
         teacher_consent: examData.teacher_consent,
         systems: examData.systems || [],
       });

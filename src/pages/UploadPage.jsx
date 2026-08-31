@@ -56,7 +56,7 @@ export default function UploadPage() {
       return;
     }
 
-    const result = await uploadExam(examData, file);
+    const result = await uploadExam(examData, file, locations.hasNoDepartments);
 
     if (result.success) {
       toast.success("Exam uploaded successfully!");
