@@ -84,8 +84,6 @@ export function useExams(filters = {}, page = 1) {
     let active = true;
 
     const loadExams = async () => {
-      await Promise.resolve();
-
       if (active) {
         fetchExams();
       }

@@ -37,8 +37,11 @@ const useWelcomeValidation = () => {
   const clearErrors = (field) =>
     setErrors((prev) => {
       if (!(field in prev)) return prev;
-      const { [field]: _, ...rest } = prev;
-      return rest;
+
+      const nextErrors = { ...prev };
+      delete nextErrors[field];
+
+      return nextErrors;
     });
 
   return { errors, validate, clearErrors };

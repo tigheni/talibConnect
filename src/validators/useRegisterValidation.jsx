@@ -52,8 +52,10 @@ const useRegisterValidation = () => {
 
   const clearErrors = (field) =>
     setErrors((prev) => {
-      const { [field]: _, ...rest } = prev;
-      return rest;
+      const nextErrors = { ...prev };
+      delete nextErrors[field];
+
+      return nextErrors;
     });
 
   return {

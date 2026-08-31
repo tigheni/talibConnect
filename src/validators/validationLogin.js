@@ -1,11 +1,15 @@
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function validateLoginForm({ email, password }) {
   const errors = {
     email: "",
     password: "",
   };
+  const mail = email?.trim();
 
-  if (!email) {
+  if (!mail) {
     errors.email = "Email is required";
+  } else if (!EMAIL_REGEX.test(mail)) {
+    errors.email = "Please enter a valid email address";
   }
 
   if (!password) {

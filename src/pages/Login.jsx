@@ -112,7 +112,7 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="w-full">
+        <form onSubmit={handleSubmit} className="w-full" noValidate>
           <label
             htmlFor="email"
             className="block text-gray-700 font-medium mb-1 text-sm"
