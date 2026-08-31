@@ -121,13 +121,14 @@ export function HomeHeader({ stats, subjects = [] }) {
                   {subject}
                 </button>
               ))}
-              <button
-                key={subjectsLength}
-                type="button"
-                className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-950 hover:text-slate-950"
-              >
-                + {subjectsLength}
-              </button>
+              {subjectsLength > 0 && (
+                <span
+                  key={subjectsLength}
+                  className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-slate-950 hover:text-slate-950"
+                >
+                  + {subjectsLength}
+                </span>
+              )}
             </div>
           </div>
           <div className="hidden lg:flex lg:flex-col lg:justify-center lg:gap-4">

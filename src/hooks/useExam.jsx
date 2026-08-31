@@ -50,7 +50,7 @@ export function useExams(filters = {}, page = 1) {
       );
     }
 
-    if (filters.yearFilter) {
+    if (filters.yearFilter && filters.systemFilter) {
       query = query.contains(
         "systems",
         JSON.stringify([
@@ -81,7 +81,21 @@ export function useExams(filters = {}, page = 1) {
   ]);
 
   useEffect(() => {
-    fetchExams();
+    let active = true;
+
+    const loadExams = async () => {
+      await Promise.resolve();
+
+      if (active) {
+        fetchExams();
+      }
+    };
+
+    loadExams();
+
+    return () => {
+      active = false;
+    };
   }, [fetchExams]);
 
   return {

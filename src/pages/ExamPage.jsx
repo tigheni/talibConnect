@@ -32,6 +32,8 @@ export default function ExamPage() {
   const currentPage = Math.max(1, Number(searchParams.get("page")) || 1);
 
   useEffect(() => {
+    // This state intentionally mirrors the URL after navigation.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchInput(searchTerm);
   }, [searchTerm]);
 
