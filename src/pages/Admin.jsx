@@ -83,10 +83,27 @@ export default function Admin() {
   };
 
   const handleReject = async (uuid) => {
-    const { error } = await supabase.from("exams").delete().eq("uuid", uuid);
+    const exam = pendingExams.find((item) => item.uuid === uuid);
 
-    if (error) {
-      setMessage(error.message);
+    if (!exam) {
+      setMessage("Exam not found.");
+      return;
+    }
+    const { error: storageError } = await supabase.storage
+      .from("exams")
+      .remove([exam.file_path]);
+
+    if (storageError) {
+      setMessage(storageError.message);
+      return;
+    }
+
+    const { error: deleteError } = await supabase
+      .from("exams")
+      .delete()
+      .eq("uuid", uuid);
+    if (deleteError) {
+      setMessage(deleteError.message);
       return;
     }
 
