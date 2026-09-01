@@ -31,10 +31,14 @@ export function InstitutionSection({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+          <label
+            htmlFor="wilaya"
+            className="block text-gray-700 font-medium mb-1.5 text-sm"
+          >
             Wilaya
           </label>
           <select
+            id="wilaya"
             value={selectedWilaya}
             onChange={(e) => {
               const selected = wilayas.find(
@@ -67,12 +71,16 @@ export function InstitutionSection({
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+          <label
+            htmlFor="institution"
+            className="block text-gray-700 font-medium mb-1.5 text-sm"
+          >
             Institution
           </label>
           <select
             className={`${inputBase} ${getErrorClass("institution")}`}
             value={selectedInstitution}
+            id="institution"
             disabled={!selectedWilaya}
             onChange={(e) => {
               const selected = institutions.find(
@@ -103,13 +111,17 @@ export function InstitutionSection({
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+          <label
+            htmlFor="faculty"
+            className="block text-gray-700 font-medium mb-1.5 text-sm"
+          >
             Faculty
           </label>
           <select
             className={`${inputBase} ${getErrorClass("faculty")}`}
             value={selectedFaculty}
             disabled={!selectedInstitution}
+            id="faculty"
             onChange={(e) => {
               const selected = faculties.find(
                 (f) => f.id === Number(e.target.value),
@@ -138,10 +150,14 @@ export function InstitutionSection({
         </div>
         {!hasNoDepartments && (
           <div>
-            <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+            <label
+              htmlFor="department"
+              className="block text-gray-700 font-medium mb-1.5 text-sm"
+            >
               Department
             </label>
             <select
+              id="department"
               value={selectedDepartment}
               className={`${inputBase} ${getErrorClass("department")}`}
               disabled={!selectedFaculty}

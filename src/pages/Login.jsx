@@ -107,7 +107,10 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
         </Link>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full">
+          <div
+            role="alert"
+            className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full"
+          >
             {error}
           </div>
         )}
@@ -127,10 +130,13 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
             value={formData.email}
             placeholder="Email"
             onChange={handleChange}
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby="login-email-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
 
           <div
+            id="login-email-error"
             className={`text-red-500 text-xs mt-1 ${
               fieldErrors.email ? "visible" : "invisible"
             }`}
@@ -152,10 +158,13 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
             value={formData.password}
             placeholder="Password"
             onChange={handleChange}
+            aria-invalid={!!fieldErrors.password}
+            aria-describedby="login-password-error"
             className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-[#5ae4a8] text-sm"
           />
 
           <div
+            id="login-password-error"
             className={`text-red-500 text-xs mt-1 ${
               fieldErrors.password ? "visible" : "invisible"
             }`}

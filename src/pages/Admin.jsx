@@ -52,7 +52,8 @@ export default function Admin() {
       if (cancelled) return;
 
       if (error) {
-        setMessage(error.message);
+        console.error("Admin action failed:", error);
+        setMessage("Something went wrong. Please try again.");
       } else {
         setPendingExams(data || []);
       }
@@ -74,7 +75,8 @@ export default function Admin() {
       .eq("uuid", uuid);
 
     if (error) {
-      setMessage(error.message);
+      console.error("Admin action failed:", error);
+      setMessage("Something went wrong. Please try again.");
       return;
     }
 
@@ -94,7 +96,8 @@ export default function Admin() {
       .remove([exam.file_path]);
 
     if (storageError) {
-      setMessage(storageError.message);
+      console.error("Admin action failed:", storageError.message);
+      setMessage("Something went wrong. Please try again.");
       return;
     }
 
@@ -103,7 +106,8 @@ export default function Admin() {
       .delete()
       .eq("uuid", uuid);
     if (deleteError) {
-      setMessage(deleteError.message);
+      console.error("Admin action failed", deleteError.message);
+      setMessage("Something went wrong. Please try again.");
       return;
     }
 
@@ -245,7 +249,10 @@ export default function Admin() {
                               .createSignedUrl(exam.file_path, 60 * 60);
 
                             if (error) {
-                              setMessage(error.message);
+                              console.error("Admin action failed:", error);
+                              setMessage(
+                                "Something went wrong. Please try again.",
+                              );
                               return;
                             }
 

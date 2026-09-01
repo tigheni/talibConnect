@@ -18,11 +18,15 @@ export function BasicInfoSection({
       />
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+        <label
+          htmlFor="title"
+          className="block text-gray-700 font-medium mb-1.5 text-sm"
+        >
           Title
         </label>
         <input
           type="text"
+          id="title"
           name="title"
           placeholder="EX: Waves and vibrations"
           value={examData.title}
@@ -37,11 +41,15 @@ export function BasicInfoSection({
       </div>
 
       <div>
-        <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+        <label
+          htmlFor="subject"
+          className="block text-gray-700 font-medium mb-1.5 text-sm"
+        >
           Subject
         </label>
         <input
           type="text"
+          id="subject"
           name="subject"
           placeholder="e.g., Computer Science, Law, Biochemistry..."
           value={examData.subject}

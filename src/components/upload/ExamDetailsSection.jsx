@@ -16,11 +16,15 @@ export function ExamDetailsSection({
       />
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-1.5 text-sm">
+        <label
+          htmlFor="year"
+          className="block text-gray-700 font-medium mb-1.5 text-sm"
+        >
           Exam year
         </label>
         <input
           type="number"
+          id="year"
           name="year"
           placeholder="e.g., 2024"
           value={examData.year}
@@ -36,7 +40,10 @@ export function ExamDetailsSection({
       </div>
 
       <div className="mb-4">
-        <label className="flex items-center gap-1.5 text-gray-700 font-medium mb-1.5 text-sm">
+        <label
+          htmlFor="teacher_name"
+          className="flex items-center gap-1.5 text-gray-700 font-medium mb-1.5 text-sm"
+        >
           <UserCircle className="w-4 h-4 text-gray-400" />
           Teacher <span className="text-gray-400 font-normal">(optional)</span>
         </label>
@@ -47,6 +54,7 @@ export function ExamDetailsSection({
         <input
           type="text"
           name="teacher_name"
+          id="teacher_name"
           placeholder="e.g., Dr. Mohamed Kader"
           value={examData.teacher_name}
           onChange={handleChange}
@@ -59,9 +67,13 @@ export function ExamDetailsSection({
         )}
       </div>
 
-      <label className="flex items-center gap-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 cursor-pointer">
+      <label
+        htmlFor="teacher_consent"
+        className="flex items-center gap-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 cursor-pointer"
+      >
         <input
           type="checkbox"
+          id="teacher_consent"
           name="teacher_consent"
           checked={examData.teacher_consent}
           onChange={handleChange}
