@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "worker:dev": "wrangler dev --config wrangler.jsonc",
-    "worker:deploy": "wrangler deploy --config wrangler.jsonc"
+    "worker:dev": "wrangler dev --config .wrangler.jsonc",
+    "worker:deploy": "wrangler deploy --config .wrangler.jsonc"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.1",

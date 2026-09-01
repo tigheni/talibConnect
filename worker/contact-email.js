@@ -5,7 +5,13 @@ const jsonHeaders = {
 };
 
 function corsHeaders(origin, env) {
-  const allowedOrigin = env.CORS_ORIGIN || origin || "*";
+  const allowedOrigins = (env.CORS_ORIGIN || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const allowedOrigin = allowedOrigins.includes(origin)
+    ? origin
+    : allowedOrigins[0] || origin || "*";
 
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
@@ -250,11 +256,9 @@ export default {
     try {
       await env.CONTACT_EMAIL.send(emailMessage);
     } catch (error) {
+      console.error("Email provider error:", error);
       return jsonResponse(
-        {
-          error: "Failed to send email.",
-          providerError: error.message,
-        },
+        { error: "Failed to send email." },
         502,
         origin,
         env,

@@ -41,7 +41,9 @@ export default function Contact() {
         setFormData({ name: "", email: "", message: "" });
         setTimeout(() => setStatus(""), 3000);
       } else {
-        toast.error(" Failed to send. Please try again.");
+        const errorData = await res.json().catch(() => null);
+        setStatus("error");
+        toast.error(errorData?.error || "Failed to send. Please try again.");
       }
     } catch (err) {
       toast.error(" Failed to send. Please try again.");
