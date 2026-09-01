@@ -12,10 +12,12 @@ dist-ssr
 *.local
 data
 public
+!public/
+public/*
+!public/_headers
 scripts/import-kuliya.js
 worker
 wrangler.jsonc
-_headers
 .vscode/*
 !.vscode/extensions.json
 .idea
