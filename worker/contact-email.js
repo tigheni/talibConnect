@@ -178,6 +178,17 @@ function validateContactForm(data) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: "Please provide a valid email address." };
   }
+  if (name.length > 100) {
+    return { error: "Name is too long." };
+  }
+
+  if (email.length > 254) {
+    return { error: "Email is too long." };
+  }
+
+  if (message.length > 5000) {
+    return { error: "Message is too long." };
+  }
 
   return { value: { name, email, message } };
 }
