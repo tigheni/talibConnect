@@ -6,7 +6,7 @@ import { useAuth } from "../context/authContext/useAuth";
 
 export function useUploadExam() {
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const uploadExam = async (examData, file, hasNoDepartments = false) => {
     const { isValid, errors } = validateExamForm(
@@ -50,6 +50,7 @@ export function useUploadExam() {
         file_path: filePath,
         file_type: "PDF",
         uploader_id: uploaderId,
+        ...(isAdmin ? { uploader_name: "admin" } : {}),
         teacher_name: examData.teacher_name?.trim() || "Anonymous",
         teacher_consent: examData.teacher_consent,
         systems: examData.systems || [],
