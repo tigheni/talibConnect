@@ -336,7 +336,7 @@ export default function CompleteProfile() {
                 "institution",
               )}
               aria-invalid={!!errors.institution}
-              className="w-full border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl  border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!selectedWilaya}
             >
               <option value="">Select your university</option>
@@ -371,7 +371,7 @@ export default function CompleteProfile() {
               value={selectedFaculty}
               onChange={handleFacultyChange}
               aria-invalid={!!errors.faculty}
-              className="w-full border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!selectedInstitution}
             >
               <option value="">Select your faculty</option>
@@ -392,7 +392,7 @@ export default function CompleteProfile() {
               <div className="mb-5">
                 <label
                   htmlFor="department"
-                  className="block text-gray-700 font-medium mb-1 text-sm"
+                  className="block rounded-xl text-gray-700 font-medium mb-1 text-sm"
                 >
                   Department:
                 </label>
@@ -405,7 +405,7 @@ export default function CompleteProfile() {
                     "department",
                   )}
                   aria-invalid={!!errors.department}
-                  className="w-full border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="w-full rounded-xl border border-[#c9d8cc] bg-[#f7f8f2] px-3 py-3 text-sm text-[#18352a] outline-none transition focus:border-[#2f9e6d] focus:ring-2 focus:ring-[#5ae4a8]/25 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={!selectedFaculty}
                 >
                   <option value="">Select your department</option>
