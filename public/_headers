@@ -6,3 +6,9 @@
   X-XSS-Protection: 1; mode=block
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   Content-Security-Policy: default-src 'self'; script-src 'self' https://tntrcjrfdulffqnqssek.supabase.co https://*.supabase.co 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://tntrcjrfdulffqnqssek.supabase.co wss://tntrcjrfdulffqnqssek.supabase.co https://*.supabase.co https://talibconnect-email.talibconnect-email.workers.dev; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

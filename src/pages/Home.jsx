@@ -20,71 +20,78 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
+
     const fetchAllData = async () => {
       setLoading(true);
 
-      const [examsResult, userResult, institutionsResult] = await Promise.all([
-        supabase
-          .from("exams")
-          .select(
-            "title,subject,uuid,file_type,institution,year,downloads,uploader_name,teacher_name",
-          )
-          .eq("status", "approved")
-          .order("created_at", { ascending: false }),
-        supabase.rpc("get_user_count"),
-        supabase.from("exams").select("institution").eq("status", "approved"),
-      ]);
+      // Only the six cards are needed to paint the homepage. Keep aggregate
+      // queries out of the critical render path below.
+      const examsResult = await supabase
+        .from("exams")
+        .select(
+          "title,subject,uuid,file_type,institution,year,downloads,uploader_name,teacher_name",
+        )
+        .eq("status", "approved")
+        .order("created_at", { ascending: false })
+        .limit(6);
 
       const { data: examsData, error: examsError } = examsResult;
 
       if (examsError) {
         console.error("Error fetching exams:", examsError);
-        setLoading(false);
+        if (active) setLoading(false);
         return;
       }
-
-      const { data: userData, error: userError } = userResult;
-      const userCount = userError ? 0 : userData || 0;
-
-      const { data: uniData, error: uniError } = institutionsResult;
 
       const availableSubjects = [
         ...new Set(
           (examsData || []).map((item) => item.subject).filter(Boolean),
         ),
       ];
+      if (!active) return;
       setSubjects(availableSubjects);
-
-      let universityCount = 0;
-      if (!uniError && uniData) {
-        const uniqueUniversities = [
-          ...new Set(uniData.map((item) => item.institution).filter(Boolean)),
-        ];
-        universityCount = uniqueUniversities?.length;
-      }
-
-      setRecentExams((examsData || []).slice(0, 6));
-      setStats([
-        {
-          id: 1,
-          number: `${formatNumber(examsData?.length || 0)}+`,
-          label: "Exams Available",
-        },
-        {
-          id: 2,
-          number: `${formatNumber(universityCount)}+`,
-          label: "Institutions",
-        },
-        {
-          id: 3,
-          number: `${formatNumber(userCount)}+`,
-          label: "Active Students",
-        },
-      ]);
+      setRecentExams(examsData || []);
       setLoading(false);
+
+      // Stats are useful but do not affect the initial layout/content.
+      const loadStats = async () => {
+        const [userResult, examsCountResult, institutionsResult] = await Promise.all([
+          supabase.rpc("get_user_count"),
+          supabase.from("exams").select("uuid", { count: "exact", head: true }).eq("status", "approved"),
+          supabase.from("exams").select("institution, subject").eq("status", "approved"),
+        ]);
+
+        if (!active) return;
+        const userCount = userResult.error ? 0 : userResult.data || 0;
+        const examCount = examsCountResult.error ? 0 : examsCountResult.count || 0;
+        const { data: uniData, error: uniError } = institutionsResult;
+        const universityCount = !uniError && uniData
+          ? new Set(uniData.map((item) => item.institution).filter(Boolean)).size
+          : 0;
+        const allSubjects = !uniError && uniData
+          ? [...new Set(uniData.map((item) => item.subject).filter(Boolean))]
+          : availableSubjects;
+
+        setStats([
+          { id: 1, number: `${formatNumber(examCount)}+`, label: "Exams Available" },
+          { id: 2, number: `${formatNumber(universityCount)}+`, label: "Institutions" },
+          { id: 3, number: `${formatNumber(userCount)}+`, label: "Active Students" },
+        ]);
+        setSubjects(allSubjects);
+      };
+
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(loadStats, { timeout: 2000 });
+      } else {
+        window.setTimeout(loadStats, 0);
+      }
     };
 
     fetchAllData();
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (

@@ -32,8 +32,8 @@ export function HomeHeader({ stats, subjects = [] }) {
   const subjectsLength = Math.max(0, subjects.length - 12);
 
   return (
-    <header className="relative min-h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50 pt-20 lg:h-dvh lg:pt-0">
-      <div className="mx-auto flex h-full max-w-7xl items-center px-4  sm:px-4 lg:px-8 lg:py-0">
+    <header className="relative min-h-dvh overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50 pt-20 md:min-h-0 md:py-16 lg:h-dvh lg:py-0 lg:pt-0">
+      <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-4 md:h-auto lg:px-8 lg:py-0">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="relative">
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#237a54]">
