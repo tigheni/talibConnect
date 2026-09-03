@@ -17,6 +17,7 @@ public/*
 !public/_headers
 !public/robots.txt
 !public/sitemap.xml
+!public/onglet.png
 scripts/import-kuliya.js
 worker
 wrangler.jsonc

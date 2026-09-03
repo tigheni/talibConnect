@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { HomeHeader } from "../components/home/HomeHeader";
 import { FeatureSection } from "../components/home/FeatureSection";
+import SEO from "../components/SEO";
 function formatNumber(value) {
   const num = Number(value) || 0;
   return new Intl.NumberFormat("en-US").format(num);
@@ -95,7 +96,13 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen  bg-slate-50 text-slate-950">
+    <>
+      <SEO
+        title="TalibConnect | Algerian Exam Archive"
+        description="Find and share past exam papers from universities across Algeria on TalibConnect."
+        path="/"
+      />
+      <main className="min-h-screen  bg-slate-50 text-slate-950">
       <HomeHeader stats={stats} subjects={subjects} />
 
       <FeatureSection />
@@ -162,6 +169,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

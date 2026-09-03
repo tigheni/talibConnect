@@ -11,6 +11,7 @@ import useMobile from "../hooks/useMobile";
 
 import { useExams } from "../hooks/useExam";
 import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
+import SEO from "../components/SEO";
 
 const EXAMS_PER_PAGE = 9;
 
@@ -209,7 +210,13 @@ export default function ExamPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50/40">
+    <>
+      <SEO
+        title="Past Exams from Algerian Universities | TalibConnect"
+        description="Browse and search approved past exam papers by subject, university, teacher, and year."
+        path="/exams"
+      />
+      <main className="min-h-screen bg-gray-50/40">
       <ExamHeader examCount={totalCount} />
 
       <ExamFilters
@@ -256,6 +263,7 @@ export default function ExamPage() {
           onPageChange={handlePageChange}
         />
       </div>
-    </main>
+      </main>
+    </>
   );
 }
