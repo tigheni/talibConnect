@@ -8,7 +8,7 @@ export default function ExamToolbar({
   activeFilters,
 }) {
   return (
-    <div className="max-w-5xl mx-auto px-6 pt-5 pb-2 flex flex-wrap items-center justify-between gap-3">
+    <div className="max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-12 pt-5 pb-2 flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm text-gray-500">
           <span className="font-semibold text-gray-800">{examCount}</span> exam

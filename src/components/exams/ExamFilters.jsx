@@ -29,7 +29,7 @@ export default function ExamFilters({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto">
+      <div className="flex flex-col sm:flex-row gap-2 max-w-4xl mx-auto">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
 
@@ -63,7 +63,7 @@ export default function ExamFilters({
 
       {filtersOpen && (
         <div className="bg-white border-b border-gray-100 animate-[slideDown_0.4s_ease-in]">
-          <div className="max-w-5xl mx-auto px-6 py-5">
+          <div className="max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Institution */}
               <div className="relative">

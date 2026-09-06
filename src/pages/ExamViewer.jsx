@@ -109,7 +109,7 @@ export default function ExamViewer() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="mx-auto w-full max-w-6xl 2xl:max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <ReturnBackButton />
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-5">

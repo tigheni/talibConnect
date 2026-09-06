@@ -39,7 +39,7 @@ export default function NavBoard() {
 
   return (
     <div className="sticky top-0 z-50 flex justify-center px-3 pt-3">
-      <nav className="relative font-mono flex h-16 w-full max-w-7xl items-center justify-between rounded-2xl border border-slate-200 bg-white/80 px-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:px-6">
+      <nav className="relative font-mono flex h-16 w-full max-w-[120rem] items-center justify-between rounded-2xl border border-slate-200 bg-white/80 px-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:px-6">
         <Link
           to="/"
           className="shrink-0 transition-transform duration-200 hover:scale-[1.03] active:scale-95"

@@ -194,7 +194,7 @@ export default function ExamPage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-50/40 px-6 py-16">
+      <main className="min-h-screen bg-gray-50/40 px-4 sm:px-6 py-16">
         <div className="mx-auto max-w-2xl rounded-3xl border border-rose-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-black text-slate-950">
             Unable to load exams
@@ -250,7 +250,7 @@ export default function ExamPage() {
         </div>
       )}
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      <div className="mx-auto max-w-[120rem] px-4 sm:px-6 lg:px-12 py-8">
         <ExamResults
           exams={exams}
           viewMode={viewMode}

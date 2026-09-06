@@ -77,7 +77,7 @@ export default function UploadPage() {
     "w-full bg-gray-50 border rounded-xl px-4 py-2.5 text-gray-900 text-sm outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed";
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-10 sm:py-14">
+    <main className="mx-auto w-full max-w-4xl px-4 sm:px-6 py-10 sm:py-14">
       <div className="text-center mb-8">
         <span className="text-xs font-semibold tracking-widest uppercase text-[#2f9e6d] font-roboto-mono">
           Contribute

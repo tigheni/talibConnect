@@ -70,7 +70,7 @@ export default function Contact() {
         path="/contact"
       />
       <main className="min-h-screen flex items-center justify-center px-4 py-10 sm:px-6">
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] rounded-xl overflow-hidden border border-black/15 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
+      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] 2xl:grid-cols-[0.85fr_1.15fr] rounded-xl overflow-hidden border border-black/15 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
         <div className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] px-8 py-10 sm:px-10 sm:py-12 flex flex-col justify-between overflow-hidden">
           <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-[#5ae4a8]/10 blur-3xl pointer-events-none" />
 

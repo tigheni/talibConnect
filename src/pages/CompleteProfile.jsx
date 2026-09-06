@@ -137,7 +137,7 @@ export default function CompleteProfile() {
       <div className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-[#8ed8b1]/30 blur-3xl" />
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-white/40 blur-3xl" />
 
-      <div className="relative mx-auto max-w-2xl">
+      <div className="relative mx-auto max-w-3xl">
         <div className="mb-8 text-center">
           <span className="inline-flex rounded-full border border-[#2f9e6d]/20 bg-white/70 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#2f9e6d] shadow-sm">
             Welcome to talibConnect

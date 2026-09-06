@@ -128,7 +128,7 @@ export default function Home() {
 
         <FeatureSection />
 
-        <section className="mx-auto max-w-6xl px-4">
+        <section className="mx-auto w-full max-w-[120rem] px-4 sm:px-6 lg:px-12 2xl:px-16">
           <div className="mb-1 flex flex-wrap items-end justify-between gap-2">
             <div>
               <h2 className="text-2xl font-bold md:text-3xl">
@@ -146,7 +146,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {loading
               ? Array.from({ length: 3 }).map((_, i) => (
                   <div
@@ -160,7 +160,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">
+        <section className="mx-auto w-full max-w-[120rem] px-4 pb-20 pt-16 sm:px-6 lg:px-12 2xl:px-16">
           <div className="grid gap-6 rounded-[1.8rem] border border-slate-300 bg-slate-950 p-8 shadow-[0_18px_60px_rgba(15,23,42,0.2)] lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">

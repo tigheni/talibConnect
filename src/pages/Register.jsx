@@ -91,14 +91,12 @@ export default function Register() {
 
   return (
     <main
-      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat sm:bg-none"
-      style={
-        !isMobile ? { backgroundImage: `url('${img}')` } : { margin: "20px" }
-      }
+      className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 sm:py-10 bg-cover bg-center bg-no-repeat sm:bg-none"
+      style={!isMobile ? { backgroundImage: `url('${img}')` } : undefined}
     >
       <div
         ref={formTopRef}
-        className="w-full max-w-sm md:max-w-md flex justify-center  flex-col items-center border border-gray-300 bg-white py-4 rounded-2xl shadow-md px-6"
+        className="w-full max-w-sm sm:max-w-lg lg:max-w-xl flex flex-col items-center justify-center border border-gray-300 bg-white px-5 py-6 sm:px-8 sm:py-8 rounded-2xl shadow-md"
       >
         <Link to="/">
           <img

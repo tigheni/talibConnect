@@ -86,7 +86,7 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-sm md:max-w-md flex flex-col items-center border border-gray-300 bg-white py-5 rounded-2xl shadow-2xl px-6"
+        className="relative w-full max-w-sm sm:max-w-lg lg:max-w-xl flex flex-col items-center border border-gray-300 bg-white py-6 sm:py-8 rounded-2xl shadow-2xl px-5 sm:px-8"
       >
         <button
           onClick={onClose}

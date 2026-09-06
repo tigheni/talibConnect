@@ -122,7 +122,7 @@ export default function Admin() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b border-slate-200 bg-gradient-to-b from-white to-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[120rem] px-4 py-12 sm:px-6 lg:px-12 2xl:px-16">
           <div className="max-w-3xl">
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2f9e6d]">
               Admin dashboard
@@ -136,7 +136,7 @@ export default function Admin() {
             </p>
           </div>
 
-          <div className="mt-8 flex justify-between ">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:max-w-xl lg:justify-start ">
             <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                 Pending exams
@@ -193,7 +193,7 @@ export default function Admin() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[120rem] px-4 py-10 sm:px-6 lg:px-12 2xl:px-16">
         {visibleExams.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
             <p className="text-lg font-semibold text-slate-900">

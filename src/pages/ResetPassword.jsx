@@ -76,8 +76,8 @@ export default function ResetPassword() {
   };
 
   return (
-    <main className="h-[95vh] flex items-center justify-center">
-      <div className="w-full max-w-md bg-white py-8 px-8 rounded-3xl shadow-lg border border-gray-300">
+    <main className="min-h-[100svh] flex items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
+      <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg bg-white px-5 py-6 sm:px-8 sm:py-8 rounded-3xl shadow-lg border border-gray-300">
         <Link to="/" className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="h-8" width={250} height={100} />
         </Link>

@@ -40,7 +40,7 @@ export function FeatureSection() {
   ];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <section className="mx-auto w-full max-w-[120rem] px-4 py-16 sm:px-6 lg:px-10 lg:py-20 2xl:px-12">
       <div className="mb-10 text-center">
         <h2 className="font-bold tracking-tight text-slate-900 md:text-6xl sm:text-4xl">
           Made for students

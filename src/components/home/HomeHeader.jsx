@@ -33,8 +33,8 @@ export function HomeHeader({ stats, subjects = [] }) {
 
   return (
     <header className="relative min-h-0 overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white to-slate-50 pb-12 pt-20 md:py-16 lg:h-auto lg:py-16">
-      <div className="mx-auto flex h-auto max-w-7xl items-center px-4 sm:px-4 lg:px-8 lg:py-0">
-        <div className="grid w-full items-center gap-8 lg:grid-cols-[1.3fr_0.7fr]">
+      <div className="mx-auto flex h-auto w-full max-w-[120rem] items-center px-4 sm:px-6 lg:px-10 lg:py-0 2xl:px-12">
+        <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="relative">
             <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#237a54]">
               Algerian exam archive
