@@ -26,6 +26,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let mounted = true;
+    let adminCheckTimeout = null;
 
     const initializeAuth = async () => {
       try {
@@ -60,7 +61,11 @@ export function AuthProvider({ children }) {
       setSession(newSession);
       setUser(currentUser);
 
-      setTimeout(async () => {
+      if (adminCheckTimeout) {
+        clearTimeout(adminCheckTimeout);
+      }
+
+      adminCheckTimeout = window.setTimeout(async () => {
         if (!mounted) return;
 
         await checkAdmin(currentUser);
@@ -73,6 +78,9 @@ export function AuthProvider({ children }) {
 
     return () => {
       mounted = false;
+      if (adminCheckTimeout) {
+        clearTimeout(adminCheckTimeout);
+      }
       subscription.unsubscribe();
     };
   }, []);

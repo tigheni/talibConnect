@@ -16,7 +16,7 @@ export default function ProtectedRoute({ children }) {
     if (!loading && !user && !hasOpenedModal.current) {
       hasOpenedModal.current = true;
 
-      openLogin(location.pathname, location.state?.from || "/");
+      openLogin(location.pathname);
     }
   }, [loading, user, location.pathname, location.state, openLogin]);
 

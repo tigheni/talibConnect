@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ExamCard from "../components/exams/ExamCard";
 import { supabase } from "../lib/supabase";
@@ -22,6 +22,7 @@ export default function Home() {
   const [recentExams, setRecentExams] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const hasLoadedAllSubjects = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -42,7 +43,11 @@ export default function Home() {
       if (!active) return;
 
       const exams = data || [];
-      setSubjects(uniqueValues(exams, "subject"));
+      // The preview gives us subjects immediately. Do not let a slower
+      // development request overwrite the complete list loaded by stats.
+      if (!hasLoadedAllSubjects.current) {
+        setSubjects(uniqueValues(exams, "subject"));
+      }
       setRecentExams(exams);
       setLoading(false);
     };
@@ -88,7 +93,10 @@ export default function Home() {
           label: "Active Students",
         },
       ]);
-      if (allSubjects.length) setSubjects(allSubjects);
+      if (allSubjects.length) {
+        hasLoadedAllSubjects.current = true;
+        setSubjects(allSubjects);
+      }
     };
 
     let idleId;

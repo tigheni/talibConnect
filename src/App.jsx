@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/authContext/AuthProvider.jsx";
@@ -73,8 +73,10 @@ function AppContent() {
 
 function LoginRoute() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || "/exams";
 
-  return <LoginModal onClose={() => navigate("/")} />;
+  return <LoginModal onClose={() => navigate("/")} redirectTo={redirectTo} />;
 }
 
 export default function App() {

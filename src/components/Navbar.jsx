@@ -17,7 +17,7 @@ export default function NavBoard() {
 
   const handleUploadClick = () => {
     if (!user) {
-      openLogin("/upload", location.pathname);
+      openLogin("/upload");
       return;
     }
 

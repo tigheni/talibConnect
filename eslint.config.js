@@ -21,4 +21,10 @@ export default defineConfig([
       "no-unused-vars": "warn",
     },
   },
+  {
+    files: ["scripts/**/*.{js,jsx}", "worker/**/*.js", "vite.config.js"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
 ]);

@@ -93,31 +93,14 @@ export default function CompleteProfile() {
     const result = validate(formData, hasNoDepartments);
     if (!result.isValid) return;
 
+    const normalizedRole = formData.role === "teacher" ? "teacher" : "student";
+
     setLoading(true);
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: {
-          role: formData.role,
-          study_system: formData.study_system,
-          year_of_study: formData.year_of_study,
-          wilaya: formData.wilaya,
-          wilaya_id: selectedWilaya ? Number(selectedWilaya) : null,
-          institution: formData.institution,
-          institution_id: selectedInstitution
-            ? Number(selectedInstitution)
-            : null,
-          faculty: formData.faculty,
-          faculty_id: selectedFaculty ? Number(selectedFaculty) : null,
-          department: formData.department,
-          department_id: selectedDepartment ? Number(selectedDepartment) : null,
-        },
-      });
-      if (updateError) throw updateError;
-
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          role: formData.role,
+      const { error } = await supabase.from("profiles").upsert(
+        {
+          id: user.id,
+          role: normalizedRole,
           study_system: formData.study_system,
           year_of_study: formData.year_of_study,
           wilaya: formData.wilaya,
@@ -131,8 +114,9 @@ export default function CompleteProfile() {
           department: formData.department,
           department_id: selectedDepartment ? Number(selectedDepartment) : null,
           profile_completed: true,
-        })
-        .eq("id", user.id);
+        },
+        { onConflict: "id" },
+      );
 
       if (error) throw error;
 

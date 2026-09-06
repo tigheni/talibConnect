@@ -8,6 +8,8 @@ const useWelcomeValidation = () => {
 
     if (!formData.role) {
       newErrors.role = "Please select your role";
+    } else if (!["student", "teacher"].includes(formData.role)) {
+      newErrors.role = "Please select a valid role";
     }
     if (formData.role === "student") {
       if (!formData.study_system) {
