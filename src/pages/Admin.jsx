@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "../lib/supabase";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext/useAuth";
+import {
+  approveExam,
+  createExamPreviewUrl,
+  fetchPendingExams,
+  rejectExam,
+} from "../services/adminExams";
 
 export default function Admin() {
   const [pendingExams, setPendingExams] = useState([]);
@@ -41,13 +46,7 @@ export default function Admin() {
 
     async function loadPendingExams() {
       setExamsLoading(true);
-      const { data, error } = await supabase
-        .from("exams")
-        .select(
-          "uuid,title,institution,year,created_at,file_path,teacher_consent,uploader_name,subject",
-        )
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+      const { data, error } = await fetchPendingExams();
 
       if (cancelled) return;
 
@@ -69,10 +68,7 @@ export default function Admin() {
   }, [authLoading, user, isAdmin, navigate]);
 
   const handleApprove = async (uuid) => {
-    const { error } = await supabase
-      .from("exams")
-      .update({ status: "approved" })
-      .eq("uuid", uuid);
+    const { error } = await approveExam(uuid);
 
     if (error) {
       console.error("Admin action failed:", error);
@@ -91,22 +87,9 @@ export default function Admin() {
       setMessage("Exam not found.");
       return;
     }
-    const { error: storageError } = await supabase.storage
-      .from("exams")
-      .remove([exam.file_path]);
-
-    if (storageError) {
-      console.error("Admin action failed:", storageError.message);
-      setMessage("Something went wrong. Please try again.");
-      return;
-    }
-
-    const { error: deleteError } = await supabase
-      .from("exams")
-      .delete()
-      .eq("uuid", uuid);
-    if (deleteError) {
-      console.error("Admin action failed", deleteError.message);
+    const { error } = await rejectExam(exam);
+    if (error) {
+      console.error("Admin action failed", error.message);
       setMessage("Something went wrong. Please try again.");
       return;
     }
@@ -244,9 +227,8 @@ export default function Admin() {
                         </span>{" "}
                         <button
                           onClick={async () => {
-                            const { data, error } = await supabase.storage
-                              .from("exams")
-                              .createSignedUrl(exam.file_path, 60 * 60);
+                            const { url, error } =
+                              await createExamPreviewUrl(exam.file_path);
 
                             if (error) {
                               console.error("Admin action failed:", error);
@@ -257,7 +239,7 @@ export default function Admin() {
                             }
 
                             window.open(
-                              data.signedUrl,
+                              url,
                               "_blank",
                               "noopener,noreferrer",
                             );
