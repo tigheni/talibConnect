@@ -15,6 +15,8 @@ export function useLocations() {
   const [departmentsLoading, setDepartmentsLoading] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchWilayas = async () => {
       const { data, error } = await supabase
         .from("wilayas")
@@ -26,10 +28,14 @@ export function useLocations() {
         return;
       }
 
-      setWilayas(data || []);
+      if (!cancelled) setWilayas(data || []);
     };
 
     fetchWilayas();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -43,6 +49,8 @@ export function useLocations() {
       return;
     }
 
+    let cancelled = false;
+
     const fetchInstitutions = async () => {
       const { data, error } = await supabase
         .from("institutions")
@@ -55,10 +63,14 @@ export function useLocations() {
         return;
       }
 
-      setInstitutions(data || []);
+      if (!cancelled) setInstitutions(data || []);
     };
 
     fetchInstitutions();
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedWilaya]);
 
   useEffect(() => {
@@ -69,6 +81,8 @@ export function useLocations() {
       setSelectedDepartment("");
       return;
     }
+
+    let cancelled = false;
 
     const fetchFaculties = async () => {
       const { data, error } = await supabase
@@ -82,32 +96,46 @@ export function useLocations() {
         return;
       }
 
-      setFaculties(data || []);
+      if (!cancelled) setFaculties(data || []);
     };
 
     fetchFaculties();
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedInstitution]);
 
   useEffect(() => {
     if (!selectedFaculty) {
       setDepartments([]);
       setSelectedDepartment("");
+      setDepartmentsLoading(false);
       return;
     }
 
+    let cancelled = false;
+
     const fetchDepartments = async () => {
       setDepartmentsLoading(true);
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("departments")
         .select("id,name_en")
         .eq("faculty_id", Number(selectedFaculty))
         .order("name_en");
 
+      if (cancelled) return;
+
+      if (error) console.error(error);
       setDepartments(data || []);
       setDepartmentsLoading(false);
     };
 
     fetchDepartments();
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedFaculty]);
 
   const hasNoDepartments =
@@ -122,6 +150,7 @@ export function useLocations() {
     setInstitutions([]);
     setFaculties([]);
     setDepartments([]);
+    setDepartmentsLoading(false);
   };
   return {
     wilayas,

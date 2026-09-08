@@ -20,7 +20,6 @@ export default function CompleteProfile() {
     faculty: "",
     department: "",
   });
-  const [hasNoDepartments, setHasNoDepartments] = useState(false);
   const [loading, setLoading] = useState(false);
   const {
     wilayas,
@@ -31,6 +30,7 @@ export default function CompleteProfile() {
     selectedInstitution,
     selectedDepartment,
     selectedFaculty,
+    hasNoDepartments,
     setSelectedWilaya,
     setSelectedInstitution,
     setSelectedFaculty,
@@ -53,7 +53,7 @@ export default function CompleteProfile() {
 
     clearErrors(nameField);
   };
-  const handleFacultyChange = async (e) => {
+  const handleFacultyChange = (e) => {
     const facultyId = e.target.value;
     const facultyName = e.target.options[e.target.selectedIndex]?.text || "";
     setSelectedFaculty(facultyId);
@@ -61,17 +61,6 @@ export default function CompleteProfile() {
     setFormData((prev) => ({ ...prev, faculty: facultyName, department: "" }));
     clearErrors("faculty");
 
-    if (!facultyId) {
-      setHasNoDepartments(false);
-      return;
-    }
-
-    const { count } = await supabase
-      .from("departments")
-      .select("id", { count: "exact", head: true })
-      .eq("faculty_id", facultyId);
-
-    setHasNoDepartments(count === 0);
   };
 
   const handleChange = (e) => {
@@ -86,7 +75,7 @@ export default function CompleteProfile() {
     clearErrors(name);
   };
 
-  const handlSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
 
@@ -152,7 +141,7 @@ export default function CompleteProfile() {
         </div>
 
         <form
-          onSubmit={handlSubmit}
+          onSubmit={handleSubmit}
           className="w-full rounded-[2rem] border border-white/80 bg-white/95 p-6 shadow-[0_24px_70px_rgba(24,53,42,0.12)] sm:p-9"
         >
           <div className="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">

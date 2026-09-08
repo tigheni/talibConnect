@@ -14,6 +14,12 @@ import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
 import SEO from "../components/SEO";
 
 const EXAMS_PER_PAGE = 9;
+const FILTER_KEYS = ["university", "subject", "system", "year", "search"];
+const SYSTEM_LABELS = {
+  lmd: "LMD",
+  engineering: "Engineering",
+  medical: "Medical",
+};
 
 export default function ExamPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -76,29 +82,8 @@ export default function ExamPage() {
     setSearchParams(params);
   };
 
-  const handleUniversityChange = (value) => {
-    updateParams({
-      university: value,
-    });
-  };
-
-  const handleSubjectChange = (value) => {
-    updateParams({
-      subject: value,
-    });
-  };
-
-  const handleSystemChange = (value) => {
-    updateParams({
-      system: value,
-      year: "",
-    });
-  };
-
-  const handleYearChange = (value) => {
-    updateParams({
-      year: value,
-    });
+  const handleFilterChange = (key, value, relatedUpdates = {}) => {
+    updateParams({ [key]: value, ...relatedUpdates });
   };
 
   const handleSearchChange = (e) => {
@@ -109,9 +94,7 @@ export default function ExamPage() {
     clearTimeout(searchTimeout.current);
 
     searchTimeout.current = setTimeout(() => {
-      updateParams({
-        search: value,
-      });
+      handleFilterChange("search", value);
     }, 300);
   };
 
@@ -128,52 +111,17 @@ export default function ExamPage() {
   };
 
   const activeFilters = [
-    universityFilter && {
-      key: "university",
-      label: universityFilter,
-      clear: () => {
-        updateParams({
-          university: "",
-        });
-      },
-    },
-
-    subjectFilter && {
-      key: "subject",
-      label: subjectFilter,
-      clear: () => {
-        updateParams({
-          subject: "",
-        });
-      },
-    },
-
-    systemFilter && {
-      key: "system",
-      label:
-        systemFilter === "lmd"
-          ? "LMD"
-          : systemFilter === "engineering"
-            ? "Engineering"
-            : "Medical",
-      clear: () => {
-        updateParams({
-          system: "",
-          year: "",
-        });
-      },
-    },
-
-    yearFilter && {
-      key: "year",
-      label: yearFilter,
-      clear: () => {
-        updateParams({
-          year: "",
-        });
-      },
-    },
-  ].filter(Boolean);
+    ["university", universityFilter, {}],
+    ["subject", subjectFilter, {}],
+    ["system", systemFilter, { year: "" }],
+    ["year", yearFilter, {}],
+  ]
+    .filter(([, value]) => value)
+    .map(([key, value, relatedUpdates]) => ({
+      key,
+      label: key === "system" ? SYSTEM_LABELS[value] || value : value,
+      clear: () => handleFilterChange(key, "", relatedUpdates),
+    }));
 
   const handleClearFilters = () => {
     clearTimeout(searchTimeout.current);
@@ -182,11 +130,7 @@ export default function ExamPage() {
 
     const params = new URLSearchParams(searchParams);
 
-    params.delete("university");
-    params.delete("subject");
-    params.delete("system");
-    params.delete("year");
-    params.delete("search");
+    FILTER_KEYS.forEach((key) => params.delete(key));
     params.delete("page");
 
     setSearchParams(params);
@@ -221,13 +165,15 @@ export default function ExamPage() {
 
       <ExamFilters
         universityFilter={universityFilter}
-        setUniversityFilter={handleUniversityChange}
+        setUniversityFilter={(value) => handleFilterChange("university", value)}
         subjectFilter={subjectFilter}
-        setSubjectFilter={handleSubjectChange}
+        setSubjectFilter={(value) => handleFilterChange("subject", value)}
         systemFilter={systemFilter}
-        setSystemFilter={handleSystemChange}
+        setSystemFilter={(value) =>
+          handleFilterChange("system", value, { year: "" })
+        }
         yearFilter={yearFilter}
-        setYearFilter={handleYearChange}
+        setYearFilter={(value) => handleFilterChange("year", value)}
         institutions={institutions}
         subjects={subjects}
         systems={systems}
