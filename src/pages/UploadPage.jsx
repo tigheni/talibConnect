@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useUploadExam } from "../hooks/useUploadExam";
 import { useLocations } from "../hooks/useLocations";
 import { useFormErrors } from "../hooks/useFormError";
-import { validateExamForm } from "../validators/validateExamForm";
 import toast from "react-hot-toast";
 import { INITIAL_EXAM_DATA } from "../constants/uploadForm";
 import { BasicInfoSection } from "../components/upload/BasicInfoSection";
@@ -44,18 +43,6 @@ export default function UploadPage() {
 
     clearAllErrors();
 
-    const { isValid, errors: validationErrors } = validateExamForm(
-      examData,
-      file,
-      locations.hasNoDepartments,
-    );
-
-    if (!isValid) {
-      setErrorsFromResponse(validationErrors);
-      toast.error("Please fix the errors in the form");
-      return;
-    }
-
     const result = await uploadExam(examData, file, locations.hasNoDepartments);
 
     if (result.success) {
@@ -68,7 +55,9 @@ export default function UploadPage() {
     }
 
     if (result.errors) {
-      toast.error("Failed to upload exam");
+      toast.error(
+        result.validation ? "Please fix the errors in the form" : "Failed to upload exam",
+      );
       setErrorsFromResponse(result.errors);
     }
   };

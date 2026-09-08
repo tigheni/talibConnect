@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
 import { validateExamForm } from "../validators/validateExamForm";
+import { uploadExamWithFile } from "../services/examUpload";
 
 import { useAuth } from "../context/authContext/useAuth";
 
@@ -14,7 +14,7 @@ export function useUploadExam() {
       file,
       hasNoDepartments,
     );
-    if (!isValid) return { success: false, errors };
+    if (!isValid) return { success: false, errors, validation: true };
 
     setLoading(true);
     try {
@@ -26,40 +26,12 @@ export function useUploadExam() {
         };
       }
 
-      const cleanFileName = file.name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9.-]/g, "_");
-
-      const filePath = `${uploaderId}/${crypto.randomUUID()}_${cleanFileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("exams")
-        .upload(filePath, file, { upsert: false });
-
-      if (uploadError) throw uploadError;
-
-      const { error: dbError } = await supabase.from("exams").insert({
-        title: examData.title.toUpperCase(),
-        year: parseInt(examData.year),
-        wilaya: examData.wilaya,
-        institution: examData.institution,
-        faculty: examData.faculty,
-        department: examData.department,
-        subject: examData.subject.toUpperCase(),
-        file_path: filePath,
-        file_type: "PDF",
-        uploader_id: uploaderId,
-        ...(isAdmin ? { uploader_name: "admin" } : {}),
-        teacher_name: examData.teacher_name?.trim() || "Anonymous",
-        teacher_consent: examData.teacher_consent,
-        systems: examData.systems || [],
+      await uploadExamWithFile({
+        examData,
+        file,
+        uploaderId,
+        isAdmin,
       });
-
-      if (dbError) {
-        await supabase.storage.from("exams").remove([filePath]);
-        throw dbError;
-      }
 
       return { success: true, errors: null };
     } catch (err) {
