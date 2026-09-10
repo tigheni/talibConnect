@@ -34,6 +34,11 @@ export default function Privacy() {
               <li>
                 Contact form messages and the information you submit with them.
               </li>
+              <li>
+                Technical information processed by Supabase, Cloudflare, and
+                hosting systems, such as IP address, timestamps, browser or
+                request metadata, security events, and error logs.
+              </li>
             </ul>
           </section>
 
@@ -47,6 +52,10 @@ export default function Privacy() {
               <li>To respond to support messages and moderation requests.</li>
               <li>
                 To improve the site, detect abuse, and keep the service secure.
+              </li>
+              <li>
+                Administrator authentication is used only to review and manage
+                submissions; visitors are not asked to create public accounts.
               </li>
             </ul>
           </section>
@@ -83,11 +92,13 @@ export default function Privacy() {
               5. Storage and Retention
             </h2>
             <p className="mt-2 leading-7">
-              Your data is stored in the systems that power TalibConnect until
-              it is no longer needed for the purposes described in this policy,
-              unless we must keep it longer for legal, security, or operational
-              reasons. Uploaded files may be retained while they remain part of
-              the public archive or until they are removed by moderation.
+              Submission metadata and files are retained while they are needed
+              for moderation, the public archive, security, or operational
+              purposes. Pending and rejected files may be retained privately for
+              moderation and abuse investigations, then removed according to
+              operational and legal requirements. Contact us to request review
+              or removal of a submission and provide enough information to
+              locate it.
             </p>
           </section>
 
@@ -109,9 +120,11 @@ export default function Privacy() {
             </h2>
             <p className="mt-2 leading-7">
               Depending on your location and applicable law, you may have the
-              right to access, correct, update, delete, or object to certain
-              uses of your personal data. You can also contact us if you want
-              help removing content you submitted.
+              right to access, correct, delete, or object to certain uses of
+              personal data. Because public submissions are anonymous, we may
+              not be able to connect a request to a particular submitter without
+              sufficient identifying details. You can contact us to request
+              removal of content you submitted.
             </p>
           </section>
 
@@ -152,7 +165,7 @@ export default function Privacy() {
           </section>
 
           <p className="px-1 pb-2 text-xs uppercase tracking-[0.22em] text-slate-500">
-            Effective date: September 6, 2026
+            Effective date: September 10, 2026
           </p>
         </div>
       </div>

@@ -16,8 +16,7 @@ export default function Terms() {
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
             These terms explain how TalibConnect works and what is expected from
             everyone using the platform. By browsing the archive, submitting a
-            file, or using the site in any way, you agree
-            to these terms.
+            file, or using the site in any way, you agree to these terms.
           </p>
         </div>
 
@@ -28,10 +27,10 @@ export default function Terms() {
             </h2>
             <p className="mt-2 leading-7">
               TalibConnect is an educational archive for Algerian university
-              exam papers. The platform helps students and teachers discover,
-              upload, review, and download exam files. We may moderate, approve,
-              reject, or remove content at our discretion to keep the archive
-              organized and safe.
+              exam papers. Visitors can browse and download approved files;
+              submitted files remain private until an administrator reviews
+              them. We may approve, reject, hide, or remove content to keep the
+              archive organized and safe.
             </p>
           </section>
 
@@ -41,8 +40,9 @@ export default function Terms() {
             </h2>
             <p className="mt-2 leading-7">
               Visitors do not need an account to browse, download approved
-              resources, or submit a resource. Do not include another person's
-              personal information or impersonate them in a submission.
+              resources, or submit a resource. Public submissions do not create
+              a visitor profile or publish automatically. Do not include another
+              person's personal information or impersonate them in a submission.
             </p>
           </section>
 
@@ -63,12 +63,11 @@ export default function Terms() {
               4. Uploads and Content
             </h2>
             <p className="mt-2 leading-7">
-              If you upload an exam, you confirm that you have the right to
+              If you submit an exam, you confirm that you have the right to
               share it and that it does not violate any law, school policy, or
-              third-party rights. Uploads may be reviewed by administrators
-              before they appear in the public archive. We may remove content
-              that is incomplete, misleading, duplicated, infringing, or
-              otherwise unsuitable for the platform.
+              third-party rights. Submissions are moderated and may be rejected,
+              retained privately, or removed. Do not submit malware, confidential
+              records, personal data, spam, or files unrelated to the archive.
             </p>
           </section>
 
@@ -78,9 +77,9 @@ export default function Terms() {
             </h2>
             <p className="mt-2 leading-7">
               Approved exam files and related metadata are shared for
-              educational purposes. Download availability may depend on file
-              permissions or platform settings. We do not guarantee that
-              every paper will be accurate, complete, or available forever.
+              educational purposes. Download availability depends on file
+              permissions and platform settings. We do not guarantee that any
+              paper is accurate, complete, lawful, or available forever.
             </p>
           </section>
 
@@ -102,10 +101,11 @@ export default function Terms() {
               7. Moderation and Termination
             </h2>
             <p className="mt-2 leading-7">
-              We may suspend, restrict, or terminate access to the platform at
-              any time if we believe a user has violated these terms, abused the
-              service, or created risk for other users, our systems, or our
-              partners.
+              We may rate-limit, block, hide, reject, or remove submissions and
+              restrict access to the platform if we believe someone has abused
+              the service, submitted harmful content, or created risk for other
+              users, our systems, or our partners. Anonymous use means we may
+              not be able to identify or contact a submitter.
             </p>
           </section>
 
@@ -149,7 +149,7 @@ export default function Terms() {
           </section>
 
           <p className="px-1 pb-2 text-xs uppercase tracking-[0.22em] text-slate-500">
-            Effective date: September 6, 2026
+            Effective date: September 10, 2026
           </p>
         </div>
       </div>
