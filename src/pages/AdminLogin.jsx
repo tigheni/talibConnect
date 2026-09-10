@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { validateLoginForm } from "../validators/validationLogin";
 import { loginUser } from "../services/loginUser";
-import { getSession } from "../services/sessionService";
-export default function LoginModal({ onClose, redirectTo = "/exams" }) {
+import { useAuth } from "../context/authContext/useAuth";
+export default function AdminLogin({ onClose, redirectTo = "/admin" }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const [redirectPending, setRedirectPending] = useState(false);
   const [error, setError] = useState("");
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -19,18 +20,24 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
   });
 
   const navigate = useNavigate();
+  const close = onClose || (() => navigate("/"));
+  const { user, isAdmin, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const session = await getSession();
+    if (!redirectPending || authLoading || !user) return;
 
-      if (session) {
-        navigate(redirectTo, { replace: true });
-      }
-    };
+    if (!isAdmin) {
+      return;
+    }
 
-    checkSession();
-  }, [navigate, redirectTo]);
+    if (onClose) onClose();
+    navigate(redirectTo, { replace: true });
+  }, [authLoading, isAdmin, navigate, onClose, redirectPending, redirectTo, user]);
+
+  const authorizationError =
+    redirectPending && !authLoading && user && !isAdmin
+      ? "This account is not authorized to access the admin panel."
+      : "";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,9 +73,10 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
 
     try {
       await loginUser(formData.email, formData.password);
-
-      onClose();
-      navigate(redirectTo);
+      // Wait for AuthProvider to receive the session and finish the server-side
+      // admin check before entering /admin. Navigating immediately races that
+      // update and causes the first login attempt to bounce back to login.
+      setRedirectPending(true);
     } catch (err) {
       setError(
         err.message ||
@@ -81,7 +89,7 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
 
   return (
     <div
-      onClick={onClose}
+      onClick={close}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
     >
       <div
@@ -89,14 +97,14 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
         className="relative w-full max-w-sm sm:max-w-lg lg:max-w-xl flex flex-col items-center border border-gray-300 bg-white py-6 sm:py-8 rounded-2xl shadow-2xl px-5 sm:px-8"
       >
         <button
-          onClick={onClose}
+          onClick={close}
           className="absolute right-4 top-3 text-2xl text-gray-400 hover:text-gray-800 transition"
           aria-label="Close login"
         >
           ×
         </button>
 
-        <Link to="/" onClick={onClose}>
+        <Link to="/" onClick={close}>
           <img
             src={logo}
             alt="Logo"
@@ -106,12 +114,12 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
           />
         </Link>
 
-        {error && (
+        {(error || authorizationError) && (
           <div
             role="alert"
             className="bg-red-500/10 border border-red-500 text-red-500 rounded-lg p-2 mb-3 text-sm text-center w-full"
           >
-            {error}
+            {error || authorizationError}
           </div>
         )}
 
@@ -174,9 +182,9 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
 
           <div className="text-right mt-1">
             <Link
-              to="/forgot-password"
-              onClick={onClose}
-              className="text-xs text-[#52c76a] hover:underline"
+              to="/admin/forgot-password"
+              onClick={close}
+              className="text-xs text-[#2f9e6d] hover:underline"
             >
               Forgot password?
             </Link>
@@ -184,25 +192,13 @@ export default function LoginModal({ onClose, redirectTo = "/exams" }) {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-[#5ae4a8] text-black font-semibold py-2.5 mt-4 rounded-lg hover:bg-[#4bcc94]/90 transition-all duration-300 disabled:opacity-50 text-sm"
+            disabled={loading || redirectPending}
+            className="w-full bg-[#5ae4a8] text-black font-semibold py-2.5 mt-4 rounded-lg hover:bg-[#2f9e6d] transition-all duration-300 disabled:opacity-50 text-sm"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading || redirectPending ? "Verifying admin access..." : "Login"}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-gray-600 text-sm">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              onClick={onClose}
-              className="text-[#52c76a] hover:text-[#3aa855] hover:underline transition-colors"
-            >
-              Register
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

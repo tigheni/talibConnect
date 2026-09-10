@@ -10,7 +10,7 @@ export function HomeHeader({ stats, subjects = [] }) {
     () => [
       { label: "Approved papers", value: stats[0].number },
       { label: "Universities covered", value: stats[1].number },
-      { label: "Students helped", value: stats[2].number },
+      { label: "Subjects available", value: stats[2].number },
     ],
     [stats],
   );
@@ -48,11 +48,11 @@ export function HomeHeader({ stats, subjects = [] }) {
             </p>
 
             <form onSubmit={handleSearch} className="mt-8 max-w-3xl">
-              <div className="flex flex-col gap-2 rounded-[1.4rem] border border-[#1E2A4A]/12 bg-white p-2 shadow-[0_12px_35px_rgba(30,42,74,0.08)] transition-shadow duration-300 focus-within:shadow-[0_12px_35px_rgba(30,42,74,0.14)] sm:flex-row sm:items-stretch sm:gap-3 sm:p-3">
-                <div className="flex flex-1 items-center gap-3 rounded-[1rem] border border-[#1E2A4A]/50 bg-[#FBF9F4] px-4 py-3 transition-colors duration-200 focus-within:border-[#1E2A4A]/30 focus-within:bg-white">
+              <div className="flex flex-col gap-2 rounded-[1.4rem] border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.08)] transition-shadow duration-300 focus-within:shadow-[0_12px_35px_rgba(15,23,42,0.14)] sm:flex-row sm:items-stretch sm:gap-3 sm:p-3">
+                <div className="flex flex-1 items-center gap-3 rounded-[1rem] border border-slate-300 bg-slate-50 px-4 py-3 transition-colors duration-200 focus-within:border-[#2f9e6d]/30 focus-within:bg-white">
                   <svg
                     viewBox="0 0 24 24"
-                    className="h-4 w-4 shrink-0 text-[#1E2A4A]/40"
+                    className="h-4 w-4 shrink-0 text-[#2f9e6d]"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -63,11 +63,11 @@ export function HomeHeader({ stats, subjects = [] }) {
                     <path d="m20 20-3.2-3.2" />
                   </svg>
 
-                  <span className="hidden shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-[#1E2A4A]/45 sm:inline">
+                  <span className="hidden shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 sm:inline">
                     Search
                   </span>
 
-                  <span className="hidden h-4 w-px shrink-0 bg-[#1E2A4A]/10 sm:inline-block" />
+                  <span className="hidden h-4 w-px shrink-0 bg-slate-200 sm:inline-block" />
 
                   <input
                     ref={searchInputRef}
@@ -77,7 +77,7 @@ export function HomeHeader({ stats, subjects = [] }) {
                     aria-label="Search exams"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    className="w-full bg-transparent text-[15px] text-[#1E2A4A]  outline-none placeholder:text-slate-400 [&::-webkit-search-cancel-button]:hidden"
+                    className="w-full bg-transparent text-[15px] text-slate-900 outline-none placeholder:text-slate-400 [&::-webkit-search-cancel-button]:hidden"
                   />
 
                   {searchValue && (
@@ -85,7 +85,7 @@ export function HomeHeader({ stats, subjects = [] }) {
                       type="button"
                       onClick={() => setSearchValue("")}
                       aria-label="Clear search"
-                      className="shrink-0 rounded-full p-1 text-[#1E2A4A]/40 transition-colors hover:bg-[#1E2A4A]/5 hover:text-[#1E2A4A]/70"
+                      className="shrink-0 rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ export function HomeHeader({ stats, subjects = [] }) {
 
                 <button
                   type="submit"
-                  className="rounded-[1rem] border border-[#1E2A4A] bg-[#1E2A4A] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.22em] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#16203A] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E2A4A]"
+                  className="rounded-[1rem] border border-[#2f9e6d] bg-[#2f9e6d] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.22em] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#237a54] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f9e6d]"
                 >
                   Search
                 </button>

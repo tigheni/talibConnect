@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import fetchApprovedExams from "../services/userExams.js";
+import fetchApprovedExams from "../services/approvedExams.js";
 
-export function useExams(filters = {}, page = 1, EXAMS_PER_PAGE) {
+export function useExams(filters = {}, page = 1, pageSize) {
   const [exams, setExams] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const totalPages = EXAMS_PER_PAGE
-    ? Math.ceil(totalCount / EXAMS_PER_PAGE)
+  const totalPages = pageSize
+    ? Math.ceil(totalCount / pageSize)
     : 0;
 
   const fetchExams = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    let { query } = await fetchApprovedExams(EXAMS_PER_PAGE, page);
+    let { query } = await fetchApprovedExams(pageSize, page);
 
     if (filters.searchTerm?.trim()) {
       const search = filters.searchTerm.trim().replace(/[%_,]/g, " ");
@@ -61,6 +61,7 @@ export function useExams(filters = {}, page = 1, EXAMS_PER_PAGE) {
     setLoading(false);
   }, [
     page,
+    pageSize,
     filters.searchTerm,
     filters.subjectFilter,
     filters.universityFilter,

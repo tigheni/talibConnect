@@ -74,7 +74,10 @@ export const validateExamForm = (examData, file, hasNoDepartments) => {
   if (!file) {
     errors.file = "Please select a PDF file";
     isValid = false;
-  } else if (file.type !== "application/pdf") {
+  } else if (
+    file.type !== "application/pdf" ||
+    !file.name.toLowerCase().endsWith(".pdf")
+  ) {
     errors.file = "Please select a PDF file (PDF format required)";
     isValid = false;
   } else if (file.size > 10 * 1024 * 1024) {

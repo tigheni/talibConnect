@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Download, User } from "lucide-react";
+import { Download } from "lucide-react";
 import { useDownloadExam } from "../../hooks/useDownloadExam.jsx";
 import { getExamUrl } from "../../utils/getExamUrl.jsx";
 export default function ExamCard({ exam, index, viewMode }) {
@@ -34,12 +34,6 @@ export default function ExamCard({ exam, index, viewMode }) {
                 {exam.downloads} downloads
               </span>
             </div>
-            {exam.uploader_name && (
-              <p className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 truncate w-full">
-                <User size={14} />
-                <span>Uploader: {exam.uploader_name}</span>
-              </p>
-            )}
             {exam.teacher_name && (
               <p className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 truncate w-full">
                 👨‍🏫 Teacher: {exam.teacher_name}
@@ -87,13 +81,6 @@ export default function ExamCard({ exam, index, viewMode }) {
               <Download size={14} />
               {exam.downloads} downloads
             </span>
-            {exam.uploader_name && (
-              <span className="inline-flex items-center gap-1 truncate">
-                <User size={14} />
-                <span>Uploader: {exam.uploader_name}</span>
-              </span>
-            )}
-
             <span className="inline-flex items-center gap-1 truncate">
               👨‍🏫 Teacher: {exam.teacher_name}
             </span>
@@ -104,13 +91,13 @@ export default function ExamCard({ exam, index, viewMode }) {
           <button
             onClick={() => downloadExam(exam)}
             disabled={loadingDownload}
-            className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
+            className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#2f9e6d] transition-all font-medium text-center text-sm"
           >
             Download
           </button>
           <button
             onClick={() => navigate(getExamUrl(exam))}
-            className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-sm"
+            className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#2f9e6d] transition-all font-medium text-sm"
           >
             Open PDF
           </button>

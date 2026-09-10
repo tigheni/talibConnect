@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { getSession } from "../../services/sessionService";
-import { isUserAdmin } from "../../services/profiles";
+import { isCurrentUserAdmin } from "../../services/profiles";
 import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {
@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
       return;
     }
     try {
-      const admin = await isUserAdmin(currentUser.id);
+      const admin = await isCurrentUserAdmin();
       setIsAdmin(admin);
     } catch (error) {
       console.error("Failed to fetch admin status:", error);
@@ -58,6 +58,10 @@ export function AuthProvider({ children }) {
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
       const currentUser = newSession?.user ?? null;
 
+      // Keep protected routes in a loading state while the role lookup runs.
+      // Without this, /admin can observe user != null and isAdmin == false for
+      // one render immediately after login and redirect the user back to login.
+      setLoading(true);
       setSession(newSession);
       setUser(currentUser);
 

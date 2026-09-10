@@ -175,7 +175,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full flex items-center justify-center gap-2 bg-[#5ae4a8] text-black font-semibold py-3 rounded-xl shadow-[0px_4px_24px_0_rgba(99,232,126,.35)] transition-all duration-300 hover:bg-[#4bc864] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed mt-1"
+              className="w-full flex items-center justify-center gap-2 bg-[#5ae4a8] text-black font-semibold py-3 rounded-xl shadow-[0px_4px_24px_0_rgba(90,228,168,.35)] transition-all duration-300 hover:bg-[#2f9e6d] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed mt-1"
             >
               {status === "sending" ? (
                 <>

@@ -1,4 +1,4 @@
-import { YEAR_OPTIONS } from "../../constants/uploadForm";
+import { YEAR_OPTIONS } from "../../constants/uploadFormOptions";
 import { GraduationCap } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 export function EducationSection({ examData, setExamData, getErrorMessage }) {

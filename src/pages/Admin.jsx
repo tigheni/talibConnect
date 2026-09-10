@@ -26,7 +26,6 @@ export default function Admin() {
         exam.title?.toLowerCase().includes(q) ||
         exam.subject?.toLowerCase().includes(q) ||
         exam.institution?.toLowerCase().includes(q) ||
-        exam.uploader_name?.toLowerCase().includes(q) ||
         String(exam.year || "")
           .toLowerCase()
           .includes(q)
@@ -38,7 +37,7 @@ export default function Admin() {
     if (authLoading) return;
 
     if (!user || !isAdmin) {
-      navigate("/", { replace: true });
+      navigate("/admin/login", { replace: true });
       return;
     }
 
@@ -87,7 +86,7 @@ export default function Admin() {
       setMessage("Exam not found.");
       return;
     }
-    const { error } = await rejectExam(exam);
+    const { error } = await rejectExam(exam.uuid);
     if (error) {
       console.error("Admin action failed", error.message);
       setMessage("Something went wrong. Please try again.");
@@ -95,7 +94,7 @@ export default function Admin() {
     }
 
     setPendingExams((prev) => prev.filter((exam) => exam.uuid !== uuid));
-    setMessage("Exam rejected and removed.");
+    setMessage("Exam rejected and hidden from the public archive.");
   };
 
   if (examsLoading) {
@@ -151,7 +150,7 @@ export default function Admin() {
                 id="filterExam"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                placeholder="title, subject, university, uploader, year"
+                placeholder="title, subject, university, year"
                 className="mt-1 w-full bg-transparent text-sm text-slate-950 outline-none placeholder:text-slate-400"
               />
             </div>
@@ -209,12 +208,6 @@ export default function Admin() {
                     </p>
 
                     <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-                      <p>
-                        <span className="font-semibold text-slate-900">
-                          Uploaded by:
-                        </span>{" "}
-                        {exam.uploader_name || "Unknown"}
-                      </p>
                       <p>
                         <span className="font-semibold text-slate-900">
                           Teacher consent:

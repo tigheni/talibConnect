@@ -1,7 +1,7 @@
 import { supabase } from "../lib/supabase";
 
 const PENDING_EXAM_FIELDS =
-  "uuid,title,institution,year,created_at,file_path,teacher_consent,uploader_name,subject";
+  "uuid,title,institution,year,created_at,file_path,teacher_consent,subject";
 
 export async function fetchPendingExams() {
   return supabase
@@ -15,14 +15,8 @@ export async function approveExam(uuid) {
   return supabase.from("exams").update({ status: "approved" }).eq("uuid", uuid);
 }
 
-export async function rejectExam(exam) {
-  const { error: storageError } = await supabase.storage
-    .from("exams")
-    .remove([exam.file_path]);
-
-  if (storageError) return { error: storageError };
-
-  return supabase.from("exams").delete().eq("uuid", exam.uuid);
+export async function rejectExam(uuid) {
+  return supabase.from("exams").update({ status: "rejected" }).eq("uuid", uuid);
 }
 
 export async function createExamPreviewUrl(filePath) {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { supabase } from "../lib/supabase";
 
-export default function ForgotPassword() {
+export default function AdminForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -23,7 +23,7 @@ export default function ForgotPassword() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${window.location.origin}/admin/reset-password`,
       });
       if (error) throw error;
 
@@ -83,7 +83,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
+            className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#2f9e6d] transition-all duration-300 disabled:opacity-50"
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
@@ -91,7 +91,7 @@ export default function ForgotPassword() {
 
         <div className="mt-4 text-center">
           <Link
-            to="/login"
+            to="/admin/login"
             className="text-[var(--cp)] hover:underline text-sm"
           >
             ← Back to Login

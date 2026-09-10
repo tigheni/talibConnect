@@ -15,8 +15,8 @@ export default function Terms() {
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
             These terms explain how TalibConnect works and what is expected from
-            everyone using the platform. By creating an account, browsing the
-            archive, uploading a file, or using the site in any way, you agree
+            everyone using the platform. By browsing the archive, submitting a
+            file, or using the site in any way, you agree
             to these terms.
           </p>
         </div>
@@ -37,14 +37,12 @@ export default function Terms() {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-slate-950">
-              2. Accounts and Security
+              2. Anonymous submissions
             </h2>
             <p className="mt-2 leading-7">
-              You are responsible for the activity that happens under your
-              account. Keep your login credentials private, use accurate
-              information, and notify us if you believe your account has been
-              compromised. You may not impersonate someone else or create an
-              account using false information.
+              Visitors do not need an account to browse, download approved
+              resources, or submit a resource. Do not include another person's
+              personal information or impersonate them in a submission.
             </p>
           </section>
 
@@ -79,9 +77,9 @@ export default function Terms() {
               5. Educational Content and Downloads
             </h2>
             <p className="mt-2 leading-7">
-              Exam files and related metadata are shared for educational
-              purposes. Download availability may depend on your account status,
-              file permissions, or platform settings. We do not guarantee that
+              Approved exam files and related metadata are shared for
+              educational purposes. Download availability may depend on file
+              permissions or platform settings. We do not guarantee that
               every paper will be accurate, complete, or available forever.
             </p>
           </section>

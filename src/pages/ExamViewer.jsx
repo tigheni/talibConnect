@@ -125,7 +125,7 @@ export default function ExamViewer() {
             <button
               onClick={() => downloadExam(exam)}
               disabled={loadingDownload}
-              className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
+              className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#2f9e6d] transition-all font-medium text-center text-sm"
             >
               Download
             </button>
@@ -144,7 +144,7 @@ export default function ExamViewer() {
               <button
                 onClick={() => downloadExam(exam)}
                 disabled={loadingDownload}
-                className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#3bc85a] transition-all font-medium text-center text-sm"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[#5ae4a8] text-black rounded-xl hover:bg-[#2f9e6d] transition-all font-medium text-center text-sm"
               >
                 Download
               </button>

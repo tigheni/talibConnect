@@ -67,7 +67,7 @@ export default function ResetPassword() {
       if (error) throw error;
 
       setMessage("Password reset successfully! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/admin/login"), 2000);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -153,7 +153,7 @@ export default function ResetPassword() {
           <button
             type="submit"
             disabled={loading || authLoading}
-            className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#4bc864] transition-all duration-300 disabled:opacity-50"
+            className="w-full bg-[var(--cp)] text-black font-semibold py-3 rounded-lg hover:bg-[#2f9e6d] transition-all duration-300 disabled:opacity-50"
           >
             {authLoading
               ? "Verifying reset link..."
@@ -165,7 +165,7 @@ export default function ResetPassword() {
 
         <div className="mt-4 text-center">
           <Link
-            to="/login"
+            to="/admin/login"
             className="text-[var(--cp)] hover:underline text-sm"
           >
             ← Back to Login

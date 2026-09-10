@@ -26,15 +26,10 @@ export default function Privacy() {
             </h2>
             <ul className="mt-3 list-disc space-y-2 pl-5 leading-7">
               <li>
-                Account details such as username, email address, and role.
-              </li>
-              <li>
-                Academic profile details you choose to provide, such as study
-                system, year, institution, faculty, department, and wilaya.
-              </li>
-              <li>
-                Uploaded exam files and related metadata, including title,
-                subject, year, and uploader information.
+                Resource-submission metadata, such as title, subject, year,
+                institution, faculty, department, and wilaya, together with
+                the submitted file. Do not include personal information in a
+                submission unless it is necessary for the resource itself.
               </li>
               <li>
                 Contact form messages and the information you submit with them.
@@ -47,10 +42,6 @@ export default function Privacy() {
               2. How We Use Information
             </h2>
             <ul className="mt-3 list-disc space-y-2 pl-5 leading-7">
-              <li>To create and manage your account.</li>
-              <li>
-                To complete your profile and personalize the archive experience.
-              </li>
               <li>To store, review, approve, and display exam papers.</li>
               <li>To track downloads and help maintain the archive.</li>
               <li>To respond to support messages and moderation requests.</li>
@@ -65,10 +56,12 @@ export default function Privacy() {
               3. Services We Use
             </h2>
             <p className="mt-2 leading-7">
-              TalibConnect uses Supabase for authentication, database storage,
-              and file storage. We also use Cloudflare Workers for the contact
-              form email workflow. These providers may process limited technical
-              data on our behalf to deliver their services.
+              TalibConnect uses Supabase for database and file storage; it is
+              also used for administrator authentication. We use Cloudflare
+              Workers for the contact form email workflow. These providers and
+              hosting/logging systems may process technical data such as IP
+              addresses, request metadata, and error logs to operate and secure
+              the service.
             </p>
           </section>
 
@@ -77,11 +70,11 @@ export default function Privacy() {
               4. Sharing and Public Visibility
             </h2>
             <p className="mt-2 leading-7">
-              We do not sell your personal data. Some profile and exam metadata
-              may be visible to other users as part of the archive, such as
-              uploaded exam titles, subjects, institutions, years, and uploader
-              names. We may also share data with service providers that help us
-              run the platform, but only as needed for the service to function.
+              We do not sell your personal data. Approved resource metadata
+              such as titles, subjects, institutions, and years is visible in
+              the public archive. Pending and rejected submissions are visible
+              only to administrators. We may share data with service providers
+              only as needed to run the platform.
             </p>
           </section>
 
@@ -105,7 +98,7 @@ export default function Privacy() {
             <p className="mt-2 leading-7">
               We use reasonable technical and organizational measures to protect
               the platform. No system is perfect, so we cannot guarantee
-              absolute security. You should keep your credentials private and
+              absolute security. Administrator credentials must be kept private;
               contact us if you suspect unauthorized access.
             </p>
           </section>
@@ -118,8 +111,7 @@ export default function Privacy() {
               Depending on your location and applicable law, you may have the
               right to access, correct, update, delete, or object to certain
               uses of your personal data. You can also contact us if you want
-              help updating your account information or removing content you
-              uploaded.
+              help removing content you submitted.
             </p>
           </section>
 

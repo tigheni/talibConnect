@@ -9,7 +9,7 @@ import ExamToolbar from "../components/exams/ExamToolbar";
 import ExamResults from "../components/exams/ExamResults";
 import useMobile from "../hooks/useMobile";
 
-import { useExams } from "../hooks/useExam";
+import { useExams } from "../hooks/useExams";
 import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
 import SEO from "../components/SEO";
 

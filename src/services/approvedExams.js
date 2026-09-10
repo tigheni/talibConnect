@@ -5,7 +5,7 @@ export default async function fetchApprovedExams(PAGE_SIZE, page) {
   let query = supabase
     .from("exams")
     .select(
-      "title,subject,institution,systems,uuid,teacher_name,uploader_name,file_type,year,downloads,file_path",
+      "title,subject,institution,systems,uuid,teacher_name,file_type,year,downloads,file_path",
       {
         count: "exact",
       },

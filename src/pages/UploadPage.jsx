@@ -3,7 +3,7 @@ import { useUploadExam } from "../hooks/useUploadExam";
 import { useLocations } from "../hooks/useLocations";
 import { useFormErrors } from "../hooks/useFormError";
 import toast from "react-hot-toast";
-import { INITIAL_EXAM_DATA } from "../constants/uploadForm";
+import { INITIAL_EXAM_DATA } from "../constants/uploadFormOptions";
 import { BasicInfoSection } from "../components/upload/BasicInfoSection";
 import { EducationSection } from "../components/upload/EducationSection";
 import { InstitutionSection } from "../components/upload/InstitutionSection";
@@ -46,7 +46,7 @@ export default function UploadPage() {
     const result = await uploadExam(examData, file, locations.hasNoDepartments);
 
     if (result.success) {
-      toast.success("Exam uploaded successfully!");
+      toast.success("Submission received and queued for review.");
       setExamData(INITIAL_EXAM_DATA);
       locations.resetSelections();
       setFile(null);
@@ -75,7 +75,8 @@ export default function UploadPage() {
           Upload an Exam
         </h1>
         <p className="text-gray-500 text-sm mt-2 max-w-sm mx-auto">
-          Help other students by sharing a past exam. Takes about a minute.
+          Help other students by sharing a past exam. Every submission is
+          reviewed by an administrator before it becomes public.
         </p>
       </div>
 
@@ -123,7 +124,7 @@ export default function UploadPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-[#5ae4a8] text-black font-semibold py-3.5 rounded-xl shadow-[0px_4px_24px_0_rgba(99,232,126,.35)] transition-all duration-300 hover:bg-[#4bcc94] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-[#5ae4a8] text-black font-semibold py-3.5 rounded-xl shadow-[0px_4px_24px_0_rgba(90,228,168,.35)] transition-all duration-300 hover:bg-[#2f9e6d] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>

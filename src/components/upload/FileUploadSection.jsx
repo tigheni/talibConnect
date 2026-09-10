@@ -10,7 +10,7 @@ export function FileUploadSection({
 }) {
   return (
     <div className="p-6 sm:p-8">
-      <SectionHeader icon={FileUp} title="Exam file" subtitle="PDF only" />
+      <SectionHeader icon={FileUp} title="Exam file" subtitle="PDF only, up to 10 MB" />
 
       <label
         htmlFor="examFile"

@@ -1,20 +1,10 @@
 import { supabase } from "../lib/supabase";
 
-export async function getProfile(userId) {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("role, username")
-    .eq("id", userId)
-    .maybeSingle();
+export async function isCurrentUserAdmin() {
+  // Authorization is evaluated server-side from the current Supabase session;
+  // no client-provided user ID is trusted.
+  const { data, error } = await supabase.rpc("is_admin");
 
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}
-export async function isUserAdmin(userId) {
-  const profile = await getProfile(userId);
-
-  return profile?.role === "admin";
+  if (error) throw error;
+  return data === true;
 }

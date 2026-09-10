@@ -1,34 +1,17 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../context/authContext/useAuth";
-
-import { useLoginModal } from "../context/loginContext/useLoginModal";
 
 export function useDownloadExam() {
   const [loadingDownload, setLoadingDownload] = useState(false);
 
   const [error, setError] = useState(null);
 
-  const { user } = useAuth();
-
-  const { openLogin } = useLoginModal();
   const downloadExam = async (exam) => {
     setLoadingDownload(true);
     setError(null);
 
     try {
-      if (!user) {
-        toast(
-          <div className="flex items-center gap-3">
-            <span>🔒 Please log in to download this file.</span>
-          </div>,
-        );
-
-        openLogin("/exams");
-
-        return;
-      }
       const { data: signedUrlData, error: signedUrlError } =
         await supabase.storage
           .from("exams")

@@ -17,14 +17,17 @@ export default function Footer() {
           <Link to="/exams" className="hover:text-slate-950">
             Browse
           </Link>
-          <Link to="/register" className="hover:text-slate-950">
-            Upload
+          <Link to="/upload" className="hover:text-slate-950">
+            Submit resource
           </Link>
           <Link to="/privacy" className="hover:text-slate-950">
             Privacy
           </Link>{" "}
           <Link to="/terms" className="hover:text-slate-950">
             Terms
+          </Link>
+          <Link to="/admin" className="hover:text-slate-950">
+            Admin access
           </Link>
         </div>
       </div>

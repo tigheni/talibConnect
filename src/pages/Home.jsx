@@ -8,9 +8,9 @@ import SEO from "../components/SEO";
 const EXAMS_PREVIEW_LIMIT = 6;
 const formatNumber = new Intl.NumberFormat("en-US").format;
 const INITIAL_STATS = [
-  { id: 1, number: "0+", label: "Exams Available" },
-  { id: 2, number: "0+", label: "Institutions" },
-  { id: 3, number: "0+", label: "Active Students" },
+  { id: 1, number: "0", label: "Approved Exams" },
+  { id: 2, number: "0", label: "Institutions" },
+  { id: 3, number: "0", label: "Subjects" },
 ];
 
 const uniqueValues = (rows, key) => [
@@ -31,7 +31,7 @@ export default function Home() {
       const { data, error } = await supabase
         .from("exams")
         .select(
-          "title,subject,uuid,file_type,institution,year,downloads,uploader_name,teacher_name",
+          "title,subject,uuid,file_type,institution,year,downloads,teacher_name",
         )
         .eq("status", "approved")
         .order("created_at", { ascending: false })
@@ -53,9 +53,8 @@ export default function Home() {
     };
 
     const loadStats = async () => {
-      const [userResult, examsCountResult, institutionsResult] =
+      const [examsCountResult, institutionsResult] =
         await Promise.all([
-          supabase.rpc("get_user_count"),
           supabase
             .from("exams")
             .select("uuid", { count: "exact", head: true })
@@ -79,18 +78,18 @@ export default function Home() {
       setStats([
         {
           id: 1,
-          number: `${formatNumber(examsCountResult.count || 0)}+`,
-          label: "Exams Available",
+          number: formatNumber(examsCountResult.count || 0),
+          label: "Approved Exams",
         },
         {
           id: 2,
-          number: `${formatNumber(universityCount)}+`,
+          number: formatNumber(universityCount),
           label: "Institutions",
         },
         {
           id: 3,
-          number: `${formatNumber(userResult.data || 0)}+`,
-          label: "Active Students",
+          number: formatNumber(allSubjects.length),
+          label: "Subjects",
         },
       ]);
       if (allSubjects.length) {
@@ -164,22 +163,22 @@ export default function Home() {
           <div className="grid gap-6 rounded-[1.8rem] border border-slate-300 bg-slate-950 p-8 shadow-[0_18px_60px_rgba(15,23,42,0.2)] lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
-                Registration
+                Contribute
               </p>
               <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-white md:text-5xl">
-                Create an account and start browsing papers.
+                Browse freely. Submit a resource for review.
               </h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 md:text-base">
-                Register for free, search the archive, and find the papers you
-                need for revision.
+                No account is needed to search, download approved papers, or
+                submit a paper to the moderation queue.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
               <Link
-                to="/register"
+                to="/upload"
                 className="rounded-full bg-white px-8 py-3.5 text-center text-sm font-bold uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-0.5"
               >
-                Register now
+                Submit a resource
               </Link>
               <Link
                 to="/exams"

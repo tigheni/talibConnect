@@ -19,7 +19,7 @@ export default function ExamResults({ exams, viewMode, onClearFilters }) {
 
         <button
           onClick={onClearFilters}
-          className="mt-6 px-6 py-2.5 bg-[#5ae4a8] text-black font-medium rounded-xl shadow-[0px_4px_20px_0_rgba(99,232,126,.30)] hover:bg-[#4bcc94] hover:scale-105 active:scale-95 transition-all duration-200"
+          className="mt-6 px-6 py-2.5 bg-[#5ae4a8] text-black font-medium rounded-xl shadow-[0px_4px_20px_0_rgba(90,228,168,.30)] hover:bg-[#2f9e6d] hover:scale-105 active:scale-95 transition-all duration-200"
         >
           Clear all filters
         </button>
