@@ -3,6 +3,7 @@ import { Send } from "lucide-react";
 import contactIll from "../assets/contact.svg";
 import toast from "react-hot-toast";
 import SEO from "../components/SEO";
+import { Link } from "react-router-dom";
 
 const REASONS = [
   { label: "Bug report", prefix: "I found a bug: " },
@@ -17,6 +18,7 @@ export default function Contact() {
     name: "",
     email: "",
     message: "",
+    consent: false,
   });
   const [status, setStatus] = useState("");
 
@@ -39,7 +41,7 @@ export default function Contact() {
       if (res.ok) {
         toast.success("Message sent — we'll get back to you soon.");
         setStatus("success");
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", message: "", consent: false });
         setTimeout(() => setStatus(""), 3000);
       } else {
         const errorData = await res.json().catch(() => null);
@@ -55,7 +57,8 @@ export default function Contact() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleReasonClick = (prefix) => {
@@ -171,6 +174,13 @@ export default function Contact() {
                 className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#5ae4a8] focus:ring-2 focus:ring-[#5ae4a8]/25 focus:bg-white resize-none"
               />
             </div>
+
+            <label className="flex items-start gap-3 text-xs leading-5 text-gray-600">
+              <input type="checkbox" name="consent" checked={formData.consent} onChange={handleChange} required className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-[#2f9e6d] focus:ring-[#5ae4a8]" />
+              <span>
+                I agree that TalibConnect may use my name, email, and message to respond to this request as described in the <Link className="underline" to="/privacy">Privacy Policy</Link>.
+              </span>
+            </label>
 
             <button
               type="submit"

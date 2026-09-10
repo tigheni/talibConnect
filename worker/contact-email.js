@@ -9,15 +9,31 @@ function corsHeaders(origin, env) {
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
-  const allowedOrigin = allowedOrigins.includes(origin)
-    ? origin
-    : allowedOrigins[0] || origin || "*";
+  const allowedOrigin = allowedOrigins.includes(origin) ? origin : "null";
 
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
+}
+
+async function enforceRateLimit(request, env) {
+  // Configure a Cloudflare KV binding named RATE_LIMITER in production.
+  if (!env.RATE_LIMITER) return null;
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const key = `contact:${ip}:${Math.floor(Date.now() / 900000)}`;
+  const count = Number((await env.RATE_LIMITER.get(key)) || 0);
+  if (count >= 5) {
+    return jsonResponse(
+      { error: "Too many requests. Please try again later." },
+      429,
+      request.headers.get("Origin"),
+      env,
+    );
+  }
+  await env.RATE_LIMITER.put(key, String(count + 1), { expirationTtl: 900 });
+  return null;
 }
 
 function jsonResponse(body, status, origin, env) {
@@ -176,9 +192,10 @@ function validateContactForm(data) {
   const name = typeof data.name === "string" ? data.name.trim() : "";
   const email = typeof data.email === "string" ? data.email.trim() : "";
   const message = typeof data.message === "string" ? data.message.trim() : "";
+  const consent = data.consent === true;
 
-  if (!name || !email || !message) {
-    return { error: "Name, email, and message are required." };
+  if (!name || !email || !message || !consent) {
+    return { error: "Name, email, message, and privacy consent are required." };
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -213,6 +230,17 @@ export default {
     if (request.method !== "POST") {
       return jsonResponse({ error: "Method not allowed." }, 405, origin, env);
     }
+
+    const allowedOrigins = (env.CORS_ORIGIN || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    if (!origin || !allowedOrigins.includes(origin)) {
+      return jsonResponse({ error: "Origin not allowed." }, 403, origin, env);
+    }
+
+    const rateLimitResponse = await enforceRateLimit(request, env);
+    if (rateLimitResponse) return rateLimitResponse;
 
     if (!env.CONTACT_EMAIL || !env.TO_EMAIL || !env.CONTACT_FROM) {
       return jsonResponse(

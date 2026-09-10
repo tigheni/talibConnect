@@ -4,6 +4,7 @@ export const INITIAL_EXAM_DATA = {
   subject: "",
   teacher_name: "",
   teacher_consent: false,
+  submission_consent: false,
   wilaya: "",
   institution: "",
   faculty: "",

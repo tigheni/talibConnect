@@ -14,6 +14,7 @@ function buildSubmissionPayload(examData, uploadId) {
     p_subject: examData.subject,
     p_teacher_name: examData.teacher_name?.trim() || null,
     p_teacher_consent: Boolean(examData.teacher_consent),
+    p_submission_consent: Boolean(examData.submission_consent),
     p_systems: examData.systems || [],
   };
 }
@@ -46,6 +47,7 @@ export async function uploadExamWithFile({ examData, file }) {
   );
 
   if (databaseError) {
+    await supabase.rpc("delete_unclaimed_upload", { p_upload_id: uploadId });
     console.error("SUBMISSION RPC ERROR:", databaseError);
     throw new Error("Your file was uploaded but the submission could not be saved. Please contact support if this continues.");
   }

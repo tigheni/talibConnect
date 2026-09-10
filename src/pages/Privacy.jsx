@@ -24,6 +24,12 @@ export default function Privacy() {
             <h2 className="text-xl font-semibold text-slate-950">
               1. Information We Collect
             </h2>
+            <p className="mt-2 leading-7">
+              The TalibConnect operator is responsible for this processing. We
+              collect only the information needed to operate the archive and
+              respond to requests. Anonymous submissions are not used to build
+              visitor profiles.
+            </p>
             <ul className="mt-3 list-disc space-y-2 pl-5 leading-7">
               <li>
                 Resource-submission metadata, such as title, subject, year,
@@ -46,9 +52,16 @@ export default function Privacy() {
             <h2 className="text-xl font-semibold text-slate-950">
               2. How We Use Information
             </h2>
+            <p className="mt-2 leading-7">
+              Processing is based on operating the educational service,
+              responding to voluntary contact requests, maintaining security,
+              and the consent collected at submission. You can withdraw
+              optional contact consent by contacting us; this does not affect
+              processing already completed.
+            </p>
             <ul className="mt-3 list-disc space-y-2 pl-5 leading-7">
               <li>To store, review, approve, and display exam papers.</li>
-              <li>To track downloads and help maintain the archive.</li>
+              <li>To count approved-resource downloads without identifying individual visitors in the app.</li>
               <li>To respond to support messages and moderation requests.</li>
               <li>
                 To improve the site, detect abuse, and keep the service secure.
@@ -92,13 +105,13 @@ export default function Privacy() {
               5. Storage and Retention
             </h2>
             <p className="mt-2 leading-7">
-              Submission metadata and files are retained while they are needed
-              for moderation, the public archive, security, or operational
-              purposes. Pending and rejected files may be retained privately for
-              moderation and abuse investigations, then removed according to
-              operational and legal requirements. Contact us to request review
-              or removal of a submission and provide enough information to
-              locate it.
+              Approved metadata and files are retained while they are useful to
+              the archive or required for legal and security purposes. Pending
+              and rejected files are deleted after moderation and abuse-review
+              needs end, with a target maximum of 90 days. Contact messages are
+              deleted after the request is resolved and no later than 12 months
+              unless a longer period is legally necessary. Backups and provider
+              logs may follow their documented retention periods.
             </p>
           </section>
 
@@ -111,6 +124,14 @@ export default function Privacy() {
               the platform. No system is perfect, so we cannot guarantee
               absolute security. Administrator credentials must be kept private;
               contact us if you suspect unauthorized access.
+            </p>
+            <p className="mt-3 leading-7">
+              To request access, correction, deletion, restriction, or removal
+              of content, use the contact form and include enough information
+              to locate the request. We will verify the request before acting;
+              anonymous submissions may be impossible to associate with a
+              person. You may also contact the competent Algerian data
+              protection authority where applicable.
             </p>
           </section>
 

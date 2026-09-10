@@ -9,6 +9,7 @@ import { EducationSection } from "../components/upload/EducationSection";
 import { InstitutionSection } from "../components/upload/InstitutionSection";
 import { ExamDetailsSection } from "../components/upload/ExamDetailsSection";
 import { FileUploadSection } from "../components/upload/FileUploadSection";
+import { Link } from "react-router-dom";
 
 export default function UploadPage() {
   const fileInputRef = useRef(null);
@@ -120,6 +121,15 @@ export default function UploadPage() {
           handleFileChange={handleFileChange}
           setFile={setFile}
         />
+        <div className="p-6 sm:p-8">
+          <label className="flex items-start gap-3 text-sm leading-6 text-gray-600">
+            <input type="checkbox" name="submission_consent" checked={examData.submission_consent} onChange={handleChange} className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-[#2f9e6d] focus:ring-[#5ae4a8]" />
+            <span>
+              I confirm this PDF contains no student records, identification numbers, grades, signatures, or other private information, and I agree to the <Link className="underline" to="/privacy">Privacy Policy</Link> and <Link className="underline" to="/terms">Terms</Link>.
+            </span>
+          </label>
+          {getErrorMessage("submission_consent") && <div className="mt-2 text-xs text-red-500">{getErrorMessage("submission_consent")}</div>}
+        </div>
         <div className="p-6 sm:p-8">
           <button
             type="submit"

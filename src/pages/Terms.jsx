@@ -67,7 +67,10 @@ export default function Terms() {
               share it and that it does not violate any law, school policy, or
               third-party rights. Submissions are moderated and may be rejected,
               retained privately, or removed. Do not submit malware, confidential
-              records, personal data, spam, or files unrelated to the archive.
+              records, student identifiers, grades, signatures, personal data,
+              spam, or files unrelated to the archive. TalibConnect may reject
+              or remove a file whenever privacy, security, copyright, or legal
+              concerns arise.
             </p>
           </section>
 

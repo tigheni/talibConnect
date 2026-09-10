@@ -8,8 +8,14 @@ export const validateExamForm = (examData, file, hasNoDepartments) => {
     faculty: "",
     department: "",
     file: "",
+    submission_consent: "",
   };
   let isValid = true;
+
+  if (!examData.submission_consent) {
+    errors.submission_consent = "You must agree to the privacy notice before submitting";
+    isValid = false;
+  }
 
   if (!examData.title?.trim()) {
     errors.title = "Title is required";

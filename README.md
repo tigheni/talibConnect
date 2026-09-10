@@ -51,4 +51,10 @@ npm run lint
 
 Anonymous upload permissions are intentionally narrow, but they do not stop spam or storage consumption. Add a Cloudflare WAF/rate-limit rule for the Supabase upload/RPC endpoints (or move submissions behind a rate-limited Worker) before high-traffic deployment. Moderators remain responsible for malware, copyright, inappropriate content, and retention decisions.
 
+The contact Worker requires `CORS_ORIGIN` to contain the exact production site origin. Configure a Cloudflare KV namespace binding named `RATE_LIMITER` to enforce five contact requests per IP per 15 minutes; also add a WAF rule for the Supabase anonymous upload and RPC endpoints. The frontend requires explicit privacy consent for contact messages and submissions, and the database RPC enforces submission consent server-side.
+
+Apply a scheduled administrator job for `select public.purge_old_submissions();` at least daily. Rejected files are deleted immediately through `reject_exam`; pending and rejected records older than 90 days are removed by the purge job.
+
+Before production launch, replace the generic operator description in the privacy policy with the legal name and contact address of the data controller, confirm the applicable Algerian declaration/authorization requirements with the competent data-protection authority or counsel, and document provider contracts, international transfers, and the actual retention schedule. These are operational/legal steps that cannot be completed by frontend code.
+
 Supabase, Cloudflare, and hosting/error logs may still process technical metadata such as IP addresses and request logs. This architecture minimizes app-collected visitor data; it does not make the service free of personal-data processing.

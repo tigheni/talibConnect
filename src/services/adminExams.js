@@ -16,7 +16,8 @@ export async function approveExam(uuid) {
 }
 
 export async function rejectExam(uuid) {
-  return supabase.from("exams").update({ status: "rejected" }).eq("uuid", uuid);
+  const { data, error } = await supabase.rpc("reject_exam", { p_exam_uuid: uuid });
+  return { data, error };
 }
 
 export async function createExamPreviewUrl(filePath) {
