@@ -6,6 +6,9 @@ export function useExams(filters = {}, page = 1, EXAMS_PER_PAGE) {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const totalPages = EXAMS_PER_PAGE
+    ? Math.ceil(totalCount / EXAMS_PER_PAGE)
+    : 0;
 
   const fetchExams = useCallback(async () => {
     setLoading(true);
@@ -84,6 +87,7 @@ export function useExams(filters = {}, page = 1, EXAMS_PER_PAGE) {
   return {
     exams,
     totalCount,
+    totalPages,
     loading,
     error,
     refetch: fetchExams,

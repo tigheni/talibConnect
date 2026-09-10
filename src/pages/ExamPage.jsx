@@ -58,15 +58,13 @@ export default function ExamPage() {
     yearFilter,
   };
 
-  const { exams, totalCount, loading, error } = useExams(
+  const { exams, totalCount, totalPages, loading, error } = useExams(
     filters,
     currentPage,
     EXAMS_PER_PAGE,
   );
 
   const { institutions, subjects, systems } = useExamFilterOptions();
-
-  const totalPages = Math.ceil(totalCount / EXAMS_PER_PAGE);
 
   const updateParams = (updates = {}, resetPage = true) => {
     const params = new URLSearchParams(searchParams);
