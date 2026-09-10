@@ -13,7 +13,7 @@ import { useExams } from "../hooks/useExam";
 import { useExamFilterOptions } from "../hooks/useExamFilterOptions";
 import SEO from "../components/SEO";
 
-const EXAMS_PER_PAGE = 9;
+const EXAMS_PER_PAGE = 12;
 const FILTER_KEYS = ["university", "subject", "system", "year", "search"];
 const SYSTEM_LABELS = {
   lmd: "LMD",
@@ -58,7 +58,11 @@ export default function ExamPage() {
     yearFilter,
   };
 
-  const { exams, totalCount, loading, error } = useExams(filters, currentPage);
+  const { exams, totalCount, loading, error } = useExams(
+    filters,
+    currentPage,
+    EXAMS_PER_PAGE,
+  );
 
   const { institutions, subjects, systems } = useExamFilterOptions();
 
@@ -161,54 +165,56 @@ export default function ExamPage() {
         path="/exams"
       />
       <main className="min-h-screen bg-gray-50/40">
-      <ExamHeader examCount={totalCount} />
+        <ExamHeader examCount={totalCount} />
 
-      <ExamFilters
-        universityFilter={universityFilter}
-        setUniversityFilter={(value) => handleFilterChange("university", value)}
-        subjectFilter={subjectFilter}
-        setSubjectFilter={(value) => handleFilterChange("subject", value)}
-        systemFilter={systemFilter}
-        setSystemFilter={(value) =>
-          handleFilterChange("system", value, { year: "" })
-        }
-        yearFilter={yearFilter}
-        setYearFilter={(value) => handleFilterChange("year", value)}
-        institutions={institutions}
-        subjects={subjects}
-        systems={systems}
-        searchTerm={searchInput}
-        onSearchChange={handleSearchChange}
-        activeFilterCount={activeFilters.length}
-      />
+        <ExamFilters
+          universityFilter={universityFilter}
+          setUniversityFilter={(value) =>
+            handleFilterChange("university", value)
+          }
+          subjectFilter={subjectFilter}
+          setSubjectFilter={(value) => handleFilterChange("subject", value)}
+          systemFilter={systemFilter}
+          setSystemFilter={(value) =>
+            handleFilterChange("system", value, { year: "" })
+          }
+          yearFilter={yearFilter}
+          setYearFilter={(value) => handleFilterChange("year", value)}
+          institutions={institutions}
+          subjects={subjects}
+          systems={systems}
+          searchTerm={searchInput}
+          onSearchChange={handleSearchChange}
+          activeFilterCount={activeFilters.length}
+        />
 
-      <ExamToolbar
-        examCount={totalCount}
-        activeFilters={activeFilters}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        isMobile={isMobile}
-      />
-
-      {loading && (
-        <div className="py-4">
-          <LoadingSpinner />
-        </div>
-      )}
-
-      <div className="mx-auto max-w-[120rem] px-4 sm:px-6 lg:px-12 py-8">
-        <ExamResults
-          exams={exams}
+        <ExamToolbar
+          examCount={totalCount}
+          activeFilters={activeFilters}
           viewMode={viewMode}
-          onClearFilters={handleClearFilters}
+          onViewModeChange={setViewMode}
+          isMobile={isMobile}
         />
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
+        {loading && (
+          <div className="py-4">
+            <LoadingSpinner />
+          </div>
+        )}
+
+        <div className="mx-auto max-w-[120rem] px-4 sm:px-6 lg:px-12 py-8">
+          <ExamResults
+            exams={exams}
+            viewMode={viewMode}
+            onClearFilters={handleClearFilters}
+          />
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </main>
     </>
   );
