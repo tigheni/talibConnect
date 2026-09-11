@@ -3,6 +3,10 @@ import { supabase } from "../lib/supabase";
 
 const SYSTEMS = ["lmd", "engineering", "medical_education"];
 
+const uniqueValues = (rows, key) => {
+  return [...new Set(rows.map((row) => row[key]).filter(Boolean))].sort();
+};
+
 export function useExamFilterOptions() {
   const [options, setOptions] = useState({
     institutions: [],
@@ -21,15 +25,10 @@ export function useExamFilterOptions() {
 
       if (error || !active) return;
 
-      const institutions = [
-        ...new Set(
-          (data || []).map((exam) => exam.institution).filter(Boolean),
-        ),
-      ].sort();
+      const institutions = uniqueValues(data, "institution");
 
-      const subjects = [
-        ...new Set((data || []).map((exam) => exam.subject).filter(Boolean)),
-      ].sort();
+      const subjects = uniqueValues(data, "subject");
+
       setOptions({ institutions, subjects, systems: SYSTEMS });
     };
 
