@@ -6,11 +6,11 @@
   "send_email": [
     {
       "name": "CONTACT_EMAIL",
-      "destination_address": "oussama.adame40@gmail.com",
+      "destination_address": "contact@talibconnect.com",
     },
   ],
   "vars": {
-    "TO_EMAIL": "oussama.adame40@gmail.com",
+    "TO_EMAIL": "contact@talibconnect.com",
     "CONTACT_FROM": "contact@talibconnect.com",
     "CORS_ORIGIN": "https://talibconnect.com,http://localhost:5173,http://127.0.0.1:5173",
   },

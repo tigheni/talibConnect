@@ -2,6 +2,8 @@
   "name": "talibconnect",
   "private": true,
   "version": "0.0.0",
+  "description": "A searchable, moderated archive of Algerian university exam papers.",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite --open",

@@ -4,6 +4,10 @@ TalibConnect is a public, searchable archive of Algerian university exam papers.
 
 The project is a React/Vite frontend backed by Supabase, with a small Cloudflare Worker for contact-form email delivery.
 
+**Live demo:** [talibconnect.com](https://talibconnect.com/)
+
+![TalibConnect project mark](https://talibconnect.com/onglet.png)
+
 ## What it does
 
 - Browse a paginated archive of approved exam papers.
@@ -113,6 +117,8 @@ The frontend expects the following application pieces to exist in Supabase:
 
 Apply and review database changes through your normal Supabase migration workflow. This repository does not execute schema changes from the frontend. Check existing policies before deployment: Storage policies apply across buckets, so broad legacy policies can accidentally expose submissions. Disable public Auth sign-up and provision administrator accounts through a controlled process.
 
+The bundled `data/kuliya.json` contains multilingual public university hierarchy labels used by the import tooling. Its records include no user submissions or personal contact data. Review the upstream `kuliya` project’s license and retain appropriate attribution if redistributing or replacing this dataset.
+
 ### Submission safeguards
 
 The browser validates a PDF extension, MIME type, `%PDF-` signature, and a maximum size of 10 MB. Storage policies and the submission RPC must enforce those constraints again server-side. Signature checks are not malware scanning; moderators should inspect every submission before approval.
@@ -174,4 +180,4 @@ This design reduces application-collected personal data but does not eliminate p
 
 ## License
 
-No open-source license is currently declared. Treat the repository as all-rights-reserved unless the project owner adds a license.
+This project is released under the [MIT License](LICENSE). Third-party data, fonts, icons, and uploaded exam papers may have separate rights and are not automatically covered by this license.
