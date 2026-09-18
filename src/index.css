@@ -21,11 +21,16 @@
   --color-light-green-800: #2d5214;
   --color-light-green-900: #16290a;
   --color-light-green-950: #101d07;
+  --ink: #17211c;
+  --paper: #f4f6f1;
+  --mint: #76e6b2;
+  --forest: #176044;
 }
 body {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: var(--paper);
   font-family: "Inter", sans-serif;
+  color: var(--ink);
 }
 html {
   scroll-behavior: smooth;
@@ -51,6 +56,26 @@ html {
 
 button:hover {
   cursor: pointer;
+}
+
+::selection { background: #b8f5d5; color: #10271d; }
+
+.paper-grid {
+  background-color: var(--paper);
+  background-image: linear-gradient(rgba(23, 96, 68, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 96, 68, .045) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hero-glow {
+  background: radial-gradient(circle at 76% 20%, rgba(118, 230, 178, .2), transparent 29%), radial-gradient(circle at 92% 82%, rgba(255, 209, 102, .14), transparent 24%);
+}
+
+.lift { transition: transform .25s ease, box-shadow .25s ease; }
+.lift:hover { transform: translateY(-4px); box-shadow: 0 20px 45px rgba(23, 33, 28, .12); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 @keyframes slideDown {
   from {

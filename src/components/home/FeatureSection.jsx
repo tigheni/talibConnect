@@ -3,9 +3,9 @@ import { Brain, BookOpenCheck, Compass } from "lucide-react";
 function FeatureBlock({ title, description, icon: Icon, className = "" }) {
   return (
     <div
-      className={`p-7 transition-colors duration-300 hover:bg-slate-50 ${className}`}
+      className={`p-7 transition-colors duration-300 hover:bg-[#f4faf6] ${className}`}
     >
-      <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-950">
+      <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#dff7e9] text-[#176044]">
         <Icon size={22} strokeWidth={2} />
       </div>
 
@@ -42,7 +42,7 @@ export function FeatureSection() {
   return (
     <section className="mx-auto w-full max-w-[120rem] px-4 py-16 sm:px-6 lg:px-10 lg:py-20 2xl:px-12">
       <div className="mb-10 text-center">
-        <h2 className="font-bold tracking-tight text-slate-900 md:text-6xl sm:text-4xl">
+        <h2 className="font-black tracking-[-0.05em] text-[#17211c] md:text-6xl sm:text-4xl">
           Made for students
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">

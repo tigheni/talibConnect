@@ -10,12 +10,12 @@ export default function ExamCard({ exam, index, viewMode }) {
   if (viewMode === "grid") {
     return (
       <div
-        className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 w-full max-w-full h-full flex flex-col"
+        className="lift group flex h-full w-full max-w-full flex-col rounded-2xl border border-[#dce6df] bg-white shadow-[0_8px_25px_rgba(23,33,28,0.06)]"
         style={{ animationDelay: `${index * 50}ms` }}
       >
         <div className="p-4 sm:p-5 flex flex-col flex-1">
           <div className="mb-3">
-            <span className="inline-block px-3 py-1 bg-[#5ae4a8] text-slate-950 text-xs rounded-xl font-medium">
+            <span className="inline-block rounded-full bg-[#dff7e9] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#176044]">
               {exam.file_type}
             </span>
           </div>
@@ -45,7 +45,7 @@ export default function ExamCard({ exam, index, viewMode }) {
             <button
               onClick={() => downloadExam(exam)}
               disabled={loadingDownload}
-              className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium text-center text-sm"
+              className="w-full rounded-xl bg-[#176044] px-4 py-2.5 text-center text-sm font-bold text-white transition-all duration-300 hover:bg-[#0d4932]"
             >
               Download
             </button>
@@ -53,7 +53,7 @@ export default function ExamCard({ exam, index, viewMode }) {
               onClick={() => {
                 navigate(getExamUrl(exam));
               }}
-              className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-[#5ae4a8] hover:text-black transition-all duration-300 font-medium text-sm"
+              className="w-full rounded-xl border border-[#cddbd2] bg-white px-4 py-2.5 text-sm font-bold text-[#176044] transition-all duration-300 hover:bg-[#e9f8ef]"
             >
               Open PDF
             </button>

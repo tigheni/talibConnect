@@ -163,28 +163,32 @@ export default function ExamPage() {
         path="/exams"
       />
       <main className="min-h-screen bg-gray-50/40">
-        <ExamHeader examCount={totalCount} />
+        <div className="border-b border-gray-100 bg-white">
+          <div className="mx-auto grid max-w-[120rem] items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(14rem,0.35fr)_minmax(0,1fr)] lg:px-12 lg:py-12">
+            <ExamHeader examCount={totalCount} />
 
-        <ExamFilters
-          universityFilter={universityFilter}
-          setUniversityFilter={(value) =>
-            handleFilterChange("university", value)
-          }
-          subjectFilter={subjectFilter}
-          setSubjectFilter={(value) => handleFilterChange("subject", value)}
-          systemFilter={systemFilter}
-          setSystemFilter={(value) =>
-            handleFilterChange("system", value, { year: "" })
-          }
-          yearFilter={yearFilter}
-          setYearFilter={(value) => handleFilterChange("year", value)}
-          institutions={institutions}
-          subjects={subjects}
-          systems={systems}
-          searchTerm={searchInput}
-          onSearchChange={handleSearchChange}
-          activeFilterCount={activeFilters.length}
-        />
+            <ExamFilters
+              universityFilter={universityFilter}
+              setUniversityFilter={(value) =>
+                handleFilterChange("university", value)
+              }
+              subjectFilter={subjectFilter}
+              setSubjectFilter={(value) => handleFilterChange("subject", value)}
+              systemFilter={systemFilter}
+              setSystemFilter={(value) =>
+                handleFilterChange("system", value, { year: "" })
+              }
+              yearFilter={yearFilter}
+              setYearFilter={(value) => handleFilterChange("year", value)}
+              institutions={institutions}
+              subjects={subjects}
+              systems={systems}
+              searchTerm={searchInput}
+              onSearchChange={handleSearchChange}
+              activeFilterCount={activeFilters.length}
+            />
+          </div>
+        </div>
 
         <ExamToolbar
           examCount={totalCount}

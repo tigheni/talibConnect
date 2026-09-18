@@ -18,13 +18,13 @@ export default function Navbar() {
   </>;
 
   return <div className="sticky top-0 z-50 flex justify-center px-3 pt-3">
-    <nav className="relative flex h-16 w-full max-w-[120rem] items-center justify-between rounded-2xl border border-slate-200 bg-white/80 px-4 font-mono shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:px-6">
+    <nav className="relative flex h-16 w-full max-w-[120rem] items-center justify-between rounded-2xl border border-[#d4e1d8] bg-[#fbfdfb]/90 px-4 font-mono shadow-[0_12px_35px_rgba(23,33,28,0.08)] backdrop-blur-xl sm:px-6">
       <Link to="/" className="shrink-0" onClick={closeMenu}><img src={logo} className="h-5 w-auto sm:h-6 lg:h-7" alt="TalibConnect" width={250} height={100} /></Link>
       <div className="hidden flex-1 justify-center px-4 lg:flex"><div className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1">{links}</div></div>
       <div className="flex items-center gap-3">
         <Link
           to="/upload"
-          className="hidden rounded-xl bg-[#2f9e6d] px-4 py-2.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(47,158,109,0.2)] transition hover:bg-[#237a54] lg:block"
+          className="hidden rounded-xl bg-[#176044] px-4 py-2.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(23,96,68,0.2)] transition hover:bg-[#0d4932] lg:block"
         >
           Submit resource
         </Link>

@@ -1,6 +1,6 @@
 export function StatCard({ label, value }) {
   return (
-    <div className="group relative rounded-xl border border-slate-200 bg-white px-6 py-5 text-left shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
+    <div className="group relative rounded-2xl border border-[#cddbd2] bg-white/85 px-6 py-5 text-left shadow-[0_8px_25px_rgba(23,33,28,0.05)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(23,33,28,0.12)]">
       <div className="absolute inset-y-3 left-0 border-l-2 border-dashed border-[#2f9e6d]/25" />
 
       <div className="absolute -right-2 -top-2 flex h-9 w-9 rotate-12 items-center justify-center rounded-full border-2 border-[#2f9e6d]/70 text-[#2f9e6d]/70 opacity-0 transition-all duration-300 group-hover:-rotate-6 group-hover:opacity-100">

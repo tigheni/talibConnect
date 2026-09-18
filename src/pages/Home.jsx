@@ -122,7 +122,7 @@ export default function Home() {
         description="Find and share past exam papers from universities across Algeria on TalibConnect."
         path="/"
       />
-      <main className="min-h-screen  bg-slate-50 text-slate-950">
+      <main className="min-h-screen bg-[#f4f6f1] text-slate-950">
         <HomeHeader stats={stats} subjects={subjects} />
 
         <FeatureSection />
@@ -160,7 +160,7 @@ export default function Home() {
         </section>
 
         <section className="mx-auto w-full max-w-[120rem] px-4 pb-20 pt-16 sm:px-6 lg:px-12 2xl:px-16">
-          <div className="grid gap-6 rounded-[1.8rem] border border-slate-300 bg-slate-950 p-8 shadow-[0_18px_60px_rgba(15,23,42,0.2)] lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
+              <div className="grid gap-6 rounded-[1.8rem] border border-[#254a3a] bg-[#17211c] p-8 shadow-[0_18px_60px_rgba(23,33,28,0.22)] lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
                 Contribute
